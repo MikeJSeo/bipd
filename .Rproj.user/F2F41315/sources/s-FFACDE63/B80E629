@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1593906245491.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "B80E629",
+    "lastKnownWriteTime" : 1593906529,
+    "last_content_update" : 1593906529031,
+    "path" : "~/GitHub/bipd/R/helpful.functions.ipdma.R",
+    "project_path" : "R/helpful.functions.ipdma.R",
+    "properties" : {
+        "cursorPosition" : "5,11",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

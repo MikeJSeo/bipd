@@ -1,0 +1,81 @@
+---
+title: "simulation"
+author: "Michael Seo"
+date: "27 Januar 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(tidy = TRUE, tidy.opts=list(blank=FALSE, width.cutoff=60), warning = FALSE, message=FALSE, echo = FALSE)
+```
+
+```{r}
+# load packages needed
+library(MASS) # Used for data simulation
+
+library(lme4) #for fitting glmm
+library(glmnet) #for lasso
+library(dclone) # for parallel processing of JAGS code
+
+library(writexl)
+
+#setwd("C:/Users/mike/Desktop/Github/phd/varselect/")
+setwd("~/GitHub/phd/varselect/")
+
+source("run.simulation.functions.final.R")
+source("helpful.functions.final.R")
+
+# setup for parallel computing
+n.cores <- 2
+cl <- makePSOCKcluster(n.cores)
+tmp <- clusterEvalQ(cl, library(dclone))
+
+# number of simulation to run
+niter <- 1000
+
+start_time <- Sys.time()
+```
+
+## Simulation
+
+```{r}
+### parameters to change ###
+col_labels <- c(paste0("X", 1:10, ":treat"), "treat")
+
+correct_em <- c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+correct_em_values <- c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+  
+Nstudies <- 5
+Ncovariate <- 10
+continuous.cov <- c(1, 2, 3, 6, 7, 8)
+pf <- c(1,2,3,4,5)
+em <- NULL
+beta <- c(0.2, 0.2, 0.2, 0.2, 0.2)
+gamma <- NULL
+tau <- 0.5
+
+glmm_oracle_formula <- as.formula("y ~ studyid + X1 + X2 + X3 + X4 + X5 + treat + (-1 + treat|studyid)")
+glmm_full_formula <- as.formula("y ~ studyid + (X1 + X2 + X3 + X4 + X5 + X6 + X7 + X8 + X9 + X10)*treat + (-1 + treat|studyid)")
+step_full_formula <-  as.formula("y ~ studyid + (X1 + X2 + X3 + X4 + X5 + X6 + X7 + X8 + X9 + X10)*treat")
+step_lower_formula <- as.formula(" ~ studyid + X1 + X2 + X3 + X4 + X5 + X6 + X7 + X8 + X9 + X10 + treat")
+
+model.type = "binary"
+```
+
+```{r simulationa, eval = FALSE}
+simulation.a <- run.simulation()
+```
+
+```{r simulationb, cache = TRUE, result = "hide", include = FALSE}
+simulation.b <- run.simulation2()
+```
+
+```{r simulationc, eval = FALSE}
+simulation.c <- run.simulation3()
+```
+
+```{r}
+simulation.result <- simulation.b
+simulation.result
+write_xlsx(as.data.frame(round(simulation.result,3)), "simulation32.xlsx")
+```

@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1593906301684.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "329C31AE",
+    "lastKnownWriteTime" : 1587903022,
+    "last_content_update" : 1587903022,
+    "path" : "~/GitHub/bnma/R/network.data.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "60,0",
+        "scrollLine" : "49"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
