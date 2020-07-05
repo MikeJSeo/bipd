@@ -31,7 +31,6 @@ generate_ipdma_example <- function(type = "continuous"){
     y <- round(alpha[i] + delta[i]*treat + beta1[i]*z1 + beta2[i]*z2 + gamma1[i]*z1*treat + gamma2[i]*z2*treat)
     ds[(((i-1)*N)+1):(i*N), ] <- cbind(studyid[i], treat, z1,z2, y)
   }
-  ds$studyid <- letters[ds$studyid] 
   ds$studyid <- as.factor(ds$studyid)
 
   } else if(type == "binary"){
