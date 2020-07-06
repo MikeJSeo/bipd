@@ -60,10 +60,60 @@ generate_ipdma_example <- function(type = "continuous"){
     y <- rbinom(N, 1, expit(linearpredictor))
     ds[(((i-1)*N)+1):(i*N), ] <- cbind(studyid[i], treat, w1, w2, y)
   }
-  ds$studyid <- letters[ds$studyid] 
   ds$studyid <- as.factor(ds$studyid)
     
   }
   
   return(ds)
 }
+
+
+
+#' Calculate patient-specific treatment effect
+#'
+#' Convenient function for calculating the patient-specific treatment effect.
+#' Patient-specific treatment effect includes the main effect of treatment and 
+#' treatment-covariate interaction effect (i.e. effect modification)
+#' 
+#' @param result mcmc samples found from running `ipd.run`
+#' @param newpatient Covariate values of patients that you want to predict treatment effect on. Must have length equal to total number of covariates. Can also be a matrix of dimension number of different patient groups x number of covariates
+#' @param type "continuous" for continuous outcome and "binary" for binary outcome. Reports odds ratio for the binary outcome.
+#' @param quantile quantile for the confidence interval
+#' @param coef (only for a frequentist method) vector of coefficient values for treatment effect and treatment-covariate interaction effect. 
+#' @param cov (only for a frquentist method) Covariance matrix of the parameters specified in `coef`. Used to find confidence interval.
+#' @param treatment.covariate.names (only for a frquentist method) Index names of treatment and treatment-covariate interactions (treatment index come first)
+#'
+#' @export
+
+treatment.effect <- function(result = NULL, newpatient = NULL, type = "continuous", quantile = c(0.025, 0.5, 0.975),
+                             coef = NULL, cov = NULL, treatment.covariate.names = NULL){
+
+  if(is.null(result)){
+    
+    #frequentist method calculation
+    vec1 <- rep(0, length = length(coef))
+    names(vec1) <- names(coef)
+    
+    vec1[treatment.covariate.names] <- c(1, newpatient)
+    mean1 <- as.vector(vec1 %*% coef)
+    
+    if(!is.null(cov)){
+      se1 <- as.vector(sqrt(vec1 %*% cov %*% vec1))
+      
+      if(type == "binary"){
+        exp(mean1 + qnorm(quantile) * se1)  
+      } else if(type == "continuous"){
+        mean1 + qnorm(quantile) * se1
+      }  
+    } else{
+      if(type == "binary"){
+        exp(mean1)  
+      } else if(type == "continuous"){
+        mean1
+      } 
+    }
+    
+  }  
+}
+
+
