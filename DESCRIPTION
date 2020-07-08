@@ -1,12 +1,15 @@
 Package: bipd
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Bayesian Individual Patient Data (Network) Meta-Analysis using 'JAGS'
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
+Date: 2020-07-04
+Depends: R (>= 2.10)
+Imports: rjags (>= 4-6), coda (>= 0.13)
+Authors@R: c( 
+	person("Michael", "Seo", email = "swj8874@gmail.com", role = c("aut", "cre")))
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.0.2

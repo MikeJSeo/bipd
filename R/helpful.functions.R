@@ -1,5 +1,6 @@
-#helpful functions that were used to run IPD-MA models (one-stage)
-##################################################################
+##########################################################################
+#helpful functions that were used to run/evaluate IPD-MA models (one-stage)
+##########################################################################
 
 #' Generate a fake IPD-MA data for demonstration
 #'
@@ -112,7 +113,6 @@ treatment.effect <- function(result = NULL, newpatient = NULL, type = "continuou
         mean1
       } 
     }
-    
   }  
 }
 
