@@ -119,11 +119,10 @@ shrinkage.prior.rjags <- function(ipd){
                        "\nfor(k in 1:Ncovariate){",
                        "\n\tgamma[k] ~ ddexp(0, tt)",
                        "\n}")
-                       )
                        
       } else if (lambda.prior[[1]] == "dunif"){
         code <- paste0(code, "\nlambda <- pow(lambda.inv, -1)",
-                       "\nlambda.inv ~ dunif(", lambda.prior[[2]], ", ", lambda.prior[[3]], ")"),
+                       "\nlambda.inv ~ dunif(", lambda.prior[[2]], ", ", lambda.prior[[3]], ")",
                        "\nfor(k in 1:Ncovariate){",
                        "\n\tgamma[k] ~ ddexp(0, lambda)",
                        "\n}")
