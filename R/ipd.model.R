@@ -34,7 +34,8 @@
 
 ipd.model <- function(y = NULL, study = NULL, treat = NULL, X = NULL, 
                       response = "normal", type = "random", model = "onestage", shrinkage = "none",
-                      mean.a = 0, prec.a = 0.001, mean.beta = 0, prec.beta = 0.001, mean.gamma = 0, prec.gamma = 0.001,
+                      mean.a = 0, prec.a = 0.001, mean.beta = 0, prec.beta = 0.001, 
+                      mean.gamma = 0, prec.gamma = 0.001, mean.delta = 0, prec.delta = 0.001,
                       hy.prior = list("dhnorm", 0, 1), lambda.prior = NULL, p.ind = NULL
                       ){
 
@@ -52,7 +53,8 @@ ipd.model <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
          
   ipd <- list(y = y, study = study, treat = treat, X = X, response = response, type = type, 
               model = model, shrinkage = shrinkage, mean.a = mean.a, prec.a = prec.a, 
-              mean.beta = mean.beta, prec.beta = prec.beta, mean.gamma = mean.gamma, prec.gamma = prec.gamma,
+              mean.beta = mean.beta, prec.beta = prec.beta, mean.gamma = mean.gamma, 
+              prec.gamma = prec.gamma, mean.delta = mean.delta, prec.delta = prec.delta,
               hy.prior = hy.prior, lambda.prior = lambda.prior, p.ind = p.ind)
 
   code <- ipd.rjags(ipd)
