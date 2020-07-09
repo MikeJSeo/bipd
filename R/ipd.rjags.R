@@ -102,7 +102,7 @@ shrinkage.prior.rjags <- function(ipd){
   code <- ""
   with(ipd, {
     
-    if(shrinakge == "none"){
+    if(shrinkage == "none"){
       code <- paste0(code, "\nfor(k in 1:Ncovariate){",
       "\n\tgamma[k] ~ dnorm(", mean.gamma, ", ", prec.gamma, ") ",
       "\n}")

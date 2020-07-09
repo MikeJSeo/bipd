@@ -51,9 +51,10 @@ ipd.model <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
   if(is.null(p.ind)) p.ind <- rep(0.5, dim(X)[2])
          
   ipd <- list(y = y, study = study, treat = treat, X = X, response = response, type = type, 
-              model = model, shrinkage = shrinkage, mean.a = mean.a, mean.beta = mean.beta,
-              prec.beta = prec.beta, hy.prior = hy.prior, lambda.prior = lambda.prior)
-  
+              model = model, shrinkage = shrinkage, mean.a = mean.a, prec.a = prec.a, 
+              mean.beta = mean.beta, prec.beta = prec.beta, mean.gamma = mean.gamma, prec.gamma = prec.gamma
+              hy.prior = hy.prior, lambda.prior = lambda.prior, p.ind = p.ind)
+
   code <- ipd.rjags(ipd)
 
   list(data = data, code = code)
