@@ -52,7 +52,7 @@ ipd.model <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
          
   ipd <- list(y = y, study = study, treat = treat, X = X, response = response, type = type, 
               model = model, shrinkage = shrinkage, mean.a = mean.a, prec.a = prec.a, 
-              mean.beta = mean.beta, prec.beta = prec.beta, mean.gamma = mean.gamma, prec.gamma = prec.gamma
+              mean.beta = mean.beta, prec.beta = prec.beta, mean.gamma = mean.gamma, prec.gamma = prec.gamma,
               hy.prior = hy.prior, lambda.prior = lambda.prior, p.ind = p.ind)
 
   code <- ipd.rjags(ipd)
