@@ -43,7 +43,7 @@ model.onestage <- function(ipd){
     }
     
     if(type == "random"){
-      code <- paste0(code, "\n#####treatment effect",
+      code <- paste0(code, "\n\n#####treatment effect",
                      "\nfor(j in 1:Nstudies){",
                      "\n\td[j,1] <- 0",
                      "\n\td[j,2] ~ dnorm(delta[2], tau)",
@@ -54,17 +54,17 @@ model.onestage <- function(ipd){
       code <- paste0(code, hy.prior.rjags(ipd))  
     }
     
-    code <- paste0(code, "\n## prior distribution for baseline effect",
+    code <- paste0(code, "\n\n## prior distribution for the study intercept",
                    "\nfor (j in 1:Nstudies){",
                    "\n\talpha[j] ~ dnorm(", mean.a, ", ", prec.a, ")",
                    "\n}")
     
-    code <- paste0(code, "\nfor(k in 1:Ncovariate){",
+    code <- paste0(code, "\n\n## prior distribution for the study intercept",
                    "\nfor(k in 1:Ncovariate){",
                    "\n\tbeta[k] ~ dnorm(", mean.beta, ", ", prec.beta, ")",
                    "\n}")
 
-    code <- paste0(code, "\n## prior distribution for average treatment effect",
+    code <- paste0(code, "\n\n## prior distribution for average treatment effect",
                    "\ndelta[1] <- 0",
                    "\ndelta[2] ~ dnorm(", mean.delta, ", ", prec.delta, ")\n")
                    
@@ -83,16 +83,16 @@ hy.prior.rjags <- function(ipd){
   distr <- hy.prior[[1]]
   if (distr == "dunif") {
     code <- paste0(code,
-                   "\n\tsd ~ dunif(hy.prior.1, hy.prior.2)",
-                   "\n\ttau <- pow(sd,-2)")
+                   "\nsd ~ dunif(", hy.prior[[2]], ", ", hy.prior[[3]], ")",
+                   "\ntau <- pow(sd,-2)")
   } else if(distr == "dgamma"){
     code <- paste0(code,
-                   "\n\tsd <- pow(prec, -0.5)",
-                   "\n\ttau ~ dgamma(hy.prior.1, hy.prior.2)")
+                   "\nsd <- pow(prec, -0.5)",
+                   "\ntau ~ dgamma(", hy.prior[[2]], ", ", hy.prior[[3]], ")")
   } else if(distr == "dhnorm"){
     code <- paste0(code,
-                   "\n\tsd ~ dnorm(hy.prior.1, hy.prior.2)T(0,)",
-                   "\n\ttau <- pow(sd, -2)")
+                   "\nsd ~ dunif(", hy.prior[[2]], ", ", hy.prior[[3]], ")T(0,)",
+                   "\ntau <- pow(sd, -2)")
   }
 }
 
@@ -103,12 +103,14 @@ shrinkage.prior.rjags <- function(ipd){
   with(ipd, {
     
     if(shrinkage == "none"){
-      code <- paste0(code, "\nfor(k in 1:Ncovariate){",
+      code <- paste0(code, "\n## prior distribution for the effect modifiers under no shrinkage",
+      "\nfor(k in 1:Ncovariate){",
       "\n\tgamma[k] ~ dnorm(", mean.gamma, ", ", prec.gamma, ") ",
       "\n}")
       
     } else if(shrinkage == "laplace"){
       
+      code <- paste0(code, "\n## prior distribution for the effect modifiers under laplacian shrinkage")
       if(lambda.prior[[1]] == "dgamma"){
         if(response == "normal"){
           code <- paste0(code, "\ntt <- lambda * sigma")
@@ -127,6 +129,8 @@ shrinkage.prior.rjags <- function(ipd){
                        "\n\tgamma[k] ~ ddexp(0, lambda)",
                        "\n}")
       }
+    } else if (shrinkage == "SSVS"){
+      code <- paste0(code, "\n## prior distribution for the effect modifiers under SSVS")
     }
     return(code)
   })
