@@ -16,5 +16,5 @@ ipd.run <- function(ipd, pars.save = c("beta", "gamma", "delta"), inits = NULL, 
   mod <- rjags::jags.model(textConnection(ipd$code), data = ipd$data, inits = inits, n.chains = n.chains, n.adapt = n.adapt)
   samples <- rjags::coda.samples(model = mod, variable.names = pars.save, n.iter = n.iter)   
 
-  return(list(ipd = ipd, samples = samples))
+  return(samples)
 }
