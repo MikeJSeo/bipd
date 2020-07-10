@@ -13,4 +13,6 @@ NULL
 #' @import coda
 NULL
 
+#' @import dclone
+NULL
 
