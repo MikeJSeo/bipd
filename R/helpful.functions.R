@@ -113,6 +113,17 @@ treatment.effect <- function(result = NULL, newpatient = NULL, type = "continuou
         mean1
       } 
     }
+  } else {
+    # if running bayesian method
+    
+    result
+    
+    result[,"c("]
+    
+    mat1 <- model_SSVS$BUGSoutput$sims.matrix[,c("delta[2]", "gamma[1]", "gamma[2]", "gamma[3]", "gamma[4]", "gamma[5]", "gamma[6]", "gamma[7]", "gamma[8]", "gamma[9]")]
+    sum1 <- mat1 %*% c(1, 0.9325098, -1.6474649, 1.8095668, -0.7168387, 1.0778950, 1.0691515, 2.348039, -5.3789130, 3.1705418)
+    
+    
   }  
 }
 

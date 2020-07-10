@@ -4,7 +4,7 @@
 #' 
 #' @param y outcome of the study. Can be continuous or binary. 
 #' @param study a vector indicating which study the patient belongs to. Please change the study names into numbers (i.e. 1,2,3,etc)
-#' @param treat a vector indicating which treatment the patient was assigned to. Please change the study names into numbers (i.e. 1,2,3,etc)
+#' @param treat a vector indicating which treatment the patient was assigned to (ie 1 for treatment, 0 for placebo)
 #' @param X a matrix of covariate values for each patient. Dimension would be number of patients x number of covariates.
 #' @param response Specification of the outcomes type. Must specify either "normal" or "binomial"
 #' @param type Assumption on the treatment effect: either "random" for random effects model or "fixed" for fixed effects model. Default is "random".
@@ -41,15 +41,19 @@ ipd.model <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
 
   data <- 
     list(Nstudies = length(unique(study)),
-         Ncovariates = dim(X)[2],
+         Ncovariate = dim(X)[2],
          X = X,
          Np = dim(X)[1],
          studyid = study,
-         treat = treat,
+         treat = treat + 1,
          y = y)
   
   if(is.null(lambda.prior)) lambda.prior <- list("dunif", 0, 5)
   if(is.null(p.ind)) p.ind <- rep(0.5, dim(X)[2])
+  
+  if(shrinkage == "SSVS"){
+    data$p.ind <- p.ind
+  }
          
   ipd <- list(y = y, study = study, treat = treat, X = X, response = response, type = type, 
               model = model, shrinkage = shrinkage, mean.a = mean.a, prec.a = prec.a, 

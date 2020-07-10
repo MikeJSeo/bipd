@@ -19,6 +19,8 @@ ipd.model(
   prec.beta = 0.001,
   mean.gamma = 0,
   prec.gamma = 0.001,
+  mean.delta = 0,
+  prec.delta = 0.001,
   hy.prior = list("dhnorm", 0, 1),
   lambda.prior = NULL,
   p.ind = NULL
@@ -29,7 +31,7 @@ ipd.model(
 
 \item{study}{a vector indicating which study the patient belongs to. Please change the study names into numbers (i.e. 1,2,3,etc)}
 
-\item{treat}{a vector indicating which treatment the patient was assigned to. Please change the study names into numbers (i.e. 1,2,3,etc)}
+\item{treat}{a vector indicating which treatment the patient was assigned to (ie 1 for treatment, 0 for placebo)}
 
 \item{X}{a matrix of covariate values for each patient. Dimension would be number of patients x number of covariates.}
 
@@ -57,16 +59,16 @@ See O'hara et al (2009) for more reference.}
 
 \item{prec.gamma}{Prior precision for the effect modifiers.}
 
+\item{mean.delta}{Prior mean for the treatment effect}
+
+\item{prec.delta}{Prior precision for the treatment effect}
+
 \item{hy.prior}{Prior for the heterogeneity parameter. Supports uniform, gamma, and half normal for normal and binomial response
 It should be a list of length 3, where first element should be the distribution (one of dunif, dgamma, dhnorm) and the next two are the parameters associated with the distribution. For example, list("dunif", 0, 5) give uniform prior with lower bound 0 and upper bound 5 for the heterogeneity parameter.}
 
 \item{lambda.prior}{(Only for shrinkage = "laplace") Two options for laplace shrinkage. We can put a gamma prior on the lambda (i.e. list("dgamma",2,0.1)) or put a uniform prior on the inverse of lambda (i.e. list("dunif",0,5))}
 
 \item{p.ind}{(Only for shrinkage = "SSVS") Prior probability of including each of the effect modifiers. Length should be same as the total length of the covariates.}
-
-\item{mean.delta}{Prior mean for the treatment effect}
-
-\item{prec.delta}{Prior precision for the treatment effect}
 }
 \value{
 \item{data}{Data organized in a list so that it can be used when running code in JAGS}
