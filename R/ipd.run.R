@@ -37,7 +37,7 @@ ipd.run <- function(ipd, pars.save = c("beta", "gamma", "delta"), inits = NULL, 
 ipd.run.parallel <- function(ipd, pars.save = c("beta", "gamma", "delta"), inits = NULL, n.chains = 3, n.adapt = 1000, n.iter = 10000, n.cores = 3){
 
   cl <- parallel::makePSOCKcluster(n.cores)
-  samples <- dclone::jags.parfit(cl = cl, data = ipd$data, inits = inits, model = textConnection(ipd$code), n.chains = n.chains, n.adapt = n.adapt, n.iter = n.iter)
+  samples <- dclone::jags.parfit(cl = cl, data = ipd$data, params = pars.save, model = textConnection(ipd$code), inits = inits, n.chains = n.chains, n.adapt = n.adapt, n.iter = n.iter)
   
   return(samples)
 }  
