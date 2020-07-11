@@ -91,7 +91,7 @@ hy.prior.rjags <- function(ipd){
                    "\ntau ~ dgamma(", hy.prior[[2]], ", ", hy.prior[[3]], ")")
   } else if(distr == "dhnorm"){
     code <- paste0(code,
-                   "\nsd ~ dnorm(", hy.prior[[2]], ", ", hy.prior[[3]], ");T(0,)",
+                   "\nsd ~ dnorm(", hy.prior[[2]], ", ", hy.prior[[3]], ")T(0,)",
                    "\ntau <- pow(sd, -2)")
   }
 }
