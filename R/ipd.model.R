@@ -28,7 +28,7 @@
 #' @param p.ind (Only for shrinkage = "SSVS") Prior probability of including each of the effect modifiers. Length should be same as the total length of the covariates.
 #' @return 
 #' \item{data.JAGS}{Data organized in a list so that it can be used when running code in JAGS}
-#' \item{code}{JAGS code that is used to run the model. Use cat(code) to see the code in a nicer format.}
+#' \item{code}{JAGS code that is used to run the model. Use cat(code) to see the code in a readable format}
 #' \item{model.JAGS}{JAGS code in a function. This is used when running model in parallel}
 #'
 #' @export
