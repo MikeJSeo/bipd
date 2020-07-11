@@ -14,6 +14,7 @@
 #' "SSVS" corresponds to the Search Variable Selection method. SSVS is not strictly a shrinkage method, 
 #' but pulls the estimated coefficient toward zero through variable selection in each iteration of the MCMC. 
 #' See O'hara et al (2009) for more reference.
+#' @param scale indicator for scaling the covariates; default is TRUE.
 #' @param mean.a Prior mean for the study intercept
 #' @param prec.a Prior precision for the study intercept
 #' @param mean.beta Prior mean for the regression coefficients of the main effects of the covariates 
@@ -30,16 +31,26 @@
 #' \item{data.JAGS}{Data organized in a list so that it can be used when running code in JAGS}
 #' \item{code}{JAGS code that is used to run the model. Use cat(code) to see the code in a readable format}
 #' \item{model.JAGS}{JAGS code in a function. This is used when running model in parallel}
+#' \item{scale.mean}{mean used in scaling covariates}
+#' \item{scale.sd}{standard deviation used in scaling covariates}
 #'
 #' @export
 
 ipd.model <- function(y = NULL, study = NULL, treat = NULL, X = NULL, 
-                      response = "normal", type = "random", model = "onestage", shrinkage = "none",
+                      response = "normal", type = "random", model = "onestage", shrinkage = "none", scale = TRUE,
                       mean.a = 0, prec.a = 0.001, mean.beta = 0, prec.beta = 0.001, 
                       mean.gamma = 0, prec.gamma = 0.001, mean.delta = 0, prec.delta = 0.001,
                       hy.prior = list("dhnorm", 0, 1), lambda.prior = NULL, p.ind = NULL
                       ){
 
+  #center the covariates
+  scale_mean <- scale_sd <- NULL
+  if(scale == TRUE){
+    scale_mean <- apply(X, 2, mean)
+    scale_sd <- apply(X, 2, sd)
+    X <- apply(X, 2, scale) 
+  }
+  
   data.JAGS <- 
     list(Nstudies = length(unique(study)),
          Ncovariate = dim(X)[2],
@@ -68,7 +79,7 @@ ipd.model <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
   code2 <- sub("T(0,)", ";T(0,)", code2, fixed = T)
   eval(parse(text = paste('model.JAGS <- function() {', code2, sep='')))
 
-  list(data.JAGS = data.JAGS, code = code, model.JAGS = model.JAGS)
+  list(data.JAGS = data.JAGS, code = code, model.JAGS = model.JAGS, scale_mean = scale_mean, scale_sd = scale_sd)
 }
 
 

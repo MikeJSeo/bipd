@@ -76,55 +76,44 @@ generate_ipdma_example <- function(type = "continuous"){
 #' Patient-specific treatment effect includes the main effect of treatment and 
 #' treatment-covariate interaction effect (i.e. effect modification)
 #' 
-#' @param result mcmc samples found from running `ipd.run`
-#' @param newpatient Covariate values of patients that you want to predict treatment effect on. Must have length equal to total number of covariates. Can also be a matrix of dimension number of different patient groups x number of covariates
-#' @param type "continuous" for continuous outcome and "binary" for binary outcome. Reports odds ratio for the binary outcome.
+#' @param ipd ipd object created from ipd.data function
+#' @param samples mcmc samples found from running `ipd.run`
+#' @param newpatient Covariate values of patients that you want to predict treatment effect on. Must have length equal to total number of covariates.
+#' @param response "normal" for continuous outcome and "binomial" for binary outcome. Reports odds ratio for the binary outcome.
 #' @param quantile quantile for the confidence interval
-#' @param coef (only for a frequentist method) vector of coefficient values for treatment effect and treatment-covariate interaction effect. 
-#' @param cov (only for a frquentist method) Covariance matrix of the parameters specified in `coef`. Used to find confidence interval.
-#' @param treatment.covariate.names (only for a frquentist method) Index names of treatment and treatment-covariate interactions (treatment index come first)
 #'
 #' @export
 
-treatment.effect <- function(result = NULL, newpatient = NULL, type = "continuous", quantile = c(0.025, 0.5, 0.975),
-                             coef = NULL, cov = NULL, treatment.covariate.names = NULL){
+treatment.effect <- function(ipd = NULL, samples = NULL, newpatient = NULL, 
+                             response = "normal", quantile = c(0.025, 0.5, 0.975)){
 
-  if(is.null(result)){
-    
-    #frequentist method calculation
-    vec1 <- rep(0, length = length(coef))
-    names(vec1) <- names(coef)
-    
-    vec1[treatment.covariate.names] <- c(1, newpatient)
-    mean1 <- as.vector(vec1 %*% coef)
-    
-    if(!is.null(cov)){
-      se1 <- as.vector(sqrt(vec1 %*% cov %*% vec1))
-      
-      if(type == "binary"){
-        exp(mean1 + qnorm(quantile) * se1)  
-      } else if(type == "continuous"){
-        mean1 + qnorm(quantile) * se1
-      }  
-    } else{
-      if(type == "binary"){
-        exp(mean1)  
-      } else if(type == "continuous"){
-        mean1
-      } 
-    }
-  } else {
-    # if running bayesian method
-    
-    result
-    
-    result[,"c("]
-    
-    mat1 <- model_SSVS$BUGSoutput$sims.matrix[,c("delta[2]", "gamma[1]", "gamma[2]", "gamma[3]", "gamma[4]", "gamma[5]", "gamma[6]", "gamma[7]", "gamma[8]", "gamma[9]")]
-    sum1 <- mat1 %*% c(1, 0.9325098, -1.6474649, 1.8095668, -0.7168387, 1.0778950, 1.0691515, 2.348039, -5.3789130, 3.1705418)
-    
-    
-  }  
+  
+  if(!is.null(ipd$scale_mean)) {
+    newpatient <- (newpatient - ipd$scale_mean)/ipd$scale_sd
+  }
+  
+  index0 <- which(colnames(samples[[1]]) == "delta[2]") #only works for IPD-MA
+  index1 <- grep("gamma", colnames(samples[[1]]))
+  index <- c(index0, index1)
+  samples2 <- samples[,index]
+  
+  merged <- samples2[[1]]
+  for(i in 2:length(samples2)){
+    merged <- rbind(merged, samples2[[i]])
+  }
+  
+  pred <- merged %*% newpatient
+  
+  mean1 <- mean(pred)
+  se1 <- sd(pred)
+  
+  if(response == "normal"){
+    CI <- mean1 + qnorm(quantile)* se1
+  } else if(response == "binomial"){
+    CI <- exp(mean1 + qnorm(quantile)* se1)    
+  }
+  names(CI) <- quantile
+  return(CI)
 }
 
 
