@@ -10,6 +10,7 @@ ipd.run.parallel(
   inits = NULL,
   n.chains = 3,
   n.adapt = 1000,
+  n.burnin = 1000,
   n.iter = 10000
 )
 }
@@ -20,13 +21,13 @@ ipd.run.parallel(
 
 \item{inits}{initial values specified for the parameters to save}
 
-\item{n.chains}{Number of MCMC chains to}
+\item{n.chains}{Number of MCMC chains to run. This corresponds the number of cores used for parallel computation.}
 
-\item{n.adapt}{The number of iterations for adaptation (this corresponds to the number of burnin)}
+\item{n.adapt}{The number of iterations for adaptation (Note that the samples from adaptation phase is non-Markovian and do not constitute a Markov chain)}
+
+\item{n.burnin}{The number of iterations for burn-in}
 
 \item{n.iter}{The number of iterations to run after the adaptation}
-
-\item{n.cores}{The number of cores used for parallel computation}
 }
 \description{
 This function runs the model through parallel computation from dclone package. Before running this function, we need to specify data, prior, JAGS code, etc. using ipd.data function.
