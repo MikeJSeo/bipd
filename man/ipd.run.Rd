@@ -14,7 +14,7 @@ ipd.run(
 )
 }
 \arguments{
-\item{ipd}{ipd object created from \code{\link{ipd.data}} function}
+\item{ipd}{ipd object created from ipd.data function}
 
 \item{pars.save}{parameters to save. "beta" - coefficients for main effects; "gamma" - coefficients for effect modifiers; "delta" - average treaetment effect}
 
@@ -27,5 +27,5 @@ ipd.run(
 \item{n.iter}{The number of iterations to run after the adaptation}
 }
 \description{
-This is the core function that runs the model in our program. Before running this function, we need to specify data, prior, JAGS code, etc. using \code{\link{ipd.data}}.
+This is the core function that runs the model in our program. Before running this function, we need to specify data, prior, JAGS code, etc. using ipd.data function.
 }

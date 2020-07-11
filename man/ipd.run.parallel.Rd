@@ -14,7 +14,7 @@ ipd.run.parallel(
 )
 }
 \arguments{
-\item{ipd}{ipd object created from \code{\link{ipd.data}} function}
+\item{ipd}{ipd object created from ipd.data function}
 
 \item{pars.save}{parameters to save. "beta" - coefficients for main effects; "gamma" - coefficients for effect modifiers; "delta" - average treaetment effect}
 
@@ -29,5 +29,5 @@ ipd.run.parallel(
 \item{n.cores}{The number of cores used for parallel computation}
 }
 \description{
-This function runs the model through parallel computation from dclone package. Before running this function, we need to specify data, prior, JAGS code, etc. using \code{\link{ipd.data}}.
+This function runs the model through parallel computation from dclone package. Before running this function, we need to specify data, prior, JAGS code, etc. using ipd.data function.
 }
