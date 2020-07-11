@@ -9,6 +9,9 @@
 NULL
 
 
+#' @import stats
+NULL
+
 #' @import coda
 NULL
 

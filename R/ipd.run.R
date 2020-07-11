@@ -11,9 +11,10 @@
 #'
 #' @export
 
-ipd.run <- function(ipd, pars.save = c("beta", "gamma", "delta"), inits = NULL, n.chains = 3, n.adapt = 1000, n.iter = 10000){
+ipd.run <- function(ipd, pars.save = c("beta", "gamma", "delta"), inits = NULL, n.chains = 3, n.adapt = 1000, n.burnin = 1000, n.iter = 10000){
   
   mod <- rjags::jags.model(textConnection(ipd$code), data = ipd$data.JAGS, inits = inits, n.chains = n.chains, n.adapt = n.adapt)
+  stats::update(mod, n.burn)
   samples <- rjags::coda.samples(model = mod, variable.names = pars.save, n.iter = n.iter)   
 
   return(samples)
@@ -33,10 +34,10 @@ ipd.run <- function(ipd, pars.save = c("beta", "gamma", "delta"), inits = NULL, 
 #' @export
 
 
-ipd.run.parallel <- function(ipd, pars.save = c("beta", "gamma", "delta"), inits = NULL, n.chains = 3, n.adapt = 1000, n.iter = 10000){
+ipd.run.parallel <- function(ipd, pars.save = c("beta", "gamma", "delta"), inits = NULL, n.chains = 3, n.adapt = 1000, n.burnin = 1000, n.iter = 10000){
 
   cl <- parallel::makePSOCKcluster(n.chains)
-  samples <- dclone::jags.parfit(cl = cl, data = ipd$data.JAGS, params = pars.save, model = ipd$model.JAGS)
+  samples <- dclone::jags.parfit(cl = cl, data = ipd$data.JAGS, params = pars.save, model = ipd$model.JAGS, n.adapt = n.adapt, n.iter = n.iter)
   
   return(samples)
 
