@@ -139,7 +139,7 @@ shrinkage.prior.rjags <- function(ipd){
                     "\n",
                     "\nzeta <- pow(eta, -2)",
                     "\neta ~ dunif(0, 5)",
-                    "\ntauCov[1] <- zeta * 1000 # g = 1000; precision of spike",
+                    "\ntauCov[1] <- zeta * 1000 # precision of spike with g = 100",
                     "\ntauCov[2] <- zeta # precision of slap",
                     "\n\nfor(k in 1:Ncovariate){",
                     "\n\tPind[2,k] <- p.ind[k]",
