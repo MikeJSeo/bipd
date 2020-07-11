@@ -40,7 +40,6 @@ ipd.run.parallel <- function(ipd, pars.save = c("beta", "gamma", "delta"), inits
 
   cl <- parallel::makePSOCKcluster(n.chains)
   samples <- dclone::jags.parfit(cl = cl, data = ipd$data.JAGS, params = pars.save, model = ipd$model.JAGS, inits = inits, n.chains = n.chains, n.adapt = n.adapt, n.update = n.burnin, n.iter = n.iter)
-  stopCluster(cl)
   return(samples)
 
 }  
