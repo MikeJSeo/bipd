@@ -13,7 +13,7 @@
 
 ipd.run <- function(ipd, pars.save = c("beta", "gamma", "delta"), inits = NULL, n.chains = 3, n.adapt = 1000, n.iter = 10000){
   
-  mod <- rjags::jags.model(textConnection(ipd$code), data = ipd$data, inits = inits, n.chains = n.chains, n.adapt = n.adapt)
+  mod <- rjags::jags.model(textConnection(ipd$code), data = ipd$data.JAGS, inits = inits, n.chains = n.chains, n.adapt = n.adapt)
   samples <- rjags::coda.samples(model = mod, variable.names = pars.save, n.iter = n.iter)   
 
   return(samples)
@@ -34,10 +34,15 @@ ipd.run <- function(ipd, pars.save = c("beta", "gamma", "delta"), inits = NULL, 
 #' @export
 
 
-ipd.run.parallel <- function(ipd, pars.save = c("beta", "gamma", "delta"), inits = NULL, n.chains = 3, n.adapt = 1000, n.iter = 10000, n.cores = 3){
+ipd.run.parallel <- function(ipd, pars.save = c("beta", "gamma", "delta"), inits = NULL, n.chains = 3, n.adapt = 1000, n.iter = 10000){
 
-  cl <- parallel::makePSOCKcluster(n.cores)
-  samples <- dclone::jags.parfit(cl = cl, data = ipd$data, params = pars.save, model = textConnection(ipd$code), inits = inits, n.chains = n.chains, n.adapt = n.adapt, n.iter = n.iter)
-  
-  return(samples)
+  with(ipd,{
+    cl <- parallel::makePSOCKcluster(n.cores)
+#    tmp <- parallel::clusterEvalQ(cl, library(dclone))
+    samples <- dclone::jags.parfit(cl = cl, data = data.JAGS, params = pars.save, model = textConnection(code), inits = inits, n.chains = n.chains, n.adapt = n.adapt, n.iter = n.iter)
+    
+    return(samples)
+  })
+ 
+#  return(samples)
 }  

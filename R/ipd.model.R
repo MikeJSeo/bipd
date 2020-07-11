@@ -27,7 +27,7 @@
 #' @param lambda.prior (Only for shrinkage = "laplace") Two options for laplace shrinkage. We can put a gamma prior on the lambda (i.e. list("dgamma",2,0.1)) or put a uniform prior on the inverse of lambda (i.e. list("dunif",0,5))
 #' @param p.ind (Only for shrinkage = "SSVS") Prior probability of including each of the effect modifiers. Length should be same as the total length of the covariates.
 #' @return 
-#' \item{data}{Data organized in a list so that it can be used when running code in JAGS}
+#' \item{data.JAGS}{Data organized in a list so that it can be used when running code in JAGS}
 #' \item{code}{JAGS code that is used to run the model. Use cat(code) to see the code in a nicer format.}
 #'
 #' @export
@@ -39,7 +39,7 @@ ipd.model <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
                       hy.prior = list("dhnorm", 0, 1), lambda.prior = NULL, p.ind = NULL
                       ){
 
-  data <- 
+  data.JAGS <- 
     list(Nstudies = length(unique(study)),
          Ncovariate = dim(X)[2],
          X = X,
@@ -52,7 +52,7 @@ ipd.model <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
   if(is.null(p.ind)) p.ind <- rep(0.5, dim(X)[2])
   
   if(shrinkage == "SSVS"){
-    data$p.ind <- p.ind
+    data.JAGS$p.ind <- p.ind
   }
          
   ipd <- list(y = y, study = study, treat = treat, X = X, response = response, type = type, 
@@ -63,7 +63,7 @@ ipd.model <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
 
   code <- ipd.rjags(ipd)
 
-  list(data = data, code = code)
+  list(data.JAGS = data.JAGS, code = code)
 }
 
 
