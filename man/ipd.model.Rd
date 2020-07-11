@@ -71,8 +71,9 @@ It should be a list of length 3, where first element should be the distribution 
 \item{p.ind}{(Only for shrinkage = "SSVS") Prior probability of including each of the effect modifiers. Length should be same as the total length of the covariates.}
 }
 \value{
-\item{data}{Data organized in a list so that it can be used when running code in JAGS}
+\item{data.JAGS}{Data organized in a list so that it can be used when running code in JAGS}
 \item{code}{JAGS code that is used to run the model. Use cat(code) to see the code in a nicer format.}
+\item{code2}{JAGS code in a function. This is used when running model in parallel}
 }
 \description{
 This function sets up data and JAGS code that is needed to run ipd models in JAGS

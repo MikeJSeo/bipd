@@ -10,8 +10,7 @@ ipd.run.parallel(
   inits = NULL,
   n.chains = 3,
   n.adapt = 1000,
-  n.iter = 10000,
-  n.cores = 2
+  n.iter = 10000
 )
 }
 \arguments{

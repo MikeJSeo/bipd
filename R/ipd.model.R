@@ -29,6 +29,7 @@
 #' @return 
 #' \item{data.JAGS}{Data organized in a list so that it can be used when running code in JAGS}
 #' \item{code}{JAGS code that is used to run the model. Use cat(code) to see the code in a nicer format.}
+#' \item{code2}{JAGS code in a function. This is used when running model in parallel}
 #'
 #' @export
 
@@ -63,7 +64,7 @@ ipd.model <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
 
   code <- ipd.rjags(ipd)
 
-  list(data.JAGS = data.JAGS, code = code)
+  list(data.JAGS = data.JAGS, code = code, code2 = code)
 }
 
 
