@@ -66,7 +66,7 @@ ipd.model <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
   
   code2 <- substring(code, 10)
   code2 <- sub("T(0,)", ";T(0,)", code2, fixed = T)
-  eval(parse(text = paste('model.JAGS <- function() {', code2, "\n}", sep='')))
+  eval(parse(text = paste('model.JAGS <- function() {', code2, sep='')))
 
   list(data.JAGS = data.JAGS, code = code, code2 = code2, model.JAGS = model.JAGS)
 }

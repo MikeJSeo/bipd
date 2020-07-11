@@ -26,31 +26,18 @@ ipd.run <- function(ipd, pars.save = c("beta", "gamma", "delta"), inits = NULL, 
 #' @param ipd ipd object created from ipd.data function
 #' @param pars.save parameters to save. "beta" - coefficients for main effects; "gamma" - coefficients for effect modifiers; "delta" - average treaetment effect
 #' @param inits initial values specified for the parameters to save
-#' @param n.chains Number of MCMC chains to 
+#' @param n.chains Number of MCMC chains to run. This corresponds the number of cores used for parallel computation.
 #' @param n.adapt The number of iterations for adaptation (this corresponds to the number of burnin)
 #' @param n.iter The number of iterations to run after the adaptation
-#' @param n.cores The number of cores used for parallel computation
 #'
 #' @export
 
 
 ipd.run.parallel <- function(ipd, pars.save = c("beta", "gamma", "delta"), inits = NULL, n.chains = 3, n.adapt = 1000, n.iter = 10000){
 
-#   mod <- rjags::jags.model(textConnection(ipd$code), data = ipd$data.JAGS, inits = inits, n.chains = n.chains)
-#   write.jags.model(mod)
-#   
-#   parJagsModel
-#   
-#   body <- "(x1 + x2) * x3"
-#   args <- "x1, x2, x3"
-#   
-#   eval(parse(text = paste('f <- function() {', code2, "\n}", sep='')))
-#   
-# #     cl <- parallel::makePSOCKcluster(n.chains)
-# # #    tmp <- parallel::clusterEvalQ(cl, library(dclone))
-#      samples <- dclone::jags.parfit(cl = cl, data = ipd$data.JAGS, params = pars.save, model = f)
-#     
-#     return(samples)
+  cl <- parallel::makePSOCKcluster(n.chains)
+  samples <- dclone::jags.parfit(cl = cl, data = ipd$data.JAGS, params = pars.save, model = ipd$model.JAGS)
+  
+  return(samples)
 
-#  return(samples)
 }  
