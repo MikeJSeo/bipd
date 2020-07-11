@@ -13,6 +13,7 @@ ipd.model(
   type = "random",
   model = "onestage",
   shrinkage = "none",
+  scale = TRUE,
   mean.a = 0,
   prec.a = 0.001,
   mean.beta = 0,
@@ -47,6 +48,8 @@ ipd.model(
 but pulls the estimated coefficient toward zero through variable selection in each iteration of the MCMC. 
 See O'hara et al (2009) for more reference.}
 
+\item{scale}{indicator for scaling the covariates; default is TRUE.}
+
 \item{mean.a}{Prior mean for the study intercept}
 
 \item{prec.a}{Prior precision for the study intercept}
@@ -74,6 +77,8 @@ It should be a list of length 3, where first element should be the distribution 
 \item{data.JAGS}{Data organized in a list so that it can be used when running code in JAGS}
 \item{code}{JAGS code that is used to run the model. Use cat(code) to see the code in a readable format}
 \item{model.JAGS}{JAGS code in a function. This is used when running model in parallel}
+\item{scale.mean}{mean used in scaling covariates}
+\item{scale.sd}{standard deviation used in scaling covariates}
 }
 \description{
 This function sets up data and JAGS code that is needed to run ipd models in JAGS

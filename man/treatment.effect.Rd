@@ -5,29 +5,23 @@
 \title{Calculate patient-specific treatment effect}
 \usage{
 treatment.effect(
-  result = NULL,
+  ipd = NULL,
+  samples = NULL,
   newpatient = NULL,
-  type = "continuous",
-  quantile = c(0.025, 0.5, 0.975),
-  coef = NULL,
-  cov = NULL,
-  treatment.covariate.names = NULL
+  response = "normal",
+  quantile = c(0.025, 0.5, 0.975)
 )
 }
 \arguments{
-\item{result}{mcmc samples found from running `ipd.run`}
+\item{ipd}{ipd object created from ipd.data function}
 
-\item{newpatient}{Covariate values of patients that you want to predict treatment effect on. Must have length equal to total number of covariates. Can also be a matrix of dimension number of different patient groups x number of covariates}
+\item{samples}{mcmc samples found from running `ipd.run`}
 
-\item{type}{"continuous" for continuous outcome and "binary" for binary outcome. Reports odds ratio for the binary outcome.}
+\item{newpatient}{Covariate values of patients that you want to predict treatment effect on. Must have length equal to total number of covariates.}
+
+\item{response}{"normal" for continuous outcome and "binomial" for binary outcome. Reports odds ratio for the binary outcome.}
 
 \item{quantile}{quantile for the confidence interval}
-
-\item{coef}{(only for a frequentist method) vector of coefficient values for treatment effect and treatment-covariate interaction effect.}
-
-\item{cov}{(only for a frquentist method) Covariance matrix of the parameters specified in `coef`. Used to find confidence interval.}
-
-\item{treatment.covariate.names}{(only for a frquentist method) Index names of treatment and treatment-covariate interactions (treatment index come first)}
 }
 \description{
 Convenient function for calculating the patient-specific treatment effect.
