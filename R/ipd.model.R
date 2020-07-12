@@ -42,7 +42,7 @@ ipd.model <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
                       response = "normal", type = "random", model = "onestage", shrinkage = "none", scale = TRUE,
                       mean.a = 0, prec.a = 0.001, mean.beta = 0, prec.beta = 0.001, 
                       mean.gamma = 0, prec.gamma = 0.001, mean.delta = 0, prec.delta = 0.001,
-                      hy.prior = list("dhnorm", 0, 1), lambda.prior = NULL, p.ind = NULL, g = NULL
+                      hy.prior = list("dhnorm", 0, 1), lambda.prior = NULL, p.ind = NULL, g = NULL, hy.prior.eta = NULL
                       ){
 
   #center the covariates
