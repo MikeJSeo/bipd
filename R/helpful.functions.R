@@ -102,7 +102,7 @@ treatment.effect <- function(ipd = NULL, samples = NULL, newpatient = NULL,
     merged <- rbind(merged, samples2[[i]])
   }
   
-  pred <- merged %*% newpatient
+  pred <- merged %*% c(1, newpatient)
   
   mean1 <- mean(pred)
   se1 <- sd(pred)

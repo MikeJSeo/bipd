@@ -27,6 +27,8 @@
 #' It should be a list of length 3, where first element should be the distribution (one of dunif, dgamma, dhnorm) and the next two are the parameters associated with the distribution. For example, list("dunif", 0, 5) give uniform prior with lower bound 0 and upper bound 5 for the heterogeneity parameter.
 #' @param lambda.prior (Only for shrinkage = "laplace") Two options for laplace shrinkage. We can put a gamma prior on the lambda (i.e. list("dgamma",2,0.1)) or put a uniform prior on the inverse of lambda (i.e. list("dunif",0,5))
 #' @param p.ind (Only for shrinkage = "SSVS") Prior probability of including each of the effect modifiers. Length should be same as the total length of the covariates.
+#' @param g (Only for shrinkage = "SSVS") Multiplier for the precision of spike. Default is g = 1000.
+#' @param hy.prior.eta (Only for shrinkage = "SSVS") Variance of the slab prior. Currently only support uniform distribution. Default is list("dunif", 0, 5)
 #' @return 
 #' \item{data.JAGS}{Data organized in a list so that it can be used when running code in JAGS}
 #' \item{code}{JAGS code that is used to run the model. Use cat(code) to see the code in a readable format}
@@ -40,7 +42,7 @@ ipd.model <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
                       response = "normal", type = "random", model = "onestage", shrinkage = "none", scale = TRUE,
                       mean.a = 0, prec.a = 0.001, mean.beta = 0, prec.beta = 0.001, 
                       mean.gamma = 0, prec.gamma = 0.001, mean.delta = 0, prec.delta = 0.001,
-                      hy.prior = list("dhnorm", 0, 1), lambda.prior = NULL, p.ind = NULL
+                      hy.prior = list("dhnorm", 0, 1), lambda.prior = NULL, p.ind = NULL, g = NULL
                       ){
 
   #center the covariates
@@ -62,16 +64,20 @@ ipd.model <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
   
   if(is.null(lambda.prior)) lambda.prior <- list("dunif", 0, 5)
   if(is.null(p.ind)) p.ind <- rep(0.5, dim(X)[2])
+  if(is.null(g)) g <- 1000
+  if(is.null(hy.prior.eta)) <- hy.prior.eta <- list("dunif", 0, 5)
   
   if(shrinkage == "SSVS"){
     data.JAGS$p.ind <- p.ind
+    data.JAGS$g <- g
+    data.JAGS$hy.prior.eta <- hy.prior.eta
   }
          
   ipd <- list(y = y, study = study, treat = treat, X = X, response = response, type = type, 
               model = model, shrinkage = shrinkage, mean.a = mean.a, prec.a = prec.a, 
               mean.beta = mean.beta, prec.beta = prec.beta, mean.gamma = mean.gamma, 
               prec.gamma = prec.gamma, mean.delta = mean.delta, prec.delta = prec.delta,
-              hy.prior = hy.prior, lambda.prior = lambda.prior, p.ind = p.ind)
+              hy.prior = hy.prior, lambda.prior = lambda.prior, p.ind = p.ind, g = g, hy.prior.eta = hy.prior.eta)
 
   code <- ipd.rjags(ipd)
   
