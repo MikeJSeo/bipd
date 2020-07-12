@@ -1,6 +1,6 @@
-#' Make an ipd object containing data, priors, and a JAGS model file
+#' Make an onestage individual patient data meta analysis (ipd-ma) object containing data, priors, and a JAGS model code
 #'
-#' This function sets up data and JAGS code that is needed to run ipd models in JAGS
+#' This function sets up data and JAGS code that is needed to run onestage ipd-ma models in JAGS
 #' 
 #' @param y outcome of the study. Can be continuous or binary. 
 #' @param study a vector indicating which study the patient belongs to. Please change the study names into numbers (i.e. 1,2,3,etc)
@@ -8,7 +8,6 @@
 #' @param X a matrix of covariate values for each patient. Dimension would be number of patients x number of covariates.
 #' @param response Specification of the outcomes type. Must specify either "normal" or "binomial"
 #' @param type Assumption on the treatment effect: either "random" for random effects model or "fixed" for fixed effects model. Default is "random".
-#' @param model "onestage" for one-stage model; two-stage are planned to be implemented
 #' @param shrinkage shrinkage method applied to the effect modifiers. "none" correspond to no shrinkage.
 #' "laplace" corresponds to a adaptive shrinkage with a Laplacian prior (ie often known as Bayesian LASSO).
 #' "SSVS" corresponds to the Search Variable Selection method. SSVS is not strictly a shrinkage method, 
@@ -38,8 +37,8 @@
 #'
 #' @export
 
-ipd.model <- function(y = NULL, study = NULL, treat = NULL, X = NULL, 
-                      response = "normal", type = "random", model = "onestage", shrinkage = "none", scale = TRUE,
+ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL, 
+                      response = "normal", type = "random", shrinkage = "none", scale = TRUE,
                       mean.a = 0, prec.a = 0.001, mean.beta = 0, prec.beta = 0.001, 
                       mean.gamma = 0, prec.gamma = 0.001, mean.delta = 0, prec.delta = 0.001,
                       hy.prior = list("dhnorm", 0, 1), lambda.prior = NULL, p.ind = NULL, g = NULL, hy.prior.eta = NULL
@@ -53,6 +52,7 @@ ipd.model <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
     X <- apply(X, 2, scale) 
   }
   
+  #JAGS data input
   data.JAGS <- 
     list(Nstudies = length(unique(study)),
          Ncovariate = dim(X)[2],
@@ -62,6 +62,7 @@ ipd.model <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
          treat = treat + 1,
          y = y)
   
+  # default prior assignment
   if(is.null(lambda.prior)) lambda.prior <- list("dunif", 0, 5)
   if(is.null(p.ind)) p.ind <- rep(0.5, dim(X)[2])
   if(is.null(g)) g <- 1000
@@ -69,17 +70,14 @@ ipd.model <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
   
   if(shrinkage == "SSVS"){
     data.JAGS$p.ind <- p.ind
-    data.JAGS$g <- g
-    data.JAGS$hy.prior.eta <- hy.prior.eta
   }
          
   ipd <- list(y = y, study = study, treat = treat, X = X, response = response, type = type, 
-              model = model, shrinkage = shrinkage, mean.a = mean.a, prec.a = prec.a, 
+              shrinkage = shrinkage, mean.a = mean.a, prec.a = prec.a, 
               mean.beta = mean.beta, prec.beta = prec.beta, mean.gamma = mean.gamma, 
               prec.gamma = prec.gamma, mean.delta = mean.delta, prec.delta = prec.delta,
               hy.prior = hy.prior, lambda.prior = lambda.prior, p.ind = p.ind, g = g, hy.prior.eta = hy.prior.eta)
-
-  code <- ipd.rjags(ipd)
+  code <- ipdma.onestage.rjags(ipd)
   
   code2 <- substring(code, 10)
   code2 <- sub("T(0,)", ";T(0,)", code2, fixed = T)

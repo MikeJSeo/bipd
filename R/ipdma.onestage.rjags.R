@@ -1,19 +1,6 @@
 
-ipd.rjags <- function(ipd){
-  
-  type <- ipd$type
-  model <- ipd$model
-  
-  code <- if(model == "onestage"){
-    model.onestage(ipd)  
-  } 
-  code <- paste0("model {\n", code, "\n}")
-  
-  return(code)
-}
 
-
-model.onestage <- function(ipd){
+ipdma.onestage.rjags <- function(ipd){
   
   with(ipd, {
     
@@ -69,6 +56,8 @@ model.onestage <- function(ipd){
                    "\n}")
 
     code <- paste0(code, shrinkage.prior.rjags(ipd))  
+    
+    code <- paste0("model {\n", code, "\n}")
     
     return(code)
   })
