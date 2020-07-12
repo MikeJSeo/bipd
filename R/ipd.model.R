@@ -65,7 +65,7 @@ ipd.model <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
   if(is.null(lambda.prior)) lambda.prior <- list("dunif", 0, 5)
   if(is.null(p.ind)) p.ind <- rep(0.5, dim(X)[2])
   if(is.null(g)) g <- 1000
-  if(is.null(hy.prior.eta)) <- hy.prior.eta <- list("dunif", 0, 5)
+  if(is.null(hy.prior.eta)) hy.prior.eta <- list("dunif", 0, 5)
   
   if(shrinkage == "SSVS"){
     data.JAGS$p.ind <- p.ind
