@@ -87,7 +87,6 @@ generate_ipdma_example <- function(type = "continuous"){
 treatment.effect <- function(ipd = NULL, samples = NULL, newpatient = NULL, 
                              response = "normal", quantile = c(0.025, 0.5, 0.975)){
 
-  
   if(!is.null(ipd$scale_mean)) {
     newpatient <- (newpatient - ipd$scale_mean)/ipd$scale_sd
   }

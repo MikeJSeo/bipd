@@ -27,7 +27,7 @@
 #' @param lambda.prior (Only for shrinkage = "laplace") Two options for laplace shrinkage. We can put a gamma prior on the lambda (i.e. list("dgamma",2,0.1)) or put a uniform prior on the inverse of lambda (i.e. list("dunif",0,5))
 #' @param p.ind (Only for shrinkage = "SSVS") Prior probability of including each of the effect modifiers. Length should be same as the total length of the covariates.
 #' @param g (Only for shrinkage = "SSVS") Multiplier for the precision of spike. Default is g = 1000.
-#' @param hy.prior.eta (Only for shrinkage = "SSVS") Variance of the slab prior. Currently only support uniform distribution. Default is list("dunif", 0, 5)
+#' @param hy.prior.eta (Only for shrinkage = "SSVS") Standard deviation of the slab prior. Currently only support uniform distribution. Default is list("dunif", 0, 5)
 #' @return 
 #' \item{data.JAGS}{Data organized in a list so that it can be used when running code in JAGS}
 #' \item{code}{JAGS code that is used to run the model. Use cat(code) to see the code in a readable format}

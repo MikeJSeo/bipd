@@ -5,7 +5,7 @@
 #' @param ipd ipd object created from ipd.data function
 #' @param pars.save parameters to save. "beta" - coefficients for main effects; "gamma" - coefficients for effect modifiers; "delta" - average treaetment effect
 #' @param inits initial values specified for the parameters to save
-#' @param n.chains Number of MCMC chains to 
+#' @param n.chains Number of MCMC chains to sample
 #' @param n.adapt The number of iterations for adaptation (Note that the samples from adaptation phase is non-Markovian and do not constitute a Markov chain)
 #' @param n.burnin The number of iterations for burn-in
 #' @param n.iter The number of iterations to run after the adaptation
