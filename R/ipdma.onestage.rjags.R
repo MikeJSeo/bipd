@@ -21,7 +21,7 @@ ipdma.onestage.rjags <- function(ipd){
       code <- paste0(code, " d[studyid[i],treat[i]]",
                            "\n}")
     } else if (type == "fixed"){
-      code <- paste0(code, "delta[treat[i]]",
+      code <- paste0(code, " delta[treat[i]]",
                            "\n}")
     }
     
