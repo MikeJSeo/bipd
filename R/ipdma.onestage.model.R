@@ -1,6 +1,6 @@
 #' Make an onestage individual patient data meta analysis (ipd-ma) object containing data, priors, and a JAGS model code
 #'
-#' This function sets up data and JAGS code that is needed to run onestage ipd-ma models in JAGS
+#' This function sets up data and JAGS code that is needed to run onestage ipd-ma models in JAGS.
 #' 
 #' @param y outcome of the study. Can be continuous or binary. 
 #' @param study a vector indicating which study the patient belongs to. Please change the study names into numbers (i.e. 1,2,3,etc)
@@ -12,16 +12,16 @@
 #' "laplace" corresponds to a adaptive shrinkage with a Laplacian prior (ie often known as Bayesian LASSO).
 #' "SSVS" corresponds to the Search Variable Selection method. SSVS is not strictly a shrinkage method, 
 #' but pulls the estimated coefficient toward zero through variable selection in each iteration of the MCMC. 
-#' See O'hara et al (2009) for more reference.
+#' See O'hara et al (2009) for more details.
 #' @param scale indicator for scaling the covariates; default is TRUE.
-#' @param mean.a Prior mean for the study intercept
+#' @param mean.a Prior mean for the study intercept. 
 #' @param prec.a Prior precision for the study intercept
 #' @param mean.beta Prior mean for the regression coefficients of the main effects of the covariates 
 #' @param prec.beta Prior precision for the regression coefficients of the main effects of the covariates
 #' @param mean.gamma Prior mean for the effect modifiers. This parameter is not used if penalization is placed on effect modifiers. 
 #' @param prec.gamma Prior precision for the effect modifiers.
-#' @param mean.delta Prior mean for the treatment effect
-#' @param prec.delta Prior precision for the treatment effect
+#' @param mean.delta Prior mean for the average treatment effect
+#' @param prec.delta Prior precision for the average treatment effect
 #' @param hy.prior Prior for the heterogeneity parameter. Supports uniform, gamma, and half normal for normal and binomial response
 #' It should be a list of length 3, where first element should be the distribution (one of dunif, dgamma, dhnorm) and the next two are the parameters associated with the distribution. For example, list("dunif", 0, 5) give uniform prior with lower bound 0 and upper bound 5 for the heterogeneity parameter.
 #' @param lambda.prior (Only for shrinkage = "laplace") Two options for laplace shrinkage. We can put a gamma prior on the lambda (i.e. list("dgamma",2,0.1)) or put a uniform prior on the inverse of lambda (i.e. list("dunif",0,5))
