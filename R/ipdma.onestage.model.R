@@ -8,6 +8,7 @@
 #' @param X a matrix of covariate values for each patient. Dimension would be number of patients x number of covariates.
 #' @param response Specification of the outcomes type. Must specify either "normal" or "binomial"
 #' @param type Assumption on the treatment effect: either "random" for random effects model or "fixed" for fixed effects model. Default is "random".
+#' @param approach "deluded" approach which does not separate within-study information and across-study information or "deft" approach which separate within-study and across-study information by centering the covariates using study specific mean and including study specific mean in the regression. Refer to Fisher et al. for more details.
 #' @param shrinkage shrinkage method applied to the effect modifiers. "none" correspond to no shrinkage.
 #' "laplace" corresponds to a adaptive shrinkage with a Laplacian prior (ie often known as Bayesian LASSO).
 #' "SSVS" corresponds to the Search Variable Selection method. SSVS is not strictly a shrinkage method, 
@@ -38,7 +39,7 @@
 #' @export
 
 ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL, 
-                      response = "normal", type = "random", shrinkage = "none", scale = TRUE,
+                      response = "normal", type = "random", approach = "deft", shrinkage = "none", scale = TRUE,
                       mean.a = 0, prec.a = 0.001, mean.beta = 0, prec.beta = 0.001, 
                       mean.gamma = 0, prec.gamma = 0.001, mean.delta = 0, prec.delta = 0.001,
                       hy.prior = list("dhnorm", 0, 1), lambda.prior = NULL, p.ind = NULL, g = NULL, hy.prior.eta = NULL
@@ -46,7 +47,7 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
 
   #center the covariates
   scale_mean <- scale_sd <- NULL
-  if(scale == TRUE){
+  if(scale == TRUE & approach == "deluded"){
     scale_mean <- apply(X, 2, mean)
     scale_sd <- apply(X, 2, sd)
     X <- apply(X, 2, scale) 
