@@ -49,6 +49,10 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
     stop("Specified approach has to be either deft or deluded")
   }
   
+  if(approach == "deft" & shrinkage != "none"){
+    stop("currently shrinkage is only available for deluded approach...")
+  }
+  
   #center the covariates
   scale_mean <- scale_sd <- NULL
   if(scale == TRUE & approach == "deluded"){
