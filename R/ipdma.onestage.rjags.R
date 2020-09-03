@@ -8,13 +8,27 @@ ipdma.onestage.rjags <- function(ipd){
                    "\nfor (i in 1:Np) {")
     
     if(response == "binomial"){
-      code <- paste0(code, "\n\ty[i] ~ dbern(p[i])",
-                     "\n\tlogit(p[i]) <- a[studyid[i]] + inprod(beta[], X[i,]) +",
-                     "\n\t\t(1 - equals(treat[i],1)) * inprod(gamma[], X[i,]) +")
+      
+      if(approach == "deluded"){
+        code <- paste0(code, "\n\ty[i] ~ dbern(p[i])",
+                       "\n\tlogit(p[i]) <- a[studyid[i]] + inprod(beta[], X[i,]) +",
+                       "\n\t\t(1 - equals(treat[i],1)) * inprod(gamma[], X[i,]) +")  
+      } else if(approach == "deft"){
+        code <- paste0(code, "\n\ty[i] ~ dbern(p[i])",
+                       "\n\tlogit(p[i]) <- a[studyid[i]] + inprod(beta[], X[i,]) + inprod(gamA[], Xbar[studyid[i],]) +",
+                       "\n\t\t(1 - equals(treat[i],1)) * inprod(gamma[], X[i,] - Xbar[studyid[i],]) +")
+      }
     } else if(response == "normal"){
-      code <- paste0(code, "\n\ty[i] ~ dnorm(mu[i], sigma)",
-                     "\n\tmu[i] <- a[studyid[i]] + inprod(beta[], X[i,]) +",
-                     "\n\t\t(1 - equals(treat[i],1)) * inprod(gamma[], X[i,]) +")
+      
+      if(approach == "deluded"){
+        code <- paste0(code, "\n\ty[i] ~ dnorm(mu[i], sigma)",
+                       "\n\tmu[i] <- a[studyid[i]] + inprod(beta[], X[i,]) +",
+                       "\n\t\t(1 - equals(treat[i],1)) * inprod(gamma[], X[i,]) +")  
+      } else if(approach == "deft"){
+        code <- paste0(code, "\n\ty[i] ~ dnorm(mu[i], sigma)",
+                       "\n\tmu[i] <- a[studyid[i]] + inprod(beta[], X[i,]) + inprod(gamA[], Xbar[studyid[i],]) +",
+                       "\n\t\t(1 - equals(treat[i],1)) * inprod(gamma[], X[i,] - Xbar[studyid[i],])) +") 
+      }
     }
     
     if(type == "random"){
@@ -35,9 +49,6 @@ ipdma.onestage.rjags <- function(ipd){
                      "\n\td[j,1] <- 0",
                      "\n\td[j,2] ~ dnorm(delta[2], tau)",
                      "\n}")
-    }
-    
-    if(type == "random"){
       code <- paste0(code, hy.prior.rjags(ipd))  
     }
     
