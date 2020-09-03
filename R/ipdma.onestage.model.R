@@ -21,8 +21,11 @@
 #' @param prec.beta Prior precision for the regression coefficients of the main effects of the covariates
 #' @param mean.gamma Prior mean for the effect modifiers. This parameter is not used if penalization is placed on effect modifiers. 
 #' @param prec.gamma Prior precision for the effect modifiers.
+#' @param mean.gamA Prior mean for the effect modifiers of across study information
+#' @param prec.gamA prior precision for the effect modifiers of across study information
 #' @param mean.delta Prior mean for the average treatment effect
 #' @param prec.delta Prior precision for the average treatment effect
+
 #' @param hy.prior Prior for the heterogeneity parameter. Supports uniform, gamma, and half normal for normal and binomial response
 #' It should be a list of length 3, where first element should be the distribution (one of dunif, dgamma, dhnorm) and the next two are the parameters associated with the distribution. For example, list("dunif", 0, 5) give uniform prior with lower bound 0 and upper bound 5 for the heterogeneity parameter.
 #' @param lambda.prior (Only for shrinkage = "laplace") Two options for laplace shrinkage. We can put a gamma prior on the lambda (i.e. list("dgamma",2,0.1)) or put a uniform prior on the inverse of lambda (i.e. list("dunif",0,5))
@@ -41,7 +44,7 @@
 ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL, 
                       response = "normal", type = "random", approach = "deft", shrinkage = "none", scale = TRUE,
                       mean.a = 0, prec.a = 0.001, mean.beta = 0, prec.beta = 0.001, 
-                      mean.gamma = 0, prec.gamma = 0.001, mean.delta = 0, prec.delta = 0.001,
+                      mean.gamma = 0, prec.gamma = 0.001, mean.gamA = 0, prec.gamA = 0.001, mean.delta = 0, prec.delta = 0.001,
                       hy.prior = list("dhnorm", 0, 1), lambda.prior = NULL, p.ind = NULL, g = NULL, hy.prior.eta = NULL
                       ){
 
@@ -74,7 +77,6 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
       this.study <- unique(study)[i]
       Xbar[i,] <- apply(X[study == this.study,], 2, mean)
     }
-    print(Xbar)
   }
   
   #JAGS data input
@@ -100,7 +102,7 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
   ipd <- list(y = y, study = study, treat = treat, X = X, response = response, type = type, 
               approach = approach, shrinkage = shrinkage, mean.a = mean.a, prec.a = prec.a, 
               mean.beta = mean.beta, prec.beta = prec.beta, mean.gamma = mean.gamma, 
-              prec.gamma = prec.gamma, mean.delta = mean.delta, prec.delta = prec.delta,
+              prec.gamma = prec.gamma, mean.gamA = mean.gamA, prec.gamA = prec.gamA, mean.delta = mean.delta, prec.delta = prec.delta,
               hy.prior = hy.prior, lambda.prior = lambda.prior, p.ind = p.ind, g = g, hy.prior.eta = hy.prior.eta)
   
   if(approach == "deft"){

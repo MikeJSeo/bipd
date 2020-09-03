@@ -21,7 +21,7 @@ ipd.run(
 
 \item{inits}{initial values specified for the parameters to save}
 
-\item{n.chains}{Number of MCMC chains to}
+\item{n.chains}{Number of MCMC chains to sample}
 
 \item{n.adapt}{The number of iterations for adaptation (Note that the samples from adaptation phase is non-Markovian and do not constitute a Markov chain)}
 

@@ -65,6 +65,14 @@ ipdma.onestage.rjags <- function(ipd){
                    "\nfor(k in 1:Ncovariate){",
                    "\n\tbeta[k] ~ dnorm(", mean.beta, ", ", prec.beta, ")",
                    "\n}")
+    
+    if(approach == "deft"){
+      code <- paste0(code, "\n\n## prior distribution for the effect modifiers of across study information",
+                     "\nfor(k in 1:Ncovariate){",
+                     "\n\tgamA[k] ~ dnorm(", mean.gamA, ", ", prec.gamA, ")",
+                     "\n}")
+      
+    }
 
     code <- paste0(code, shrinkage.prior.rjags(ipd))  
     

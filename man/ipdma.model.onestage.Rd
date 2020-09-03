@@ -11,6 +11,7 @@ ipdma.model.onestage(
   X = NULL,
   response = "normal",
   type = "random",
+  approach = "deft",
   shrinkage = "none",
   scale = TRUE,
   mean.a = 0,
@@ -19,6 +20,8 @@ ipdma.model.onestage(
   prec.beta = 0.001,
   mean.gamma = 0,
   prec.gamma = 0.001,
+  mean.gamA = 0,
+  prec.gamA = 0.001,
   mean.delta = 0,
   prec.delta = 0.001,
   hy.prior = list("dhnorm", 0, 1),
@@ -41,15 +44,17 @@ ipdma.model.onestage(
 
 \item{type}{Assumption on the treatment effect: either "random" for random effects model or "fixed" for fixed effects model. Default is "random".}
 
+\item{approach}{"deluded" approach which does not separate within-study information and across-study information or "deft" approach which separate within-study and across-study information by centering the covariates using study specific mean and including study specific mean in the regression. Refer to Fisher et al. for more details.}
+
 \item{shrinkage}{shrinkage method applied to the effect modifiers. "none" correspond to no shrinkage.
 "laplace" corresponds to a adaptive shrinkage with a Laplacian prior (ie often known as Bayesian LASSO).
 "SSVS" corresponds to the Search Variable Selection method. SSVS is not strictly a shrinkage method, 
 but pulls the estimated coefficient toward zero through variable selection in each iteration of the MCMC. 
-See O'hara et al (2009) for more reference.}
+See O'hara et al (2009) for more details.}
 
 \item{scale}{indicator for scaling the covariates; default is TRUE.}
 
-\item{mean.a}{Prior mean for the study intercept}
+\item{mean.a}{Prior mean for the study intercept.}
 
 \item{prec.a}{Prior precision for the study intercept}
 
@@ -61,9 +66,13 @@ See O'hara et al (2009) for more reference.}
 
 \item{prec.gamma}{Prior precision for the effect modifiers.}
 
-\item{mean.delta}{Prior mean for the treatment effect}
+\item{mean.gamA}{Prior mean for the effect modifiers of across study information}
 
-\item{prec.delta}{Prior precision for the treatment effect}
+\item{prec.gamA}{prior precision for the effect modifiers of across study information}
+
+\item{mean.delta}{Prior mean for the average treatment effect}
+
+\item{prec.delta}{Prior precision for the average treatment effect}
 
 \item{hy.prior}{Prior for the heterogeneity parameter. Supports uniform, gamma, and half normal for normal and binomial response
 It should be a list of length 3, where first element should be the distribution (one of dunif, dgamma, dhnorm) and the next two are the parameters associated with the distribution. For example, list("dunif", 0, 5) give uniform prior with lower bound 0 and upper bound 5 for the heterogeneity parameter.}
@@ -74,7 +83,7 @@ It should be a list of length 3, where first element should be the distribution 
 
 \item{g}{(Only for shrinkage = "SSVS") Multiplier for the precision of spike. Default is g = 1000.}
 
-\item{hy.prior.eta}{(Only for shrinkage = "SSVS") Variance of the slab prior. Currently only support uniform distribution. Default is list("dunif", 0, 5)}
+\item{hy.prior.eta}{(Only for shrinkage = "SSVS") Standard deviation of the slab prior. Currently only support uniform distribution. Default is list("dunif", 0, 5)}
 }
 \value{
 \item{data.JAGS}{Data organized in a list so that it can be used when running code in JAGS}
@@ -84,5 +93,5 @@ It should be a list of length 3, where first element should be the distribution 
 \item{scale.sd}{standard deviation used in scaling covariates}
 }
 \description{
-This function sets up data and JAGS code that is needed to run onestage ipd-ma models in JAGS
+This function sets up data and JAGS code that is needed to run onestage ipd-ma models in JAGS.
 }
