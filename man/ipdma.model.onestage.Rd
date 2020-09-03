@@ -89,9 +89,9 @@ It should be a list of length 3, where first element should be the distribution 
 \item{data.JAGS}{Data organized in a list so that it can be used when running code in JAGS}
 \item{code}{JAGS code that is used to run the model. Use cat(code) to see the code in a readable format}
 \item{model.JAGS}{JAGS code in a function. This is used when running model in parallel}
-\item{scale.mean}{mean used in scaling covariates}
-\item{scale.sd}{standard deviation used in scaling covariates}
-\item{Xbar}{study specific average of covariates; used in "deft" approach}
+\item{scale.mean}{Mean used in scaling covariates}
+\item{scale.sd}{Standard deviation used in scaling covariates}
+\item{Xbar}{Study specific average of covariates; only used in "deft" approach}
 }
 \description{
 This function sets up data and JAGS code that is needed to run onestage ipd-ma models in JAGS.

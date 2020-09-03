@@ -36,9 +36,9 @@
 #' \item{data.JAGS}{Data organized in a list so that it can be used when running code in JAGS}
 #' \item{code}{JAGS code that is used to run the model. Use cat(code) to see the code in a readable format}
 #' \item{model.JAGS}{JAGS code in a function. This is used when running model in parallel}
-#' \item{scale.mean}{mean used in scaling covariates}
-#' \item{scale.sd}{standard deviation used in scaling covariates}
-#' \item{Xbar}{study specific average of covariates; used in "deft" approach}
+#' \item{scale.mean}{Mean used in scaling covariates}
+#' \item{scale.sd}{Standard deviation used in scaling covariates}
+#' \item{Xbar}{Study specific average of covariates; only used in "deft" approach}
 #'
 #' @export
 
@@ -70,6 +70,7 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
     X <- apply(X, 2, scale) 
   }
   
+  Xbar <- NULL
   if(approach == "deft"){
     Xbar <- matrix(NA, length(unique(study)), dim(X)[2])
     # scale with trial specific mean and sd
