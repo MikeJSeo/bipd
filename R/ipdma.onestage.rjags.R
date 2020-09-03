@@ -27,7 +27,7 @@ ipdma.onestage.rjags <- function(ipd){
       } else if(approach == "deft"){
         code <- paste0(code, "\n\ty[i] ~ dnorm(mu[i], sigma)",
                        "\n\tmu[i] <- a[studyid[i]] + inprod(beta[], X[i,]) + inprod(gamA[], Xbar[studyid[i],]) +",
-                       "\n\t\t(1 - equals(treat[i],1)) * inprod(gamma[], X[i,] - Xbar[studyid[i],])) +") 
+                       "\n\t\t(1 - equals(treat[i],1)) * inprod(gamma[], X[i,] - Xbar[studyid[i],]) +") 
       }
     }
     
