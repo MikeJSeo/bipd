@@ -63,7 +63,7 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
   
   if(approach == "deft"){
     
-    Xbar <- matrix(length(unique(study)), dim(X)[2])
+    Xbar <- matrix(NA, length(unique(study)), dim(X)[2])
     # scale with trial specific mean and sd
     for(i in 1:length(unique(study))){
       this.study <- unique(study)[i]
