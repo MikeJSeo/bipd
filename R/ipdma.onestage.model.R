@@ -70,7 +70,6 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
       Xbar[i,] <- apply(X[study == this.study,], 2, mean)
     }
     print(Xbar)
-    
   }
   
   #JAGS data input
@@ -93,11 +92,16 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
     data.JAGS$p.ind <- p.ind
   }
          
-  ipd <- list(y = y, study = study, treat = treat, X = X, Xbar = Xbar, response = response, type = type, 
+  ipd <- list(y = y, study = study, treat = treat, X = X, response = response, type = type, 
               approach = approach, shrinkage = shrinkage, mean.a = mean.a, prec.a = prec.a, 
               mean.beta = mean.beta, prec.beta = prec.beta, mean.gamma = mean.gamma, 
               prec.gamma = prec.gamma, mean.delta = mean.delta, prec.delta = prec.delta,
               hy.prior = hy.prior, lambda.prior = lambda.prior, p.ind = p.ind, g = g, hy.prior.eta = hy.prior.eta)
+  
+  if(approach == "deft"){
+    ipd$Xbar <- Xbar
+  }
+  
   code <- ipdma.onestage.rjags(ipd)
   
   code2 <- substring(code, 10)
