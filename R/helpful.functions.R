@@ -74,21 +74,29 @@ generate_ipdma_example <- function(type = "continuous"){
 #'
 #' Convenient function for calculating the patient-specific treatment effect.
 #' Patient-specific treatment effect includes the main effect of treatment and 
-#' treatment-covariate interaction effect (i.e. effect modification)
+#' treatment-covariate interaction effect (i.e. effect modification). 
+#' Reports odds ratio for the binary outcome.
 #' 
 #' @param ipd ipd object created from ipd.data function
 #' @param samples mcmc samples found from running `ipd.run`
 #' @param newpatient Covariate values of patients that you want to predict treatment effect on. Must have length equal to total number of covariates.
-#' @param response "normal" for continuous outcome and "binomial" for binary outcome. Reports odds ratio for the binary outcome.
+#' @param reference reference group used for finding patient-specific treatment effect; only used for "deft" approach
 #' @param quantile quantile for the confidence interval
 #'
 #' @export
 
 treatment.effect <- function(ipd = NULL, samples = NULL, newpatient = NULL, 
-                             response = "normal", quantile = c(0.025, 0.5, 0.975)){
+                             reference = NULL, quantile = c(0.025, 0.5, 0.975)){
 
   if(!is.null(ipd$scale_mean)) {
     newpatient <- (newpatient - ipd$scale_mean)/ipd$scale_sd
+  }
+  
+  if(ipd$appraoch == "deft"){
+    if(is.null(reference)){
+      stop("Need to specifiy reference group for deft approach")
+    }
+    newpatient <- newpatient - reference
   }
   
   index0 <- which(colnames(samples[[1]]) == "delta[2]") #only works for IPD-MA

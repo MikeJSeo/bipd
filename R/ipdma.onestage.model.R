@@ -116,7 +116,7 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
   code2 <- sub("T(0,)", ";T(0,)", code2, fixed = T)
   eval(parse(text = paste('model.JAGS <- function() {', code2, sep='')))
 
-  list(data.JAGS = data.JAGS, code = code, model.JAGS = model.JAGS, scale_mean = scale_mean, scale_sd = scale_sd, Xbar = Xbar)
+  list(data.JAGS = data.JAGS, code = code, model.JAGS = model.JAGS, response = response, approach = approach, scale_mean = scale_mean, scale_sd = scale_sd, Xbar = Xbar)
 }
 
 
