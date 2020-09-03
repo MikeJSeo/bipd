@@ -8,7 +8,7 @@ treatment.effect(
   ipd = NULL,
   samples = NULL,
   newpatient = NULL,
-  response = "normal",
+  reference = NULL,
   quantile = c(0.025, 0.5, 0.975)
 )
 }
@@ -19,12 +19,13 @@ treatment.effect(
 
 \item{newpatient}{Covariate values of patients that you want to predict treatment effect on. Must have length equal to total number of covariates.}
 
-\item{response}{"normal" for continuous outcome and "binomial" for binary outcome. Reports odds ratio for the binary outcome.}
+\item{reference}{reference group used for finding patient-specific treatment effect; only used for "deft" approach}
 
 \item{quantile}{quantile for the confidence interval}
 }
 \description{
 Convenient function for calculating the patient-specific treatment effect.
 Patient-specific treatment effect includes the main effect of treatment and 
-treatment-covariate interaction effect (i.e. effect modification)
+treatment-covariate interaction effect (i.e. effect modification). 
+Reports odds ratio for the binary outcome.
 }
