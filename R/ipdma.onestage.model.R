@@ -45,6 +45,7 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
                       hy.prior = list("dhnorm", 0, 1), lambda.prior = NULL, p.ind = NULL, g = NULL, hy.prior.eta = NULL
                       ){
 
+  #warning messages
   if(approach != "deft" & approach != "deluded"){
     stop("Specified approach has to be either deft or deluded")
   }
