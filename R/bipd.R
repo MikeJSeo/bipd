@@ -16,4 +16,3 @@ NULL
 
 #' @import dclone
 NULL
-
