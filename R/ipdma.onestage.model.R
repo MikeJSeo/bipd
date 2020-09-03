@@ -45,12 +45,28 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
                       hy.prior = list("dhnorm", 0, 1), lambda.prior = NULL, p.ind = NULL, g = NULL, hy.prior.eta = NULL
                       ){
 
+  if(approach != "deft" & approach != "deluded"){
+    stop("Specified approach has to be either deft or deluded")
+  }
+  
   #center the covariates
   scale_mean <- scale_sd <- NULL
   if(scale == TRUE & approach == "deluded"){
     scale_mean <- apply(X, 2, mean)
     scale_sd <- apply(X, 2, sd)
     X <- apply(X, 2, scale) 
+  }
+  
+  if(approach == "deft"){
+    
+    Xbar <- matrix(length(unique(study)), dim(X)[2])
+    # scale with trial specific mean and sd
+    for(i in 1:length(unique(study))){
+      this.study <- unique(study)[i]
+      Xbar[i,] <- apply(X[study == this.study,], 2, mean)
+    }
+    print(Xbar)
+    
   }
   
   #JAGS data input
@@ -73,8 +89,8 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
     data.JAGS$p.ind <- p.ind
   }
          
-  ipd <- list(y = y, study = study, treat = treat, X = X, response = response, type = type, 
-              shrinkage = shrinkage, mean.a = mean.a, prec.a = prec.a, 
+  ipd <- list(y = y, study = study, treat = treat, X = X, Xbar = Xbar, response = response, type = type, 
+              approach = approach, shrinkage = shrinkage, mean.a = mean.a, prec.a = prec.a, 
               mean.beta = mean.beta, prec.beta = prec.beta, mean.gamma = mean.gamma, 
               prec.gamma = prec.gamma, mean.delta = mean.delta, prec.delta = prec.delta,
               hy.prior = hy.prior, lambda.prior = lambda.prior, p.ind = p.ind, g = g, hy.prior.eta = hy.prior.eta)
@@ -84,7 +100,7 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
   code2 <- sub("T(0,)", ";T(0,)", code2, fixed = T)
   eval(parse(text = paste('model.JAGS <- function() {', code2, sep='')))
 
-  list(data.JAGS = data.JAGS, code = code, model.JAGS = model.JAGS, scale_mean = scale_mean, scale_sd = scale_sd)
+  list(data.JAGS = data.JAGS, code = code, model.JAGS = model.JAGS, scale_mean = scale_mean, scale_sd = scale_sd, approach = approach)
 }
 
 
