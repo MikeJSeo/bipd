@@ -38,6 +38,7 @@
 #' \item{model.JAGS}{JAGS code in a function. This is used when running model in parallel}
 #' \item{scale.mean}{mean used in scaling covariates}
 #' \item{scale.sd}{standard deviation used in scaling covariates}
+#' \item{Xbar}{study specific average of covariates; used in "deft" approach}
 #'
 #' @export
 
@@ -70,7 +71,6 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
   }
   
   if(approach == "deft"){
-    
     Xbar <- matrix(NA, length(unique(study)), dim(X)[2])
     # scale with trial specific mean and sd
     for(i in 1:length(unique(study))){
@@ -103,7 +103,7 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
     data.JAGS$Xbar <- Xbar
   }
          
-  ipd <- list(y = y, study = study, treat = treat, X = X, Xbar = Xbar, response = response, type = type, 
+  ipd <- list(y = y, study = study, treat = treat, X = X, response = response, type = type, 
               approach = approach, shrinkage = shrinkage, mean.a = mean.a, prec.a = prec.a, 
               mean.beta = mean.beta, prec.beta = prec.beta, mean.gamma = mean.gamma, 
               prec.gamma = prec.gamma, mean.gamA = mean.gamA, prec.gamA = prec.gamA, mean.delta = mean.delta, prec.delta = prec.delta,
@@ -115,7 +115,7 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
   code2 <- sub("T(0,)", ";T(0,)", code2, fixed = T)
   eval(parse(text = paste('model.JAGS <- function() {', code2, sep='')))
 
-  list(data.JAGS = data.JAGS, code = code, model.JAGS = model.JAGS, scale_mean = scale_mean, scale_sd = scale_sd, approach = approach)
+  list(data.JAGS = data.JAGS, code = code, model.JAGS = model.JAGS, scale_mean = scale_mean, scale_sd = scale_sd, Xbar = Xbar)
 }
 
 
