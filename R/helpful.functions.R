@@ -92,9 +92,9 @@ treatment.effect <- function(ipd = NULL, samples = NULL, newpatient = NULL,
     newpatient <- (newpatient - ipd$scale_mean)/ipd$scale_sd
   }
   
-  if(ipd$appraoch == "deft"){
+  if(ipd$approach == "deft"){
     if(is.null(reference)){
-      stop("Need to specifiy reference group for deft approach")
+      stop("Need to specify reference group for deft approach")
     }
     newpatient <- newpatient - reference
   }
@@ -114,9 +114,9 @@ treatment.effect <- function(ipd = NULL, samples = NULL, newpatient = NULL,
   mean1 <- mean(pred)
   se1 <- sd(pred)
   
-  if(response == "normal"){
+  if(ipd$response == "normal"){
     CI <- mean1 + qnorm(quantile)* se1
-  } else if(response == "binomial"){
+  } else if(ipd$response == "binomial"){
     CI <- exp(mean1 + qnorm(quantile)* se1)    
   }
   names(CI) <- quantile

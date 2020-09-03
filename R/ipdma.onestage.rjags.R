@@ -110,6 +110,8 @@ shrinkage.prior.rjags <- function(ipd){
   code <- ""
   with(ipd, {
     
+    if(approach == "deluded"){
+    
     if(shrinkage == "none"){
       code <- paste0(code, "\n## prior distribution for the effect modifiers under no shrinkage",
       "\nfor(k in 1:Ncovariate){",
@@ -155,6 +157,14 @@ shrinkage.prior.rjags <- function(ipd){
                     "\n}"
                     )
     }
+    } else if(approach == "deft"){
+      
+      code <- paste0(code, "\n## prior distribution for the effect modifiers of within study information under no shrinkage",
+                     "\nfor(k in 1:Ncovariate){",
+                     "\n\tgamma[k] ~ dnorm(", mean.gamma, ", ", prec.gamma, ") ",
+                     "\n}")
+    }
+    
     return(code)
   })
 }
