@@ -15,7 +15,7 @@ ipdma.onestage.rjags <- function(ipd){
                        "\n\t\t(1 - equals(treat[i],1)) * inprod(gamma[], X[i,]) +")  
       } else if(approach == "deft"){
         code <- paste0(code, "\n\ty[i] ~ dbern(p[i])",
-                       "\n\tlogit(p[i]) <- a[studyid[i]] + inprod(beta[], X[i,]) + inprod(gamA[], Xbar[studyid[i],]) +",
+                       "\n\tlogit(p[i]) <- a[studyid[i]] + inprod(beta[], X[i,]) + (1 - equals(treat[i],1)) * inprod(gamA[], Xbar[studyid[i],]) +",
                        "\n\t\t(1 - equals(treat[i],1)) * inprod(gamma[], X[i,] - Xbar[studyid[i],]) +")
       }
     } else if(response == "normal"){
@@ -26,7 +26,7 @@ ipdma.onestage.rjags <- function(ipd){
                        "\n\t\t(1 - equals(treat[i],1)) * inprod(gamma[], X[i,]) +")  
       } else if(approach == "deft"){
         code <- paste0(code, "\n\ty[i] ~ dnorm(mu[i], sigma)",
-                       "\n\tmu[i] <- a[studyid[i]] + inprod(beta[], X[i,]) + inprod(gamA[], Xbar[studyid[i],]) +",
+                       "\n\tmu[i] <- a[studyid[i]] + inprod(beta[], X[i,]) + (1 - equals(treat[i],1)) * inprod(gamA[], Xbar[studyid[i],]) +",
                        "\n\t\t(1 - equals(treat[i],1)) * inprod(gamma[], X[i,] - Xbar[studyid[i],]) +") 
       }
     }
