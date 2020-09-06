@@ -57,9 +57,15 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
     stop("currently shrinkage is only available for deluded approach...")
   }
   
+  if(approach == "deft" & scale == TRUE){
+    warning("In most cases, scale should be set to FALSE for deft approach")
+  }
+  
   if(shrinkage== "none" & (!is.null(lambda.prior) || !is.null(p.ind) || !is.null(g) || !is.null(hy.prior.eta))){
     stop("Shrinkage is set to none but have specified prior for shrinkage parameters")
   }
+  
+  
      
   #center the covariates
   scale_mean <- scale_sd <- NULL
