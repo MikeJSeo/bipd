@@ -58,8 +58,7 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
   }
   
   if(approach == "deft" & scale == TRUE){
-    scale = FALSE
-    print("Scale is set to FALSE for deft approach")
+    stop("Scale should be set to FALSE for deft approach")
   }
   
   if(shrinkage== "none" & (!is.null(lambda.prior) || !is.null(p.ind) || !is.null(g) || !is.null(hy.prior.eta))){
