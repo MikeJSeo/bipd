@@ -1,6 +1,6 @@
 #' Make an onestage individual patient data meta analysis (ipd-ma) object containing data, priors, and a JAGS model code
 #'
-#' This function sets up data and JAGS code that is needed to run onestage ipd-ma models in JAGS.
+#' This function sets up data and JAGS code that is needed to run onestage ipd-ma models in JAGS. The mathematical symbols follow that of Seo et al.
 #' 
 #' @param y outcome of the study. Can be continuous or binary. 
 #' @param study a vector indicating which study the patient belongs to. Please change the study names into numbers (i.e. 1,2,3,etc)
@@ -42,7 +42,7 @@
 #' @export
 
 ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL, 
-                      response = "normal", type = "random", approach = "deft", shrinkage = "none", scale = TRUE,
+                      response = "normal", type = "random", approach = "deluded", shrinkage = "none", scale = TRUE,
                       mean.a = 0, prec.a = 0.001, mean.beta = 0, prec.beta = 0.001, 
                       mean.gamma = 0, prec.gamma = 0.001, mean.gamA = 0, prec.gamA = 0.001, mean.delta = 0, prec.delta = 0.001,
                       hy.prior = list("dhnorm", 0, 1), lambda.prior = NULL, p.ind = NULL, g = NULL, hy.prior.eta = NULL
