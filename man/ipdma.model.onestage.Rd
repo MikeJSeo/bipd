@@ -11,7 +11,7 @@ ipdma.model.onestage(
   X = NULL,
   response = "normal",
   type = "random",
-  approach = "deft",
+  approach = "deluded",
   shrinkage = "none",
   scale = TRUE,
   mean.a = 0,
@@ -40,7 +40,7 @@ ipdma.model.onestage(
 
 \item{X}{a matrix of covariate values for each patient. Dimension would be number of patients x number of covariates.}
 
-\item{response}{Specification of the outcomes type. Must specify either "normal" or "binomial"}
+\item{response}{Specification of the outcomes type. Must specify either "normal" or "binomial".}
 
 \item{type}{Assumption on the treatment effect: either "random" for random effects model or "fixed" for fixed effects model. Default is "random".}
 
@@ -54,21 +54,21 @@ See O'hara et al (2009) for more details.}
 
 \item{scale}{indicator for scaling the covariates; default is TRUE.}
 
-\item{mean.a}{Prior mean for the study intercept.}
+\item{mean.a}{Prior mean for the study intercept}
 
 \item{prec.a}{Prior precision for the study intercept}
 
-\item{mean.beta}{Prior mean for the regression coefficients of the main effects of the covariates}
+\item{mean.beta}{Prior mean for the regression coefficients of the main effects of the covariates; main effects are assumed to have common effect.}
 
 \item{prec.beta}{Prior precision for the regression coefficients of the main effects of the covariates}
 
-\item{mean.gamma}{Prior mean for the effect modifiers. This parameter is not used if penalization is placed on effect modifiers.}
+\item{mean.gamma}{For deluded approach, this is prior mean for the effect modifiers. This parameter is not used if penalization is placed on effect modifiers. For deft approach, this is prior mean for effect modifiers of within study information.}
 
-\item{prec.gamma}{Prior precision for the effect modifiers.}
+\item{prec.gamma}{For deluded approach, this is prior precision for the effect modifiers. For deft approach, this is prior precision for effect modifiers of within study information.}
 
-\item{mean.gamA}{Prior mean for the effect modifiers of across study information}
+\item{mean.gamA}{Prior mean for the effect modifiers of across study information; effect modification is assumed to have common effect.}
 
-\item{prec.gamA}{prior precision for the effect modifiers of across study information}
+\item{prec.gamA}{Prior precision for the effect modifiers of across study information}
 
 \item{mean.delta}{Prior mean for the average treatment effect}
 
@@ -94,5 +94,5 @@ It should be a list of length 3, where first element should be the distribution 
 \item{Xbar}{Study specific average of covariates; only used in "deft" approach}
 }
 \description{
-This function sets up data and JAGS code that is needed to run onestage ipd-ma models in JAGS.
+This function sets up data and JAGS code that is needed to run onestage ipd-ma models in JAGS. The mathematical symbols follow that of Seo et al.
 }
