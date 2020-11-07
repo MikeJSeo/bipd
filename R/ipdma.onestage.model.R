@@ -6,7 +6,7 @@
 #' @param study a vector indicating which study the patient belongs to. Please change the study names into numbers (i.e. 1,2,3,etc)
 #' @param treat a vector indicating which treatment the patient was assigned to (ie 1 for treatment, 0 for placebo)
 #' @param X a matrix of covariate values for each patient. Dimension would be number of patients x number of covariates.
-#' @param response Specification of the outcomes type. Must specify either "normal" or "binomial"
+#' @param response Specification of the outcomes type. Must specify either "normal" or "binomial".
 #' @param type Assumption on the treatment effect: either "random" for random effects model or "fixed" for fixed effects model. Default is "random".
 #' @param approach "deluded" approach which does not separate within-study information and across-study information or "deft" approach which separate within-study and across-study information by centering the covariates using study specific mean and including study specific mean in the regression. Refer to Fisher et al. for more details.
 #' @param shrinkage shrinkage method applied to the effect modifiers. "none" correspond to no shrinkage.
@@ -15,13 +15,13 @@
 #' but pulls the estimated coefficient toward zero through variable selection in each iteration of the MCMC. 
 #' See O'hara et al (2009) for more details.
 #' @param scale indicator for scaling the covariates; default is TRUE.
-#' @param mean.a Prior mean for the study intercept. 
+#' @param mean.a Prior mean for the study intercept
 #' @param prec.a Prior precision for the study intercept
-#' @param mean.beta Prior mean for the regression coefficients of the main effects of the covariates 
+#' @param mean.beta Prior mean for the regression coefficients of the main effects of the covariates; main effects are assumed to have common effect.
 #' @param prec.beta Prior precision for the regression coefficients of the main effects of the covariates
 #' @param mean.gamma For deluded approach, this is prior mean for the effect modifiers. This parameter is not used if penalization is placed on effect modifiers. For deft approach, this is prior mean for effect modifiers of within study information.
 #' @param prec.gamma For deluded approach, this is prior precision for the effect modifiers. For deft approach, this is prior precision for effect modifiers of within study information.
-#' @param mean.gamA Prior mean for the effect modifiers of across study information
+#' @param mean.gamA Prior mean for the effect modifiers of across study information; effect modification is assumed to have common effect.
 #' @param prec.gamA Prior precision for the effect modifiers of across study information
 #' @param mean.delta Prior mean for the average treatment effect
 #' @param prec.delta Prior precision for the average treatment effect
@@ -48,13 +48,17 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
                       hy.prior = list("dhnorm", 0, 1), lambda.prior = NULL, p.ind = NULL, g = NULL, hy.prior.eta = NULL
                       ){
 
+  if(length(unique(treat)) > 2){
+    stop("There are more than 2 different treatments specified; need to use ipdnma.model.onestage (under development)")
+  }
+
   #warning messages
   if(approach != "deft" & approach != "deluded"){
     stop("Specified approach has to be either deft or deluded")
   }
   
   if(approach == "deft" & shrinkage != "none"){
-    stop("currently shrinkage is only available for deluded approach...")
+    stop("currently shrinkage is only available for deluded approach")
   }
   
   if(approach == "deft" & scale == TRUE){
@@ -66,7 +70,6 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
   }
   
   
-     
   #center the covariates
   scale_mean <- scale_sd <- NULL
   if(scale == TRUE & approach == "deluded"){

@@ -1,4 +1,4 @@
-#' bipd: A package for individual patient data (network) meta analysis using Bayesian methods
+#' bipd: A package for individual patient data (network) meta analysis using 'JAGS'
 #'
 #' A package for running Bayesian individual patient data (network) meta analysis
 #'

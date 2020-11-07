@@ -1,5 +1,5 @@
 ##########################################################################
-#helpful functions that were used to run/evaluate IPD-MA models (one-stage)
+#helpful functions that were used to run/evaluate models
 ##########################################################################
 
 #' Generate a fake IPD-MA data for demonstration
