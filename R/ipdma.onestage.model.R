@@ -14,7 +14,7 @@
 #' "SSVS" corresponds to the Search Variable Selection method. SSVS is not strictly a shrinkage method, 
 #' but pulls the estimated coefficient toward zero through variable selection in each iteration of the MCMC. 
 #' See O'hara et al (2009) for more details.
-#' @param scale indicator for scaling the covariates; default is TRUE.
+#' @param scale indicator for scaling the covariates by the overall average; default is TRUE. For "deft" approach, this parameter is ignored and covariates are always scaled using the group average.
 #' @param mean.a Prior mean for the study intercept
 #' @param prec.a Prior precision for the study intercept
 #' @param mean.beta Prior mean for the regression coefficients of the main effects of the covariates; main effects are assumed to have common effect.
@@ -52,17 +52,12 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
     stop("There are more than 2 different treatments specified; need to use ipdnma.model.onestage (under development)")
   }
 
-  #warning messages
   if(approach != "deft" & approach != "deluded"){
     stop("Specified approach has to be either deft or deluded")
   }
   
   if(approach == "deft" & shrinkage != "none"){
     stop("currently shrinkage is only available for deluded approach")
-  }
-  
-  if(approach == "deft" & scale == TRUE){
-    stop("Scale should be set to FALSE for deft approach")
   }
   
   if(shrinkage== "none" & (!is.null(lambda.prior) || !is.null(p.ind) || !is.null(g) || !is.null(hy.prior.eta))){
