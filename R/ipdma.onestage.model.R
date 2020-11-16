@@ -38,7 +38,6 @@
 #' \item{scale.mean}{Mean used in scaling covariates}
 #' \item{scale.sd}{Standard deviation used in scaling covariates}
 #' \item{Xbar}{Study specific average of covariates; only used in "deft" approach}
-#'
 #' @export
 
 ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL, 

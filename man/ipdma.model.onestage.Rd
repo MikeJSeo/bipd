@@ -52,7 +52,7 @@ ipdma.model.onestage(
 but pulls the estimated coefficient toward zero through variable selection in each iteration of the MCMC. 
 See O'hara et al (2009) for more details.}
 
-\item{scale}{indicator for scaling the covariates; default is TRUE.}
+\item{scale}{indicator for scaling the covariates by the overall average; default is TRUE. For "deft" approach, this parameter is ignored and covariates are always scaled using the group average.}
 
 \item{mean.a}{Prior mean for the study intercept}
 
