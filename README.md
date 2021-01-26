@@ -1,4 +1,5 @@
 # bipd
 Bayesian Individual Patient Data Meta-Analysis using 'JAGS' 
 
-Install R package by running: devtools::install_github("MikeJSeo/bipd")
+To install R package, please run the following code: 
+devtools::install_github("MikeJSeo/bipd")
