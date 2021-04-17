@@ -49,6 +49,10 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
                       hy.prior = list("dhnorm", 0, 1), lambda.prior = NULL, p.ind = NULL, g = NULL, hy.prior.eta = NULL
                       ){
 
+  if(!all(sapply(study, is.numeric))){
+    stop("Please change the study names into numbers (i.e. 1,2,3,etc)")
+  }
+  
   if(length(unique(treat)) > 2){
     stop("There are more than 2 different treatments specified; need to use ipdnma.model.onestage (under development)")
   }
