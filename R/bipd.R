@@ -25,3 +25,5 @@ NULL
 #' @import dclone
 NULL
 
+#' @import R2WinBUGS
+NULL
