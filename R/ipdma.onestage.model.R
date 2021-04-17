@@ -49,7 +49,7 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
                       hy.prior = list("dhnorm", 0, 1), lambda.prior = NULL, p.ind = NULL, g = NULL, hy.prior.eta = NULL
                       ){
 
-  if(!all(sapply(study, is.numeric))){
+  if(!all(grepl("^-?[0-9.]+$", study))){
     stop("Please change the study names into numbers (i.e. 1,2,3,etc)")
   }
   
