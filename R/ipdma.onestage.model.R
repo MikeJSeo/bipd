@@ -38,6 +38,8 @@
 #' \item{scale.mean}{Mean used in scaling covariates}
 #' \item{scale.sd}{Standard deviation used in scaling covariates}
 #' \item{Xbar}{Study specific average of covariates; only used in "deft" approach}
+#' @references Fisher DJ, Carpenter JR, Morris TP, et al. Meta-analytical methods to identify who benefits most from treatments: daft, deluded, or deft approach?. \emph{BMJ}. 2017;356:j573 \doi{10.1136/bmj.j573}
+#' @references Seo M, White IR, Furukawa TA, et al. Comparing methods for estimating patient-specific treatment effects in individual patient data meta-analysis. \emph{Stat Med}. 2021;40(6):1553-1573. \doi{10.1002/sim.8859}
 #' @export
 
 ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL, 

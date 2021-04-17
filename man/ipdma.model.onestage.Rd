@@ -96,3 +96,8 @@ It should be a list of length 3, where first element should be the distribution 
 \description{
 This function sets up data and JAGS code that is needed to run onestage ipd-ma models in JAGS. The mathematical symbols follow that of Seo et al.
 }
+\references{
+Fisher DJ, Carpenter JR, Morris TP, et al. Meta-analytical methods to identify who benefits most from treatments: daft, deluded, or deft approach?. \emph{BMJ}. 2017;356:j573 \doi{10.1136/bmj.j573}
+
+Seo M, White IR, Furukawa TA, et al. Comparing methods for estimating patient-specific treatment effects in individual patient data meta-analysis. \emph{Stat Med}. 2021;40(6):1553-1573. \doi{10.1002/sim.8859}
+}
