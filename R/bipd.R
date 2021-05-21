@@ -30,3 +30,6 @@ NULL
 
 #' @import mvtnorm
 NULL
+
+#' @import tidyr
+NULL
