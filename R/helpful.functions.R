@@ -123,3 +123,64 @@ treatment.effect <- function(ipd = NULL, samples = NULL, newpatient = NULL,
   return(CI)
 }
 
+
+
+#' Generate a fake IPD-MA data with systematically missing variables for demonstration
+#'
+#' Generate a fake IPD-MA data with systematically missing variables for demonstration
+#'
+#' @export
+
+generate_ipdma_example_with_systematic_missing <- function(){
+  
+  set.seed(1)
+  Nstudies <- 50
+  Npatients <- 1500
+  Npatients.tot <- Nstudies*Npatients
+  study <- rep(1:Nstudies, each = Npatients)
+  treat <- rbinom(Npatients.tot, 1, 0.5)
+  
+  a <- 1
+  b <- c(0.7, 1, 0.7, 0.5)
+  c <- c(0.1, 0.5, 0.2, 0.2)
+  d <- 0.5
+  Sigma <- matrix(c(0.2^2, -0.1*0.2*0.2, -0.1*0.2*0.2, 0.2^2), nrow = 2)
+  
+  u <- rmvnorm(Nstudies, rep(0, 2), matrix(c(0.2^2, 0.2 * 0.2 * -0.1, 0.2 * 0.2 * -0.1, 0.2^2), nrow = 2) )
+  
+  #generate x1
+  gamma1 <- rnorm(Nstudies, 0, 0.5)
+  e1 <- rnorm(Npatients.tot, 0, 0.2)
+  x1 <- rep(gamma1, each = Npatients)+ e1
+  
+  #generate x2
+  gamma2 <- rmvnorm(Nstudies, c(0, 0), matrix(c(0.5^2, 0.2 * 0.5 * 0.5, 0.2 * 0.5 * 0.5, 0.5^2), nrow = 2))
+  e2 <- rnorm(Npatients.tot, 0, 0.1)
+  x2 <- 0.3 * x1 + gamma2[,1] + gamma2[,2]*x1 + e2
+  #  gamma2 <- rnorm(Nstudies, 0, 0.5)
+  #  x2 <- rep(gamma2, each = Npatients) + e2
+  
+  #generate x3
+  p3 <- runif(Nstudies, 0.05, 0.15)
+  x3 <- rbinom(Npatients.tot, 1, rep(p3, each = Npatients))
+  
+  #generate x4
+  p4 <- runif(Nstudies, 0.15, 0.25)
+  x4 <- rbinom(Npatients.tot, 1, rep(p4, each = Npatients))
+  
+  #generate y
+  y <- rep(a, Npatients.tot) + b[1] * x1 + b[2] * x2 + b[3] * x3 + b[4] * x4 + 
+    c[1] * x1 * treat + c[2] * x2 * treat + c[3] * x3 * treat + c[4] * x4 * treat +
+    d * treat + u[,1] + u[,2] * treat
+  
+  #generate systematically missing framework in x2
+  pi_sys <- 0.2
+  study_missing <- as.logical(rep(rbinom(Nstudies, 1, 0.2), each = Npatients))
+  x2[study_missing] <- NA
+  
+  #generate sporadically missing framework for all variables
+  X <- cbind(x1, x2, x3, x4)
+  X[as.logical(rbinom(Npatients.tot * 4, 1, 0.05))] <- NA
+  
+  return(as_tibble(cbind(y, X, study, treat)))
+}
