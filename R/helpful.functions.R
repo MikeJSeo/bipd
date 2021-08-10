@@ -69,7 +69,6 @@ generate_ipdma_example <- function(type = "continuous"){
 }
 
 
-
 #' Calculate patient-specific treatment effect
 #'
 #' Convenient function for calculating the patient-specific treatment effect.
