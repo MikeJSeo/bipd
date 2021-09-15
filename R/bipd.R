@@ -16,7 +16,7 @@
 NULL
 
 
-#' @import stats
+#' @import stats update
 NULL
 
 #' @import coda
@@ -34,5 +34,5 @@ NULL
 #' @import tidyr
 NULL
 
-#' @import dplyr
+#' @import dplyr 
 NULL
