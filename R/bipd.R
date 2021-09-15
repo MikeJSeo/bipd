@@ -33,3 +33,6 @@ NULL
 
 #' @import tidyr
 NULL
+
+#' @import dplyr
+NULL
