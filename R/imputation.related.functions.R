@@ -15,9 +15,9 @@ findMissingPattern <- function(dummydata, covariates, studyname = "study"){
   
   if(length(unique(dummydata[,studyname])) == 1){
     
-    missingcount <- dummydata %>% summarize_all(~sum(is.na(.)))
-    missingn <- dummydata %>% summarise_all(~length(.))
-    missingpercent <- dummydata %>% summarise_all(~round(sum(is.na(.)/length(.))*100))
+    missingcount <- dummydata %>% select(all_of(covariates))%>% summarize_all(~sum(is.na(.)))
+    missingn <- dummydata %>% select(all_of(covariates))  %>% summarise_all(~length(.))
+    missingpercent <- dummydata %>% select(all_of(covariates)) %>% summarise_all(~round(sum(is.na(.)/length(.))*100))
     
     numberofNAs <- dummydata %>% select(all_of(covariates)) %>% summarize_all(~sum(is.na(.)))
     studysize = dim(dummydata)[1]
@@ -29,12 +29,12 @@ findMissingPattern <- function(dummydata, covariates, studyname = "study"){
     
   } else{
 
-    missingcount <- dummydata %>% group_by(across(all_of(studyname))) %>% summarize_all(~sum(is.na(.)))
-    missingn <- dummydata %>% group_by(across(all_of(studyname))) %>% summarise_all(~length(.))
-    missingpercent <- dummydata %>% group_by(across(all_of(studyname))) %>% summarise_all(~round(sum(is.na(.)/length(.))*100))
+    missingcount <- dummydata %>% select(all_of(c(studyname, covariates))) %>% group_by(across(all_of(studyname))) %>% summarize_all(~sum(is.na(.)))
+    missingn <- dummydata %>% select(all_of(c(studyname, covariates))) %>% group_by(across(all_of(studyname))) %>% summarise_all(~length(.))
+    missingpercent <- dummydata %>% select(all_of(c(studyname, covariates))) %>% group_by(across(all_of(studyname))) %>% summarise_all(~round(sum(is.na(.)/length(.))*100))
 
-    numberofNAs <- dummydata %>% select(studyname, all_of(covariates)) %>% group_by(across(all_of(studyname))) %>% summarize_all(~sum(is.na(.)))
-    studysize <- dummydata %>% select(studyname, all_of(covariates)) %>% group_by(across(all_of(studyname))) %>% summarize_all(~length(.))
+    numberofNAs <- dummydata %>% select(all_of(c(studyname, covariates))) %>% group_by(across(all_of(studyname))) %>% summarize_all(~sum(is.na(.)))
+    studysize <- dummydata %>% select(all_of(c(studyname, covariates))) %>% group_by(across(all_of(studyname))) %>% summarize_all(~length(.))
 
     sys_missing <- apply(numberofNAs[,covariates] == studysize[,covariates], 2, any)
     sys_covariates <- names(sys_missing)[which(sys_missing == TRUE)]
