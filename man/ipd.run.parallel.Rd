@@ -17,7 +17,7 @@ ipd.run.parallel(
 \arguments{
 \item{ipd}{ipd object created from ipd.data function}
 
-\item{pars.save}{parameters to save. "beta" - coefficients for main effects; "gamma" - coefficients for effect modifiers; "delta" - average treaetment effect}
+\item{pars.save}{parameters to save. "beta" - coefficients for main effects; "gamma" - coefficients for effect modifiers; "delta" - average treatment effect}
 
 \item{inits}{initial values specified for the parameters to save}
 

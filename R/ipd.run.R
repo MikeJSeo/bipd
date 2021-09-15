@@ -26,7 +26,7 @@ ipd.run <- function(ipd, pars.save = c("beta", "gamma", "delta"), inits = NULL, 
 #' This function runs the model through parallel computation from dclone package. Before running this function, we need to specify data, prior, JAGS code, etc. using ipd.data function.
 #' 
 #' @param ipd ipd object created from ipd.data function
-#' @param pars.save parameters to save. "beta" - coefficients for main effects; "gamma" - coefficients for effect modifiers; "delta" - average treaetment effect
+#' @param pars.save parameters to save. "beta" - coefficients for main effects; "gamma" - coefficients for effect modifiers; "delta" - average treatment effect
 #' @param inits initial values specified for the parameters to save
 #' @param n.chains Number of MCMC chains to run. This corresponds the number of cores used for parallel computation.
 #' @param n.adapt The number of iterations for adaptation (Note that the samples from adaptation phase is non-Markovian and do not constitute a Markov chain)
