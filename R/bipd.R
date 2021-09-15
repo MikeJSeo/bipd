@@ -16,13 +16,13 @@
 NULL
 
 
-#' @import stats update
+#' @importFrom stats "update"
 NULL
 
 #' @import coda
 NULL
 
-#' @import dclone
+#' @importFrom dclone "jags.parfit"
 NULL
 
 #' @import R2WinBUGS
