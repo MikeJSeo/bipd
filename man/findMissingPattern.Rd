@@ -2,15 +2,17 @@
 % Please edit documentation in R/imputation.related.functions.R
 \name{findMissingPattern}
 \alias{findMissingPattern}
-\title{Find missing data pattern, i.e. whether they are systematically missing or sporadically missing}
+\title{Find missing data pattern in a given data}
 \usage{
-findMissingPattern(dummydata, covariates, studyname = "study")
+findMissingPattern(dataset, covariates, studyname = "study")
 }
 \arguments{
-\item{dummydata}{Dataset which contains covariates of interest}
+\item{dataset}{data which contains variables of interest}
 
-\item{covariates}{A vector of covariate names to find missing data pattern}
+\item{covariates}{vector of variable names to find missing data pattern}
+
+\item{studyname}{study name}
 }
 \description{
-Find missing data pattern in a given dataset
+Find missing data pattern in a given data i.e. whether they are systematically missing or sporadically missing
 }
