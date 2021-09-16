@@ -3,6 +3,7 @@
 export(findMissingPattern)
 export(generate_ipdma_example)
 export(getCorrectMeth)
+export(getCorrectPred)
 export(ipd.run)
 export(ipd.run.parallel)
 export(ipdma.model.onestage)
