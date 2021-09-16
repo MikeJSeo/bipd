@@ -24,7 +24,7 @@ getCorrectPred(
 
 \item{outcomename}{outcome name}
 
-\item{interaction}{whether to include interaction or not}
+\item{interaction}{indicator for including covariate-treatment interactions}
 }
 \description{
 Find correct imputation prediction matrix for the mice package

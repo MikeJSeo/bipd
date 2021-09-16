@@ -25,7 +25,7 @@ getCorrectMeth(
 
 \item{outcomename}{outcome name}
 
-\item{interaction}{whether to include interaction or not}
+\item{interaction}{indicator for including covariate-treatment interactions}
 
 \item{typeofvar}{type of variables; should be a vector of these values: "continuous", "binary", or "count". Index value of the vector should be predictor names.}
 }
