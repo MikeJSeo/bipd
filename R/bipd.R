@@ -16,13 +16,13 @@
 NULL
 
 
-#' @importFrom stats "update"
+#' @import stats
 NULL
 
 #' @import coda
 NULL
 
-#' @importFrom dclone "jags.parfit"
+#' @import dclone
 NULL
 
 #' @import mvtnorm
