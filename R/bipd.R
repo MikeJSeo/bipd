@@ -28,3 +28,6 @@ NULL
 #' @import mvtnorm
 NULL
 
+#' @import R2WinBUGS
+NULL
+
