@@ -64,7 +64,7 @@ findMissingPattern <- function(dataset, covariates, studyname = "study"){
 #'
 #' @export
 
-getCorrectMeth <- function(dataset, missingPattern, studyname = "study", treatmentname = "treat", outcomename = "y", interaction = FALSE, typeofvar = NULL){
+getCorrectMeth <- function(dataset, missingPattern, studyname = "study", treatmentname = "treat", outcomename = "y", interaction = TRUE, typeofvar = NULL){
   
 
   meth <- make.method(dataset)
@@ -135,7 +135,7 @@ getCorrectMeth <- function(dataset, missingPattern, studyname = "study", treatme
 #'
 #' @export
 
-getCorrectPred <- function(dataset, missingPattern, studyname = "study", treatmentname = "treat", outcomename = "y", interaction = FALSE){
+getCorrectPred <- function(dataset, missingPattern, studyname = "study", treatmentname = "treat", outcomename = "y", interaction = TRUE){
   
   if(length(unique(dataset[,studyname])) == 1){
     
