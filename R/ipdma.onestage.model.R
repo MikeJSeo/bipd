@@ -88,7 +88,7 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
   ipd <- list(y = y, study = study, treat = treat, X = X, response = response, type = type, 
               shrinkage = shrinkage, mean.alpha = mean.alpha, prec.alpha = prec.alpha, 
               mean.beta = mean.beta, prec.beta = prec.beta, mean.gamma = mean.gamma, 
-              prec.gamma = prec.gamma, mean.gamA = mean.gamA, prec.gamA = prec.gamA, mean.delta = mean.delta, prec.delta = prec.delta,
+              prec.gamma = prec.gamma, mean.delta = mean.delta, prec.delta = prec.delta,
               hy.prior = hy.prior, lambda.prior = lambda.prior, p.ind = p.ind, g = g, hy.prior.eta = hy.prior.eta)
   
   code <- ipdma.onestage.rjags(ipd)
