@@ -58,7 +58,7 @@ ipdma.onestage.deft.rjags <- function(ipd){
                      "\n}")
 
     
-    code <- paste0(code, "\n## prior distribution for the effect modifiers within study",
+    code <- paste0(code, "\n## prior distribution for the effect modifiers of within study information",
                    "\nfor(k in 1:Ncovariate){",
                    "\n\tgamma.within[k] ~ dnorm(", mean.gamma.within, ", ", prec.gamma.within, ") ",
                    "\n}")

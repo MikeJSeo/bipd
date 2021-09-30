@@ -94,7 +94,7 @@ treatment.effect <- function(ipd = NULL, samples = NULL, newpatient = NULL,
     
     newpatient <- (newpatient - ipd$scale_mean)/ipd$scale_sd
       
-    index0 <- which(colnames(samples[[1]]) == "delta[2]") #only works for IPD-MA
+    index0 <- which(colnames(samples[[1]]) == "delta[2]") 
     index1 <- grep("gamma", colnames(samples[[1]]))
     index <- c(index0, index1)
     samples2 <- samples[,index]
@@ -121,7 +121,26 @@ treatment.effect <- function(ipd = NULL, samples = NULL, newpatient = NULL,
     }
     newpatient <- newpatient - reference
     
+    index0 <- which(colnames(samples[[1]]) == "delta[2]") 
+    index1 <- grep("gamma.within", colnames(samples[[1]]))
+    index <- c(index0, index1)
+    samples2 <- samples[,index]
     
+    merged <- samples2[[1]]
+    for(i in 2:length(samples2)){
+      merged <- rbind(merged, samples2[[i]])
+    }
+    
+    pred <- merged %*% c(1, newpatient)
+    mean1 <- mean(pred)
+    se1 <- sd(pred)
+    
+    if(ipd$response == "normal"){
+      CI <- mean1 + qnorm(quantile)* se1
+    } else if(ipd$response == "binomial"){
+      CI <- exp(mean1 + qnorm(quantile)* se1)    
+    }
+    names(CI) <- quantile
     
   } else{
     stop("Calculating patient specific treatment effect is not yet implemented for this method")
