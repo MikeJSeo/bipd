@@ -121,6 +121,8 @@ treatment.effect <- function(ipd = NULL, samples = NULL, newpatient = NULL,
     }
     newpatient <- newpatient - reference
     
+    
+    
   } else{
     stop("Calculating patient specific treatment effect is not yet implemented for this method")
   }
