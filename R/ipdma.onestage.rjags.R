@@ -9,26 +9,15 @@ ipdma.onestage.rjags <- function(ipd){
     
     if(response == "binomial"){
       
-      if(approach == "deluded"){
-        code <- paste0(code, "\n\ty[i] ~ dbern(p[i])",
-                       "\n\tlogit(p[i]) <- a[studyid[i]] + inprod(beta[], X[i,]) +",
+      code <- paste0(code, "\n\ty[i] ~ dbern(p[i])",
+                       "\n\tlogit(p[i]) <- alpha[studyid[i]] + inprod(beta[], X[i,]) +",
                        "\n\t\t(1 - equals(treat[i],1)) * inprod(gamma[], X[i,]) +")  
-      } else if(approach == "deft"){
-        code <- paste0(code, "\n\ty[i] ~ dbern(p[i])",
-                       "\n\tlogit(p[i]) <- a[studyid[i]] + inprod(beta[], X[i,]) + (1 - equals(treat[i],1)) * inprod(gamA[], Xbar[studyid[i],]) +",
-                       "\n\t\t(1 - equals(treat[i],1)) * inprod(gamma[], X[i,] - Xbar[studyid[i],]) +")
-      }
+  
     } else if(response == "normal"){
       
-      if(approach == "deluded"){
-        code <- paste0(code, "\n\ty[i] ~ dnorm(mu[i], sigma)",
-                       "\n\tmu[i] <- a[studyid[i]] + inprod(beta[], X[i,]) +",
+      code <- paste0(code, "\n\ty[i] ~ dnorm(mu[i], sigma)",
+                       "\n\tmu[i] <- alpha[studyid[i]] + inprod(beta[], X[i,]) +",
                        "\n\t\t(1 - equals(treat[i],1)) * inprod(gamma[], X[i,]) +")  
-      } else if(approach == "deft"){
-        code <- paste0(code, "\n\ty[i] ~ dnorm(mu[i], sigma)",
-                       "\n\tmu[i] <- a[studyid[i]] + inprod(beta[], X[i,]) + (1 - equals(treat[i],1)) * inprod(gamA[], Xbar[studyid[i],]) +",
-                       "\n\t\t(1 - equals(treat[i],1)) * inprod(gamma[], X[i,] - Xbar[studyid[i],]) +") 
-      }
     }
     
     if(type == "random"){
@@ -58,7 +47,7 @@ ipdma.onestage.rjags <- function(ipd){
     
     code <- paste0(code, "\n\n## prior distribution for the study intercept",
                    "\nfor (j in 1:Nstudies){",
-                   "\n\ta[j] ~ dnorm(", mean.a, ", ", prec.a, ")",
+                   "\n\talpha[j] ~ dnorm(", mean.alpha, ", ", prec.alpha, ")",
                    "\n}")
     
     code <- paste0(code, "\n\n## prior distribution for the main effect of the covariates",
@@ -66,16 +55,7 @@ ipdma.onestage.rjags <- function(ipd){
                    "\n\tbeta[k] ~ dnorm(", mean.beta, ", ", prec.beta, ")",
                    "\n}")
     
-    if(approach == "deft"){
-      code <- paste0(code, "\n\n## prior distribution for the effect modifiers of across study information",
-                     "\nfor(k in 1:Ncovariate){",
-                     "\n\tgamA[k] ~ dnorm(", mean.gamA, ", ", prec.gamA, ")",
-                     "\n}")
-      
-    }
-
     code <- paste0(code, shrinkage.prior.rjags(ipd))  
-    
     code <- paste0("model {\n", code, "\n}")
     
     return(code)
@@ -109,8 +89,6 @@ shrinkage.prior.rjags <- function(ipd){
   
   code <- ""
   with(ipd, {
-    
-    if(approach == "deluded"){
     
     if(shrinkage == "none"){
       code <- paste0(code, "\n## prior distribution for the effect modifiers under no shrinkage",
@@ -156,13 +134,6 @@ shrinkage.prior.rjags <- function(ipd){
                     "\n\tPind[1,k] <- 1- p.ind[k]",
                     "\n}"
                     )
-    }
-    } else if(approach == "deft"){
-      
-      code <- paste0(code, "\n## prior distribution for the effect modifiers of within study information under no shrinkage",
-                     "\nfor(k in 1:Ncovariate){",
-                     "\n\tgamma[k] ~ dnorm(", mean.gamma, ", ", prec.gamma, ") ",
-                     "\n}")
     }
     
     return(code)

@@ -1,4 +1,4 @@
-#' Make an one-stage individual patient data meta-analysis (IPD-MA) object containing data, priors, and a JAGS model code
+#' Make a (Deft-approach) one-stage individual patient data meta-analysis (IPD-MA) object containing data, priors, and a JAGS model code
 #'
 #' This function sets up data and JAGS code that is needed to run one-stage IPD-MA models in JAGS.
 #' 
@@ -13,13 +13,14 @@
 #' "SSVS" corresponds to the Search Variable Selection method. SSVS is not strictly a shrinkage method, 
 #' but pulls the estimated coefficient toward zero through variable selection in each iteration of the MCMC. 
 #' See O'hara et al (2009) for more details.
-#' @param scale Indicator for scaling the covariates by the overall average; default is TRUE.
 #' @param mean.alpha Prior mean for the study intercept
 #' @param prec.alpha Prior precision for the study intercept
 #' @param mean.beta Prior mean for the regression coefficients of the main effects of the covariates; main effects are assumed to have common effect.
 #' @param prec.beta Prior precision for the regression coefficients of the main effects of the covariates
-#' @param mean.gamma Prior mean for the effect modifiers. This parameter is not used if penalization is placed on effect modifiers.
-#' @param prec.gamma Prior precision for the effect modifiers. This parameter is not used if penalization is placed on effect modifiers.
+#' @param mean.gamma.within Prior mean for effect modifiers of within study information.
+#' @param prec.gamma.within Prior precision for the effect modifiers of within study information.
+#' @param mean.gamma.across Prior mean for the effect modifiers of across study information; effect modification is assumed to have common effect.
+#' @param prec.gamma.across Prior precision for the effect modifiers of across study information
 #' @param mean.delta Prior mean for the average treatment effect
 #' @param prec.delta Prior precision for the average treatment effect
 #' @param hy.prior Prior for the heterogeneity parameter. Supports uniform, gamma, and half normal for normal and binomial response
@@ -32,18 +33,17 @@
 #' \item{data.JAGS}{Data organized in a list so that it can be used when running code in JAGS}
 #' \item{code}{JAGS code that is used to run the model. Use cat(code) to see the code in a readable format}
 #' \item{model.JAGS}{JAGS code in a function. This is used when running model in parallel}
-#' \item{scale.mean}{Mean used in scaling covariates}
-#' \item{scale.sd}{Standard deviation used in scaling covariates}
-#' @references Seo M, White IR, Furukawa TA, et al. Comparing methods for estimating patient-specific treatment effects in individual patient data meta-analysis. \emph{Stat Med}. 2021;40(6):1553-1573. \doi{10.1002/sim.8859}
+#' \item{Xbar}{Study specific average of covariates}
+#' @references Fisher DJ, Carpenter JR, Morris TP, et al. Meta-analytical methods to identify who benefits most from treatments: daft, deluded, or deft approach?. \emph{BMJ}. 2017;356:j573 \doi{10.1136/bmj.j573}
 #' @export
 
-ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL, 
-                      response = "normal", type = "random", shrinkage = "none", scale = TRUE,
-                      mean.alpha = 0, prec.alpha = 0.001, mean.beta = 0, prec.beta = 0.001, 
-                      mean.gamma = 0, prec.gamma = 0.001, mean.delta = 0, prec.delta = 0.001,
-                      hy.prior = list("dhnorm", 0, 1), lambda.prior = NULL, p.ind = NULL, g = NULL, hy.prior.eta = NULL
-                      ){
-
+ipdma.model.deft.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL, 
+                                 response = "normal", type = "random", shrinkage = "none",
+                                 mean.alpha = 0, prec.alpha = 0.001, mean.beta = 0, prec.beta = 0.001, 
+                                 mean.gamma.within = 0, prec.gamma.within = 0.001, mean.gamma.across = 0, prec.gamma.across = 0.001, mean.delta = 0, prec.delta = 0.001,
+                                 hy.prior = list("dhnorm", 0, 1), lambda.prior = NULL, p.ind = NULL, g = NULL, hy.prior.eta = NULL
+){
+  
   if(!all(grepl("^-?[0-9.]+$", study))){
     stop("Please change the study names into numbers (i.e. 1,2,3,etc)")
   }
@@ -51,18 +51,18 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
   if(length(unique(treat)) > 2){
     stop("There are more than 2 different treatments specified; need to use ipdnma.model.onestage (under development)")
   }
-
+  
   if(shrinkage== "none" & (!is.null(lambda.prior) || !is.null(p.ind) || !is.null(g) || !is.null(hy.prior.eta))){
     stop("Shrinkage is set to none but have specified prior for shrinkage parameters")
   }
   
   
-  #center the covariates
-  scale_mean <- scale_sd <- NULL
-  if(scale == TRUE){
-    scale_mean <- apply(X, 2, mean)
-    scale_sd <- apply(X, 2, sd)
-    X <- apply(X, 2, scale) 
+  Xbar <- NULL
+  Xbar <- matrix(NA, length(unique(study)), dim(X)[2])
+  # scale with trial specific mean and sd
+  for(i in 1:length(unique(study))){
+    this.study <- unique(study)[i]
+    Xbar[i,] <- apply(X[study == this.study,], 2, mean)
   }
   
   #JAGS data input
@@ -84,11 +84,13 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
   if(shrinkage == "SSVS"){
     data.JAGS$p.ind <- p.ind
   }
+  
+  data.JAGS$Xbar <- Xbar
 
   ipd <- list(y = y, study = study, treat = treat, X = X, response = response, type = type, 
-              shrinkage = shrinkage, mean.alpha = mean.alpha, prec.a = prec.a, 
-              mean.beta = mean.beta, prec.beta = prec.beta, mean.gamma = mean.gamma, 
-              prec.gamma = prec.gamma, mean.gamA = mean.gamA, prec.gamA = prec.gamA, mean.delta = mean.delta, prec.delta = prec.delta,
+              mean.alpha = mean.alpha, prec.alpha = prec.alpha, 
+              mean.beta = mean.beta, prec.beta = prec.beta, mean.gamma.within = mean.gamma.within, 
+              prec.gamma.within = prec.gamma.within, mean.gamma.across = mean.gamma.across, prec.gamma.across = prec.gamma.across, mean.delta = mean.delta, prec.delta = prec.delta,
               hy.prior = hy.prior, lambda.prior = lambda.prior, p.ind = p.ind, g = g, hy.prior.eta = hy.prior.eta)
   
   code <- ipdma.onestage.rjags(ipd)
@@ -96,8 +98,8 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
   code2 <- substring(code, 10)
   code2 <- sub("T(0,)", ";T(0,)", code2, fixed = T)
   eval(parse(text = paste('model.JAGS <- function() {', code2, sep='')))
-
-  list(data.JAGS = data.JAGS, code = code, model.JAGS = model.JAGS, response = response, scale_mean = scale_mean, scale_sd = scale_sd)
+  
+  list(data.JAGS = data.JAGS, code = code, model.JAGS = model.JAGS, response = response, Xbar = Xbar)
 }
 
 
