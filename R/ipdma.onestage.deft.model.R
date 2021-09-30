@@ -32,7 +32,7 @@ ipdma.model.deft.onestage <- function(y = NULL, study = NULL, treat = NULL, X = 
                                  response = "normal", type = "random",
                                  mean.alpha = 0, prec.alpha = 0.001, mean.beta = 0, prec.beta = 0.001, 
                                  mean.gamma.within = 0, prec.gamma.within = 0.001, mean.gamma.across = 0, prec.gamma.across = 0.001, mean.delta = 0, prec.delta = 0.001,
-                                 hy.prior = list("dhnorm", 0, 1), lambda.prior = NULL, p.ind = NULL, g = NULL, hy.prior.eta = NULL
+                                 hy.prior = list("dhnorm", 0, 1)
 ){
   
   if(!all(grepl("^-?[0-9.]+$", study))){
@@ -62,11 +62,6 @@ ipdma.model.deft.onestage <- function(y = NULL, study = NULL, treat = NULL, X = 
          treat = treat + 1,
          y = y)
   
-  # default prior assignment
-  if(is.null(lambda.prior)) lambda.prior <- list("dunif", 0, 5)
-  if(is.null(p.ind)) p.ind <- rep(0.5, dim(X)[2])
-  if(is.null(g)) g <- 1000
-  if(is.null(hy.prior.eta)) hy.prior.eta <- list("dunif", 0, 5)
   
   data.JAGS$Xbar <- Xbar
 
@@ -76,7 +71,7 @@ ipdma.model.deft.onestage <- function(y = NULL, study = NULL, treat = NULL, X = 
               prec.gamma.within = prec.gamma.within, mean.gamma.across = mean.gamma.across, prec.gamma.across = prec.gamma.across, mean.delta = mean.delta, prec.delta = prec.delta,
               hy.prior = hy.prior)
   
-  code <- ipdma.onestage.rjags(ipd)
+  code <- ipdma.onestage.deft.rjags(ipd)
   
   code2 <- substring(code, 10)
   code2 <- sub("T(0,)", ";T(0,)", code2, fixed = T)
