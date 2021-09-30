@@ -99,7 +99,9 @@ ipdma.model.deft.onestage <- function(y = NULL, study = NULL, treat = NULL, X = 
   code2 <- sub("T(0,)", ";T(0,)", code2, fixed = T)
   eval(parse(text = paste('model.JAGS <- function() {', code2, sep='')))
   
-  list(data.JAGS = data.JAGS, code = code, model.JAGS = model.JAGS, response = response, Xbar = Xbar)
+  ipd <- list(data.JAGS = data.JAGS, code = code, model.JAGS = model.JAGS, response = response, Xbar = Xbar)
+  class(ipd) <- "ipdma.onestage.deft"
+  return(ipd)
 }
 
 

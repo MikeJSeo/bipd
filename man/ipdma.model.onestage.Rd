@@ -43,8 +43,7 @@ ipdma.model.onestage(
 
 \item{shrinkage}{Shrinkage method applied to the effect modifiers. "none" correspond to no shrinkage.
 "laplace" corresponds to a adaptive shrinkage with a Laplacian prior (ie often known as Bayesian LASSO).
-"SSVS" corresponds to the Search Variable Selection method. SSVS is not strictly a shrinkage method, 
-but pulls the estimated coefficient toward zero through variable selection in each iteration of the MCMC. 
+"SSVS" corresponds to the Search Variable Selection method. SSVS is not strictly a shrinkage method, but pulls the estimated coefficient toward zero through variable selection in each iteration of the MCMC. 
 See O'hara et al (2009) for more details.}
 
 \item{scale}{Indicator for scaling the covariates by the overall average; default is TRUE.}

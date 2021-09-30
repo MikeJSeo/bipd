@@ -10,8 +10,7 @@
 #' @param type Assumption on the treatment effect: either "random" for random effects model or "fixed" for fixed effects model. Default is "random".
 #' @param shrinkage Shrinkage method applied to the effect modifiers. "none" correspond to no shrinkage.
 #' "laplace" corresponds to a adaptive shrinkage with a Laplacian prior (ie often known as Bayesian LASSO).
-#' "SSVS" corresponds to the Search Variable Selection method. SSVS is not strictly a shrinkage method, 
-#' but pulls the estimated coefficient toward zero through variable selection in each iteration of the MCMC. 
+#' "SSVS" corresponds to the Search Variable Selection method. SSVS is not strictly a shrinkage method, but pulls the estimated coefficient toward zero through variable selection in each iteration of the MCMC. 
 #' See O'hara et al (2009) for more details.
 #' @param scale Indicator for scaling the covariates by the overall average; default is TRUE.
 #' @param mean.alpha Prior mean for the study intercept
@@ -97,7 +96,9 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
   code2 <- sub("T(0,)", ";T(0,)", code2, fixed = T)
   eval(parse(text = paste('model.JAGS <- function() {', code2, sep='')))
 
-  list(data.JAGS = data.JAGS, code = code, model.JAGS = model.JAGS, response = response, scale_mean = scale_mean, scale_sd = scale_sd)
+  ipd <- list(data.JAGS = data.JAGS, code = code, model.JAGS = model.JAGS, response = response, scale_mean = scale_mean, scale_sd = scale_sd)
+  class(ipd) <- "ipdma.onestage"
+  return(ipd)
 }
 
 
