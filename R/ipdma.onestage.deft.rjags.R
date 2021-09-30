@@ -1,5 +1,3 @@
-
-
 ipdma.onestage.deft.rjags <- function(ipd){
   
   with(ipd, {
