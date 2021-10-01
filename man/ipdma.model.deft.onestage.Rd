@@ -21,11 +21,7 @@ ipdma.model.deft.onestage(
   prec.gamma.across = 0.001,
   mean.delta = 0,
   prec.delta = 0.001,
-  hy.prior = list("dhnorm", 0, 1),
-  lambda.prior = NULL,
-  p.ind = NULL,
-  g = NULL,
-  hy.prior.eta = NULL
+  hy.prior = list("dhnorm", 0, 1)
 )
 }
 \arguments{
