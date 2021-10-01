@@ -168,10 +168,6 @@ getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, interaction = 
     
   } else{
     
-    if(length(missingPattern$sys_covariates) != 0 & is.null(typeofvar)){
-      stop("typeofvar needs to be specified to denote the type of the systematically missing variables")
-    } 
-    
     if(meth[outcomename] != ""){
       meth[outcomename] <- "2l.pmm" #assume outcome data is not systematically missing
     }
