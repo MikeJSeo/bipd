@@ -69,7 +69,7 @@ ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, in
   
   impc <- complete(imp, "long", include = "TRUE")
   impc.store <- impc[, c(".imp", studyname, treatmentname, outcomename, covariates)]
-  imp.list <- mitools::imputationList(split(impc.store, impc.store[,1]))$imputations
+  imp.list <- mitools::imputationList(split(impc.store, impc.store[,1]))$imputations[-1]
 
   list(missingPattern = missingPattern, meth = meth, pred = pred, imp.list = imp.list)
 }
@@ -82,14 +82,21 @@ ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, in
 #' @param dataset Data which contains variables of interests
 #' @param covariates Vector of variable names that the user is interested in finding a missing data pattern
 #' @param typeofvar Type of covariate variables; should be a vector of these values: "continuous", "binary", or "count". Order should follow that of covariates parameter specified.
-#' @param studyname Study name in the data specified. Default is "study"
-#'
+#' @param studyname Study name in the data specified.
+#' @param treatmentname Treatment name in the data specified.
+#' @param outcomename Outcome name in the data specified.
+#' 
 #' @export
 
-findMissingPattern <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, studyname = NULL){
+findMissingPattern <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, 
+                               studyname = NULL, treatmentname = NULL, outcomename = NULL){
   
-  if(is.null(dataset) | is.null(covariates) | is.null(typeofvar) | is.null(studyname)){
-    stop("All parameters dataset, covariates, and studyname Dataset is not given")
+  if(is.null(dataset) | is.null(covariates) | is.null(typeofvar)){
+    stop("All parameters dataset, covariates, and typeofvar is not given")
+  }
+  
+  if(is.null(studyname) | is.null(treatmentname) | is.null(outcomename)){
+    stop("studyname, treatmentname, and outcomename have to be specified.")
   }
 
   if(length(unique(dataset[,studyname])) == 1){
@@ -135,78 +142,75 @@ findMissingPattern <- function(dataset = NULL, covariates = NULL, typeofvar = NU
 #' @param dataset data which contains variables of interest
 #' @param missingPattern missing pattern object created using \code{\link{findMissingPattern}}
 #' @param interaction indicator for including covariate-treatment interactions
-#' @param studyname Study name in the data specified.
-#' @param treatmentname Treatment name in the data specified.
-#' @param outcomename Outcome name in the data specified.
 #'
 #' @export
 
 #Find correct imputation method to be used in the mice package
 
-getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, interaction = TRUE, studyname = NULL, treatmentname = NULL, outcomename = NULL){
+getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, interaction = TRUE){
   
   if(is.null(dataset) | is.null(missingPattern)){
     stop("dataset and missingPattern have to be specified.")
   }
   
-  if(is.null(studyname) | is.null(treatmentname) | is.null(outcomename)){
-    stop("studyname, treatmentname, and outcomename have to be specified.")
-  }
-  
-  dataset <- dataset %>% select(all_of(c(studyname, treatmentname, outcomename, missingPattern$covariates)))
-  
-  if(interaction == TRUE){
+  with(missingPattern, {
     
-    trial <- paste0(missingPattern$covariates[1], treatmentname)
-    if(!trial %in% colnames(dataset)){
-      for(i in 1:length(missingPattern$covariates)){
-        varname <- paste0(missingPattern$covariates[i], treatmentname)
-        dataset[[varname]] <- NA
-      }
-    }
-  }
-  
-  meth <- make.method(dataset)
-  if(length(unique(dataset[,studyname])) == 1){
+    dataset <- dataset %>% select(all_of(c(studyname, treatmentname, outcomename, covariates)))
     
-    meth[paste0(missingPattern$without_sys_covariates, treatmentname)] <- paste0("~ I(as.numeric(as.character(", missingPattern$without_sys_covariates, ")) *", treatmentname, ")")
-    
-    if(meth[outcomename] != ""){
-      meth[outcomename] <- "pmm"
-    }
-    
-    if(length(missingPattern$spor_covariates) != 0){
-      meth[missingPattern$spor_covariates] <- "pmm"
-    }
-    
-  } else{
-    
-    if(meth[outcomename] != ""){
-      meth[outcomename] <- "2l.pmm" #assume outcome data is not systematically missing
-    }
-    
-    if(length(missingPattern$spor_covariates) != 0){
-      meth[missingPattern$spor_covariates] <- "2l.pmm"
-    }
-    
-    if(length(missingPattern$sys_covariates) != 0){
+    if(interaction == TRUE){
       
-      for(i in 1:length(missingPattern$sys_covariates)){
-        if(missingPattern$typeofvar[missingPattern$sys_covariates[i]] == "continuous"){
-          meth[missingPattern$sys_covariates[i]] <- "2l.2stage.norm"
-        } else if(missingPattern$typeofvar[missingPattern$sys_covariates[i]] == "binary"){
-          meth[missingPattern$sys_covariates[i]] <- "2l.2stage.bin"
-        } else if(missingPattern$typeofvar[missingPattern$sys_covariates[i]] == "count"){
-          meth[missingPattern$sys_covariates[i]] <- "2l.2stage.pois"
+      trial <- paste0(covariates[1], treatmentname)
+      if(!trial %in% colnames(dataset)){
+        for(i in 1:length(covariates)){
+          varname <- paste0(covariates[i], treatmentname)
+          dataset[[varname]] <- NA
         }
       }
     }
     
-    if(interaction == TRUE){
-      meth[paste0(missingPattern$covariates, treatmentname)] <- paste0("~ I(as.numeric(as.character(", missingPattern$covariates, ")) *", treatmentname,  ")")
+    meth <- make.method(dataset)
+    if(length(unique(dataset[,studyname])) == 1){
+      
+      meth[paste0(without_sys_covariates, treatmentname)] <- paste0("~ I(as.numeric(as.character(", without_sys_covariates, ")) *", treatmentname, ")")
+      
+      if(meth[outcomename] != ""){
+        meth[outcomename] <- "pmm"
+      }
+      
+      if(length(spor_covariates) != 0){
+        meth[spor_covariates] <- "pmm"
+      }
+      
+    } else{
+      
+      if(meth[outcomename] != ""){
+        meth[outcomename] <- "2l.pmm" #assume outcome data is not systematically missing
+      }
+      
+      if(length(spor_covariates) != 0){
+        meth[spor_covariates] <- "2l.pmm"
+      }
+      
+      if(length(sys_covariates) != 0){
+        
+        for(i in 1:length(sys_covariates)){
+          if(typeofvar[sys_covariates[i]] == "continuous"){
+            meth[sys_covariates[i]] <- "2l.2stage.norm"
+          } else if(typeofvar[sys_covariates[i]] == "binary"){
+            meth[sys_covariates[i]] <- "2l.2stage.bin"
+          } else if(typeofvar[sys_covariates[i]] == "count"){
+            meth[sys_covariates[i]] <- "2l.2stage.pois"
+          }
+        }
+      }
+      
+      if(interaction == TRUE){
+        meth[paste0(covariates, treatmentname)] <- paste0("~ I(as.numeric(as.character(", covariates, ")) *", treatmentname,  ")")
+      }
     }
-  }
-  return(meth)
+    return(meth)
+  })
+
 }
 
 
@@ -217,13 +221,10 @@ getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, interaction = 
 #' @param dataset data which contains variables of interest
 #' @param missingPattern missing pattern object created using \code{\link{findMissingPattern}}
 #' @param interaction indicator for including covariate-treatment interactions
-#' @param studyname Study name in the data specified.
-#' @param treatmentname Treatment name in the data specified.
-#' @param outcomename Outcome name in the data specified.
 #'
 #' @export
 
-getCorrectPred <- function(dataset = NULL, missingPattern = NULL, interaction = TRUE, studyname = NULL, treatmentname = NULL, outcomename = NULL){
+getCorrectPred <- function(dataset = NULL, missingPattern = NULL, interaction = TRUE){
   
   
   if(is.null(dataset) | is.null(missingPattern)){
@@ -234,14 +235,16 @@ getCorrectPred <- function(dataset = NULL, missingPattern = NULL, interaction = 
     stop("studyname, treatmentname, and outcomename have to be specified.")
   }
   
-  dataset <- dataset %>% select(all_of(c(studyname, treatmentname, outcomename, missingPattern$covariates)))
+  with(missingPattern, {
+    
+  dataset <- dataset %>% select(all_of(c(studyname, treatmentname, outcomename, covariates)))
   
   if(interaction == TRUE){
     
-    trial <- paste0(missingPattern$covariates[1], treatmentname)
+    trial <- paste0(covariates[1], treatmentname)
     if(!trial %in% colnames(dataset)){
-      for(i in 1:length(missingPattern$covariates)){
-        varname <- paste0(missingPattern$covariates[i], treatmentname)
+      for(i in 1:length(covariates)){
+        varname <- paste0(covariates[i], treatmentname)
         dataset[[varname]] <- NA
       }
     }
@@ -273,7 +276,6 @@ getCorrectPred <- function(dataset = NULL, missingPattern = NULL, interaction = 
   } else{
     
     # Case when there are multiple clusters/studies
-    with(missingPattern, {
       pred <- make.predictorMatrix(dataset)
       pred[,] <- 0
       
@@ -318,9 +320,10 @@ getCorrectPred <- function(dataset = NULL, missingPattern = NULL, interaction = 
         pred[c(outcomename, sys_covariates), studyname] <- -2
       }
       diag(pred) <- 0
-      pred
-    })
-  }
+      
+    }
+    return(pred)
+  })
 }
 
 
