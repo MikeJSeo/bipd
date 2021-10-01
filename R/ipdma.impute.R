@@ -53,16 +53,15 @@ ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, in
     }
   }
 
-  missingPattern <- findMissingPattern(dataset = dataset, covariates = covariates, typeofvar = typeofvar, studyname = studyname)
+  missingPattern <- findMissingPattern(dataset = dataset, covariates = covariates, typeofvar = typeofvar, 
+                                       studyname = studyname, treatmentname = treatmentname, outcomename = outcomename)
   
   if(is.null(meth)){
-    meth <- getCorrectMeth(dataset = dataset, missingPattern = missingPattern, interaction = interaction,
-                           studyname = studyname, treatmentname = treatmentname, outcomename = outcomename)
+    meth <- getCorrectMeth(dataset = dataset, missingPattern = missingPattern, interaction = interaction)
   }
   
   if(is.null(pred)){
-    pred <- getCorrectPred(dataset = dataset, missingPattern = missingPattern, interaction = interaction,
-                           studyname = studyname, treatmentname = treatmentname, outcomename = outcomename)
+    pred <- getCorrectPred(dataset = dataset, missingPattern = missingPattern, interaction = interaction)
   }
 
   imp <- mice(dataset, pred = pred, meth = meth, m = m)
