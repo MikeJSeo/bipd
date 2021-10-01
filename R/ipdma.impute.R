@@ -38,12 +38,19 @@ ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, in
   
   if(length(typeofvar) == length(covariates)){
     stop("length of covariates and typeofvar should match")
+  } else{
+    names(typeofvar) <- covariates  
   }
   
-  names(typeofvar) <- covariates
+  dataset <- dataset %>% select(all_of(c(studyname, treatmentname, outcomename, covariates)))
   
-  dataset <- dataset[,c(studyname, treatmentname, outcomename, covariates)]
-  
+  if(interaction == TRUE){
+    for(i in 1:length(covariates)){
+      varname <- paste0(covariates, treatmentname)
+      dataset[[varname]] <- NA
+    }
+  }
+
   missingPattern <- findMissingPattern(dataset = dataset, covariates = covariates, studyname = studyname)
   
   meth = getCorrectMeth(dataset = dataset, missingPattern = missingPattern, typeofvar = typeofvar, interaction = interaction,
@@ -53,7 +60,6 @@ ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, in
                          studyname = studyname, treatmentname = treatmentname, outcomename = outcomename)
   
   list(missingPattern = missingPattern, meth = meth, pred = pred)
-  
 }
   
 
@@ -287,13 +293,7 @@ getCorrectPred <- function(dataset = NULL, missingPattern = NULL, interaction = 
 
 
 ####################### some other helpful functions
-createinteractions <- function(dataset, cov) {
-  for(i in 1:length(cov)){
-    varname <- paste0(cov[i], "treat")
-    df[[varname]] <- NA  
-  }
-  df
-}
+
 
 
 findVarianceUsingRubinsRule <- function(prediction.dummy, variance.dummy){
