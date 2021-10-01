@@ -4,12 +4,19 @@
 \alias{findMissingPattern}
 \title{Find missing data pattern in a given data}
 \usage{
-findMissingPattern(dataset = NULL, covariates = NULL, studyname = NULL)
+findMissingPattern(
+  dataset = NULL,
+  covariates = NULL,
+  typeofvar = NULL,
+  studyname = NULL
+)
 }
 \arguments{
 \item{dataset}{Data which contains variables of interests}
 
 \item{covariates}{Vector of variable names that the user is interested in finding a missing data pattern}
+
+\item{typeofvar}{Type of covariate variables; should be a vector of these values: "continuous", "binary", or "count". Order should follow that of covariates parameter specified.}
 
 \item{studyname}{Study name in the data specified. Default is "study"}
 }

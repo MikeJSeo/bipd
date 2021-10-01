@@ -7,7 +7,6 @@
 getCorrectMeth(
   dataset = NULL,
   missingPattern = NULL,
-  typeofvar = NULL,
   interaction = TRUE,
   studyname = NULL,
   treatmentname = NULL,
@@ -18,8 +17,6 @@ getCorrectMeth(
 \item{dataset}{data which contains variables of interest}
 
 \item{missingPattern}{missing pattern object created using \code{\link{findMissingPattern}}}
-
-\item{typeofvar}{type of variables; should be a vector of these values: "continuous", "binary", or "count". Index value of the vector should be predictor names.}
 
 \item{interaction}{indicator for including covariate-treatment interactions}
 

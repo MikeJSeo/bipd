@@ -53,10 +53,10 @@ ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, in
     }
   }
 
-  missingPattern <- findMissingPattern(dataset = dataset, covariates = covariates, studyname = studyname)
+  missingPattern <- findMissingPattern(dataset = dataset, covariates = covariates, typeofvar = typeofvar, studyname = studyname)
   
   if(is.null(meth)){
-    meth <- getCorrectMeth(dataset = dataset, missingPattern = missingPattern, typeofvar = typeofvar, interaction = interaction,
+    meth <- getCorrectMeth(dataset = dataset, missingPattern = missingPattern, interaction = interaction,
                            studyname = studyname, treatmentname = treatmentname, outcomename = outcomename)
   }
   
@@ -81,13 +81,14 @@ ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, in
 #'
 #' @param dataset Data which contains variables of interests
 #' @param covariates Vector of variable names that the user is interested in finding a missing data pattern
+#' @param typeofvar Type of covariate variables; should be a vector of these values: "continuous", "binary", or "count". Order should follow that of covariates parameter specified.
 #' @param studyname Study name in the data specified. Default is "study"
 #'
 #' @export
 
-findMissingPattern <- function(dataset = NULL, covariates = NULL, studyname = NULL){
+findMissingPattern <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, studyname = NULL){
   
-  if(is.null(dataset) | is.null(covariates) | is.null(studyname)){
+  if(is.null(dataset) | is.null(covariates) | is.null(typeofvar) | is.null(studyname)){
     stop("All parameters dataset, covariates, and studyname Dataset is not given")
   }
 
@@ -122,7 +123,7 @@ findMissingPattern <- function(dataset = NULL, covariates = NULL, studyname = NU
     without_sys_covariates <- names(sys_missing)[which(sys_missing == FALSE)]
   }
   
-  return(list(missingcount = missingcount, missingpercent = missingpercent, sys_missing = sys_missing, spor_missing = spor_missing, sys_covariates = sys_covariates, spor_covariates = spor_covariates, without_sys_covariates = without_sys_covariates, covariates = covariates))
+  return(list(missingcount = missingcount, missingpercent = missingpercent, sys_missing = sys_missing, spor_missing = spor_missing, sys_covariates = sys_covariates, spor_covariates = spor_covariates, without_sys_covariates = without_sys_covariates, covariates = covariates, typeofvar = typeofvar))
 }
 
 
@@ -133,7 +134,6 @@ findMissingPattern <- function(dataset = NULL, covariates = NULL, studyname = NU
 #'
 #' @param dataset data which contains variables of interest
 #' @param missingPattern missing pattern object created using \code{\link{findMissingPattern}}
-#' @param typeofvar type of variables; should be a vector of these values: "continuous", "binary", or "count". Index value of the vector should be predictor names.
 #' @param interaction indicator for including covariate-treatment interactions
 #' @param studyname Study name in the data specified.
 #' @param treatmentname Treatment name in the data specified.
@@ -143,10 +143,10 @@ findMissingPattern <- function(dataset = NULL, covariates = NULL, studyname = NU
 
 #Find correct imputation method to be used in the mice package
 
-getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, typeofvar = NULL, interaction = TRUE, studyname = NULL, treatmentname = NULL, outcomename = NULL){
+getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, interaction = TRUE, studyname = NULL, treatmentname = NULL, outcomename = NULL){
   
-  if(is.null(dataset) | is.null(missingPattern) | is.null(typeofvar)){
-    stop("dataset, missingPattern, and typeofvar have to be specified.")
+  if(is.null(dataset) | is.null(missingPattern)){
+    stop("dataset and missingPattern have to be specified.")
   }
   
   if(is.null(studyname) | is.null(treatmentname) | is.null(outcomename)){
@@ -183,11 +183,11 @@ getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, typeofvar = NU
     if(length(missingPattern$sys_covariates) != 0){
       
       for(i in 1:length(missingPattern$sys_covariates)){
-        if(typeofvar[missingPattern$sys_covariates[i]] == "continuous"){
+        if(missingPattern$typeofvar[missingPattern$sys_covariates[i]] == "continuous"){
           meth[missingPattern$sys_covariates[i]] <- "2l.2stage.norm"
-        } else if(typeofvar[missingPattern$sys_covariates[i]] == "binary"){
+        } else if(missingPattern$typeofvar[missingPattern$sys_covariates[i]] == "binary"){
           meth[missingPattern$sys_covariates[i]] <- "2l.2stage.bin"
-        } else if(typeofvar[missingPattern$sys_covariates[i]] == "count"){
+        } else if(missingPattern$typeofvar[missingPattern$sys_covariates[i]] == "count"){
           meth[missingPattern$sys_covariates[i]] <- "2l.2stage.pois"
         }
       }
