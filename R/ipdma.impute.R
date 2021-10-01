@@ -45,7 +45,8 @@ ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, in
   }
   
   dataset <- dataset %>% select(all_of(c(studyname, treatmentname, outcomename, covariates)))
-  
+  dataset[,covariates[typeofvar == "binary"]] <- lapply(dataset[,covariates[typeofvar == "binary"]], factor)
+
   if(interaction == TRUE){
     for(i in 1:length(covariates)){
       varname <- paste0(covariates[i], treatmentname)
@@ -156,6 +157,7 @@ getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, interaction = 
   with(missingPattern, {
     
     dataset <- dataset %>% select(all_of(c(studyname, treatmentname, outcomename, covariates)))
+    dataset[,covariates[typeofvar == "binary"]] <- lapply(dataset[,covariates[typeofvar == "binary"]], factor)
     
     if(interaction == TRUE){
       
@@ -234,6 +236,7 @@ getCorrectPred <- function(dataset = NULL, missingPattern = NULL, interaction = 
   with(missingPattern, {
 
   dataset <- dataset %>% select(all_of(c(studyname, treatmentname, outcomename, covariates)))
+  dataset[,covariates[typeofvar == "binary"]] <- lapply(dataset[,covariates[typeofvar == "binary"]], factor)
   
   if(interaction == TRUE){
     
