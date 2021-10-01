@@ -19,13 +19,7 @@ NULL
 #' @import coda
 NULL
 
-#' @import dclone
-NULL
-
 #' @import mvtnorm
-NULL
-
-#' @import R2WinBUGS
 NULL
 
 #' @import dplyr

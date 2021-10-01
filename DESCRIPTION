@@ -4,7 +4,8 @@ Title: Bayesian Individual Patient Data (Network) Meta-Analysis using 'JAGS'
 Version: 0.1.0
 Date: 2020-07-04
 Depends: R (>= 2.10)
-Imports: rjags (>= 4-6), coda (>= 0.13), mvtnorm, dclone, R2WinBUGS, dplyr
+Imports: rjags (>= 4-6), coda (>= 0.13), mvtnorm, dplyr
+Suggests: dclone
 Authors@R: c( 
 	person("Michael", "Seo", email = "swj8874@gmail.com", role = c("aut", "cre")))
 Description: More about what it does (maybe more than one line)
