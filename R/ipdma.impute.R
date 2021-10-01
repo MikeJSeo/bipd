@@ -231,12 +231,8 @@ getCorrectPred <- function(dataset = NULL, missingPattern = NULL, interaction = 
     stop("dataset and missingPattern have to be specified.")
   }
   
-  if(is.null(studyname) | is.null(treatmentname) | is.null(outcomename)){
-    stop("studyname, treatmentname, and outcomename have to be specified.")
-  }
-  
   with(missingPattern, {
-    
+
   dataset <- dataset %>% select(all_of(c(studyname, treatmentname, outcomename, covariates)))
   
   if(interaction == TRUE){
