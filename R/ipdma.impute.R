@@ -157,10 +157,10 @@ getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, interaction = 
   
   if(interaction == TRUE){
     
-    trial <- paste0(covariates[1], treatmentname)
+    trial <- paste0(missingPatterns$covariates[1], treatmentname)
     if(!trial %in% colnames(dataset)){
-      for(i in 1:length(covariates)){
-        varname <- paste0(covariates[i], treatmentname)
+      for(i in 1:length(missingPatterns$covariates)){
+        varname <- paste0(missingPatterns$covariates[i], treatmentname)
         dataset[[varname]] <- NA
       }
     }
@@ -238,10 +238,10 @@ getCorrectPred <- function(dataset = NULL, missingPattern = NULL, interaction = 
   
   if(interaction == TRUE){
     
-    trial <- paste0(covariates[1], treatmentname)
+    trial <- paste0(missingPatterns$covariates[1], treatmentname)
     if(!trial %in% colnames(dataset)){
-      for(i in 1:length(covariates)){
-        varname <- paste0(covariates[i], treatmentname)
+      for(i in 1:length(missingPatterns$covariates)){
+        varname <- paste0(missingPatterns$covariates[i], treatmentname)
         dataset[[varname]] <- NA
       }
     }
