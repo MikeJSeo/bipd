@@ -24,3 +24,6 @@ NULL
 
 #' @import dplyr
 NULL
+
+#' @importFrom stats update
+NULL
