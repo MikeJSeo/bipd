@@ -36,7 +36,7 @@ ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, in
     stop("dataset, covariates, and typeofvar have to be specified.")
   }
   
-  if(length(typeofvar) == length(covariates)){
+  if(length(typeofvar) != length(covariates)){
     stop("length of covariates and typeofvar should match")
   } else{
     names(typeofvar) <- covariates  
