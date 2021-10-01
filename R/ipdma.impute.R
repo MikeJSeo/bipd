@@ -129,7 +129,8 @@ findMissingPattern <- function(dataset = NULL, covariates = NULL, typeofvar = NU
     without_sys_covariates <- names(sys_missing)[which(sys_missing == FALSE)]
   }
   
-  return(list(missingcount = missingcount, missingpercent = missingpercent, sys_missing = sys_missing, spor_missing = spor_missing, sys_covariates = sys_covariates, spor_covariates = spor_covariates, without_sys_covariates = without_sys_covariates, covariates = covariates, typeofvar = typeofvar))
+  return(list(missingcount = missingcount, missingpercent = missingpercent, sys_missing = sys_missing, spor_missing = spor_missing, sys_covariates = sys_covariates, spor_covariates = spor_covariates, without_sys_covariates = without_sys_covariates, 
+              covariates = covariates, typeofvar = typeofvar, studyname = studyname, treatmentname = treatmentname, outcomename = outcomename))
 }
 
 
