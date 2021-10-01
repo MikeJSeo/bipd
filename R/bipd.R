@@ -25,5 +25,14 @@ NULL
 #' @import dplyr
 NULL
 
+#' @import mice
+NULL
+
+#' @import micemd
+NULL
+
+#' @import miceadds
+NULL
+
 #' @importFrom stats update
 NULL

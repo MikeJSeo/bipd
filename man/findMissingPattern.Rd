@@ -4,14 +4,14 @@
 \alias{findMissingPattern}
 \title{Find missing data pattern in a given data}
 \usage{
-findMissingPattern(dataset, covariates, studyname = "study")
+findMissingPattern(dataset = NULL, covariates = NULL, studyname = NULL)
 }
 \arguments{
 \item{dataset}{Data which contains variables of interests}
 
-\item{covariates}{Vector of variable names to find missing data pattern}
+\item{covariates}{Vector of variable names that the user is interested in finding a missing data pattern}
 
-\item{studyname}{Study name in the data specified. Default is "study".}
+\item{studyname}{Study name in the data specified. Default is "study"}
 }
 \description{
 Find missing data pattern in a given data i.e. whether they are systematically missing or sporadically missing. Also calculates missing count and percentage for exploratory analysis.
