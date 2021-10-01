@@ -7,7 +7,6 @@
 #' If there are no systematically missing variables, the function defaults to use 2l.pmm in miceadds package 
 #' which generalizes predictive mean matching using linear mixed model.
 #'
-#'
 #' @param dataset Data which contains variables of interests
 #' @param covariates Vector of variable names to find missing data pattern
 #' @param typeofvar Type of covariate variables; should be a vector of these values: "continuous", "binary", or "count". Order should follow that of covariates parameter specified.
@@ -17,15 +16,18 @@
 #' @param studyname Study name in the data specified.
 #' @param treatmentname Treatment name in the data specified.
 #' @param outcomename Outcome name in the data specified.
+#' @param m Number of imputed datasets. Default is set to 5.
 #' @return 
 #' \item{missingPattern}{missing Pattern object returned by running \code{\link{findMissingPattern}}}
 #' \item{meth}{imputation method used with the mice function}
 #' \item{pred}{prediction matrix used with the mice function}
+#' \item{imp.list}{imputed datasets in a list format}
 #'
 #' @export
 
 ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, interaction = TRUE,
-                         meth = NULL, pred = NULL, studyname = NULL, treatmentname = NULL, outcomename = NULL 
+                         meth = NULL, pred = NULL, studyname = NULL, treatmentname = NULL, outcomename = NULL, 
+                         m = 5
                          ){
   
   if(is.null(studyname) | is.null(treatmentname) | is.null(outcomename)){
@@ -46,20 +48,30 @@ ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, in
   
   if(interaction == TRUE){
     for(i in 1:length(covariates)){
-      varname <- paste0(covariates, treatmentname)
+      varname <- paste0(covariates[i], treatmentname)
       dataset[[varname]] <- NA
     }
   }
 
   missingPattern <- findMissingPattern(dataset = dataset, covariates = covariates, studyname = studyname)
   
-  meth = getCorrectMeth(dataset = dataset, missingPattern = missingPattern, typeofvar = typeofvar, interaction = interaction,
-                        studyname = studyname, treatmentname = treatmentname, outcomename = outcomename)
+  if(is.null(meth)){
+    meth <- getCorrectMeth(dataset = dataset, missingPattern = missingPattern, typeofvar = typeofvar, interaction = interaction,
+                           studyname = studyname, treatmentname = treatmentname, outcomename = outcomename)
+  }
   
-  pred <- getCorrectPred(dataset = dataset, missingPattern = missingPattern, interaction = interaction,
-                         studyname = studyname, treatmentname = treatmentname, outcomename = outcomename)
+  if(is.null(pred)){
+    pred <- getCorrectPred(dataset = dataset, missingPattern = missingPattern, interaction = interaction,
+                           studyname = studyname, treatmentname = treatmentname, outcomename = outcomename)
+  }
+
+  imp <- mice(dataset, pred = pred, meth = meth, m = m)
   
-  list(missingPattern = missingPattern, meth = meth, pred = pred)
+  impc <- complete(imp, "long", include = "TRUE")
+  impc.store <- impc[, c(".imp", studyname, treatmentname, outcomename, covariates)]
+  imp.list <- mitools::imputationList(split(impc.store, impc.store[,1]))$imputations
+
+  list(missingPattern = missingPattern, meth = meth, pred = pred, imp.list = imp.list)
 }
   
 
@@ -213,6 +225,18 @@ getCorrectPred <- function(dataset = NULL, missingPattern = NULL, interaction = 
     stop("studyname, treatmentname, and outcomename have to be specified.")
   }
   
+  dataset <- dataset %>% select(all_of(c(studyname, treatmentname, outcomename, missingPattern$covariates)))
+  
+  if(interaction == TRUE){
+    
+    trial <- paste0(covariates[1], treatmentname)
+    if(!trial %in% colnames(dataset)){
+      for(i in 1:length(covariates)){
+        varname <- paste0(covariates[i], treatmentname)
+        dataset[[varname]] <- NA
+      }
+    }
+  }
   
   if(length(unique(dataset[,studyname])) == 1){
     

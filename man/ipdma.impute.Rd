@@ -13,7 +13,8 @@ ipdma.impute(
   pred = NULL,
   studyname = NULL,
   treatmentname = NULL,
-  outcomename = NULL
+  outcomename = NULL,
+  m = 5
 )
 }
 \arguments{
@@ -34,11 +35,14 @@ ipdma.impute(
 \item{treatmentname}{Treatment name in the data specified.}
 
 \item{outcomename}{Outcome name in the data specified.}
+
+\item{m}{Number of imputed datasets. Default is set to 5.}
 }
 \value{
 \item{missingPattern}{missing Pattern object returned by running \code{\link{findMissingPattern}}}
 \item{meth}{imputation method used with the mice function}
 \item{pred}{prediction matrix used with the mice function}
+\item{imp.list}{imputed datasets in a list format}
 }
 \description{
 Impute missing data in individual participant data where data is clustered by different studies.
