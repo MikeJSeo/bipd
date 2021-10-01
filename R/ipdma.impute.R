@@ -10,13 +10,13 @@
 #'
 #' @param dataset Data which contains variables of interests
 #' @param covariates Vector of variable names to find missing data pattern
-#' @param typeofvar Type of variables; should be a vector of these values: "continuous", "binary", or "count". Index value of the vector should be predictor names.
+#' @param typeofvar Type of covariate variables; should be a vector of these values: "continuous", "binary", or "count". Order should follow that of covariates parameter specified.
 #' @param interaction Indicator denoting whether treatment-covariate interactions should be included
 #' @param meth User can specify imputation method to be used in the mice package. If left unspecified, function picks a reasonable one.
 #' @param pred User can specify correct prediction matrix to be used in the mice package. If left unspecified, function picks a reasonable one.
-#' @param studyname Study name in the data specified. Default is "study".
-#' @param treatmentname Treatment name in the data specified. Default is "treat".
-#' @param outcomename Outcome name in the data specified. Default is "y".
+#' @param studyname Study name in the data specified.
+#' @param treatmentname Treatment name in the data specified.
+#' @param outcomename Outcome name in the data specified.
 #' @return 
 #' \item{missingPattern}{missing Pattern object returned by running \code{\link{findMissingPattern}}}
 #' \item{meth}{imputation method used with the mice function}
@@ -36,14 +36,23 @@ ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, in
     stop("dataset, covariates, and typeofvar have to be specified.")
   }
   
+  if(length(typeofvar) == length(covariates)){
+    stop("length of covariates and typeofvar should match")
+  }
+  
+  names(typeofvar) <- covariates
+  
   dataset <- dataset[,c(studyname, treatmentname, outcomename, covariates)]
   
   missingPattern <- findMissingPattern(dataset = dataset, covariates = covariates, studyname = studyname)
   
-  meth = getCorrectMeth(dataset = dataset, missingPattern = missingPattern, typeofvar = typeofvar, interaction = TRUE,
+  meth = getCorrectMeth(dataset = dataset, missingPattern = missingPattern, typeofvar = typeofvar, interaction = interaction,
                         studyname = studyname, treatmentname = treatmentname, outcomename = outcomename)
   
-  list(missingPattern = missingPattern, meth = meth)
+  pred <- getCorrectPred(dataset = dataset, missingPattern = missingPattern, interaction = interaction,
+                         studyname = studyname, treatmentname = treatmentname, outcomename = outcomename)
+  
+  list(missingPattern = missingPattern, meth = meth, pred = pred)
   
 }
   
@@ -108,9 +117,9 @@ findMissingPattern <- function(dataset = NULL, covariates = NULL, studyname = NU
 #' @param missingPattern missing pattern object created using \code{\link{findMissingPattern}}
 #' @param typeofvar type of variables; should be a vector of these values: "continuous", "binary", or "count". Index value of the vector should be predictor names.
 #' @param interaction indicator for including covariate-treatment interactions
-#' @param studyname study name
-#' @param treatmentname treatment name
-#' @param outcomename outcome name
+#' @param studyname Study name in the data specified.
+#' @param treatmentname Treatment name in the data specified.
+#' @param outcomename Outcome name in the data specified.
 #'
 #' @export
 
@@ -118,14 +127,13 @@ findMissingPattern <- function(dataset = NULL, covariates = NULL, studyname = NU
 
 getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, typeofvar = NULL, interaction = TRUE, studyname = NULL, treatmentname = NULL, outcomename = NULL){
   
-  if(is.null(studyname) | is.null(treatmentname) | is.null(outcomename)){
-    stop("studyname, treatmentname, and outcomename have to be specified.")
-  }
-  
-  if(is.null(dataset) | is.null(covariates) | is.null(typeofvar)){
+  if(is.null(dataset) | is.null(missingPattern) | is.null(typeofvar)){
     stop("dataset, missingPattern, and typeofvar have to be specified.")
   }
   
+  if(is.null(studyname) | is.null(treatmentname) | is.null(outcomename)){
+    stop("studyname, treatmentname, and outcomename have to be specified.")
+  }
   
   meth <- make.method(dataset)
   if(length(unique(dataset[,studyname])) == 1){
@@ -181,23 +189,24 @@ getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, typeofvar = NU
 #'
 #' @param dataset data which contains variables of interest
 #' @param missingPattern missing pattern object created using \code{\link{findMissingPattern}}
-#' @param studyname study name
-#' @param treatmentname treatment name
-#' @param outcomename outcome name
 #' @param interaction indicator for including covariate-treatment interactions
+#' @param studyname Study name in the data specified.
+#' @param treatmentname Treatment name in the data specified.
+#' @param outcomename Outcome name in the data specified.
 #'
 #' @export
 
-getCorrectPred <- function(dataset = NULL, missingPattern = NULL, studyname = NULL, treatmentname = NULL, outcomename = NULL, interaction = TRUE){
+getCorrectPred <- function(dataset = NULL, missingPattern = NULL, interaction = TRUE, studyname = NULL, treatmentname = NULL, outcomename = NULL){
   
+  
+  if(is.null(dataset) | is.null(missingPattern)){
+    stop("dataset and missingPattern have to be specified.")
+  }
   
   if(is.null(studyname) | is.null(treatmentname) | is.null(outcomename)){
     stop("studyname, treatmentname, and outcomename have to be specified.")
   }
   
-  if(is.null(dataset) | is.null(missingPattern)){
-    stop("dataset and missingPattern have to be specified.")
-  }
   
   if(length(unique(dataset[,studyname])) == 1){
     

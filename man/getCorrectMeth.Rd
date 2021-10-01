@@ -23,11 +23,11 @@ getCorrectMeth(
 
 \item{interaction}{indicator for including covariate-treatment interactions}
 
-\item{studyname}{study name}
+\item{studyname}{Study name in the data specified.}
 
-\item{treatmentname}{treatment name}
+\item{treatmentname}{Treatment name in the data specified.}
 
-\item{outcomename}{outcome name}
+\item{outcomename}{Outcome name in the data specified.}
 }
 \description{
 Find correct imputation method for the mice package

@@ -21,7 +21,7 @@ ipdma.impute(
 
 \item{covariates}{Vector of variable names to find missing data pattern}
 
-\item{typeofvar}{Type of variables; should be a vector of these values: "continuous", "binary", or "count". Index value of the vector should be predictor names.}
+\item{typeofvar}{Type of covariate variables; should be a vector of these values: "continuous", "binary", or "count". Order should follow that of covariates parameter specified.}
 
 \item{interaction}{Indicator denoting whether treatment-covariate interactions should be included}
 
@@ -29,11 +29,11 @@ ipdma.impute(
 
 \item{pred}{User can specify correct prediction matrix to be used in the mice package. If left unspecified, function picks a reasonable one.}
 
-\item{studyname}{Study name in the data specified. Default is "study".}
+\item{studyname}{Study name in the data specified.}
 
-\item{treatmentname}{Treatment name in the data specified. Default is "treat".}
+\item{treatmentname}{Treatment name in the data specified.}
 
-\item{outcomename}{Outcome name in the data specified. Default is "y".}
+\item{outcomename}{Outcome name in the data specified.}
 }
 \value{
 \item{missingPattern}{missing Pattern object returned by running \code{\link{findMissingPattern}}}

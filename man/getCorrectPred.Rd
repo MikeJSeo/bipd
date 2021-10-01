@@ -7,10 +7,10 @@
 getCorrectPred(
   dataset = NULL,
   missingPattern = NULL,
+  interaction = TRUE,
   studyname = NULL,
   treatmentname = NULL,
-  outcomename = NULL,
-  interaction = TRUE
+  outcomename = NULL
 )
 }
 \arguments{
@@ -18,13 +18,13 @@ getCorrectPred(
 
 \item{missingPattern}{missing pattern object created using \code{\link{findMissingPattern}}}
 
-\item{studyname}{study name}
-
-\item{treatmentname}{treatment name}
-
-\item{outcomename}{outcome name}
-
 \item{interaction}{indicator for including covariate-treatment interactions}
+
+\item{studyname}{Study name in the data specified.}
+
+\item{treatmentname}{Treatment name in the data specified.}
+
+\item{outcomename}{Outcome name in the data specified.}
 }
 \description{
 Find correct imputation prediction matrix for the mice package
