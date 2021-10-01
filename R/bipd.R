@@ -31,3 +31,5 @@ NULL
 #' @import R2WinBUGS
 NULL
 
+#' @import dplyr
+NULL
