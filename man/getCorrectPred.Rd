@@ -5,11 +5,11 @@
 \title{Find correct imputation prediction matrix to be used in the mice package}
 \usage{
 getCorrectPred(
-  dataset,
-  missingPattern,
-  studyname = "study",
-  treatmentname = "treat",
-  outcomename = "y",
+  dataset = NULL,
+  missingPattern = NULL,
+  studyname = NULL,
+  treatmentname = NULL,
+  outcomename = NULL,
   interaction = TRUE
 )
 }

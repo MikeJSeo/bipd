@@ -5,13 +5,13 @@
 \title{Find correct imputation method to be used in the mice package}
 \usage{
 getCorrectMeth(
-  dataset,
-  missingPattern,
-  studyname = "study",
-  treatmentname = "treat",
-  outcomename = "y",
+  dataset = NULL,
+  missingPattern = NULL,
+  typeofvar = NULL,
   interaction = TRUE,
-  typeofvar = NULL
+  studyname = NULL,
+  treatmentname = NULL,
+  outcomename = NULL
 )
 }
 \arguments{
@@ -19,15 +19,15 @@ getCorrectMeth(
 
 \item{missingPattern}{missing pattern object created using \code{\link{findMissingPattern}}}
 
+\item{typeofvar}{type of variables; should be a vector of these values: "continuous", "binary", or "count". Index value of the vector should be predictor names.}
+
+\item{interaction}{indicator for including covariate-treatment interactions}
+
 \item{studyname}{study name}
 
 \item{treatmentname}{treatment name}
 
 \item{outcomename}{outcome name}
-
-\item{interaction}{indicator for including covariate-treatment interactions}
-
-\item{typeofvar}{type of variables; should be a vector of these values: "continuous", "binary", or "count". Index value of the vector should be predictor names.}
 }
 \description{
 Find correct imputation method for the mice package

@@ -36,11 +36,12 @@ ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, in
     stop("dataset, covariates, and typeofvar have to be specified.")
   }
   
+  dataset <- dataset[,c(studyname, treatmentname, outcomename, covariates)]
   
   missingPattern <- findMissingPattern(dataset = dataset, covariates = covariates, studyname = studyname)
   
-  meth = getCorrectMeth(dataset = dataset, missingPattern = missingPattern, studyname = studyname,
-                        treatmentname = "treat", outcomename = "y", interaction = TRUE, typeofvar = typeofvar)
+  meth = getCorrectMeth(dataset = dataset, missingPattern = missingPattern, typeofvar = typeofvar, interaction = TRUE,
+                        studyname = studyname, treatmentname = treatmentname, outcomename = outcomename)
   
   list(missingPattern = missingPattern, meth = meth)
   
@@ -105,17 +106,26 @@ findMissingPattern <- function(dataset = NULL, covariates = NULL, studyname = NU
 #'
 #' @param dataset data which contains variables of interest
 #' @param missingPattern missing pattern object created using \code{\link{findMissingPattern}}
+#' @param typeofvar type of variables; should be a vector of these values: "continuous", "binary", or "count". Index value of the vector should be predictor names.
+#' @param interaction indicator for including covariate-treatment interactions
 #' @param studyname study name
 #' @param treatmentname treatment name
 #' @param outcomename outcome name
-#' @param interaction indicator for including covariate-treatment interactions
-#' @param typeofvar type of variables; should be a vector of these values: "continuous", "binary", or "count". Index value of the vector should be predictor names.
 #'
 #' @export
 
 #Find correct imputation method to be used in the mice package
 
-getCorrectMeth <- function(dataset, missingPattern, studyname = "study", treatmentname = "treat", outcomename = "y", interaction = TRUE, typeofvar = NULL){
+getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, typeofvar = NULL, interaction = TRUE, studyname = NULL, treatmentname = NULL, outcomename = NULL){
+  
+  if(is.null(studyname) | is.null(treatmentname) | is.null(outcomename)){
+    stop("studyname, treatmentname, and outcomename have to be specified.")
+  }
+  
+  if(is.null(dataset) | is.null(covariates) | is.null(typeofvar)){
+    stop("dataset, missingPattern, and typeofvar have to be specified.")
+  }
+  
   
   meth <- make.method(dataset)
   if(length(unique(dataset[,studyname])) == 1){
@@ -178,7 +188,16 @@ getCorrectMeth <- function(dataset, missingPattern, studyname = "study", treatme
 #'
 #' @export
 
-getCorrectPred <- function(dataset, missingPattern, studyname = "study", treatmentname = "treat", outcomename = "y", interaction = TRUE){
+getCorrectPred <- function(dataset = NULL, missingPattern = NULL, studyname = NULL, treatmentname = NULL, outcomename = NULL, interaction = TRUE){
+  
+  
+  if(is.null(studyname) | is.null(treatmentname) | is.null(outcomename)){
+    stop("studyname, treatmentname, and outcomename have to be specified.")
+  }
+  
+  if(is.null(dataset) | is.null(missingPattern)){
+    stop("dataset and missingPattern have to be specified.")
+  }
   
   if(length(unique(dataset[,studyname])) == 1){
     
