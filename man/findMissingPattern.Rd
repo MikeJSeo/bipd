@@ -8,7 +8,9 @@ findMissingPattern(
   dataset = NULL,
   covariates = NULL,
   typeofvar = NULL,
-  studyname = NULL
+  studyname = NULL,
+  treatmentname = NULL,
+  outcomename = NULL
 )
 }
 \arguments{
@@ -18,7 +20,11 @@ findMissingPattern(
 
 \item{typeofvar}{Type of covariate variables; should be a vector of these values: "continuous", "binary", or "count". Order should follow that of covariates parameter specified.}
 
-\item{studyname}{Study name in the data specified. Default is "study"}
+\item{studyname}{Study name in the data specified.}
+
+\item{treatmentname}{Treatment name in the data specified.}
+
+\item{outcomename}{Outcome name in the data specified.}
 }
 \description{
 Find missing data pattern in a given data i.e. whether they are systematically missing or sporadically missing. Also calculates missing count and percentage for exploratory analysis.

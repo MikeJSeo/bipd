@@ -4,14 +4,7 @@
 \alias{getCorrectMeth}
 \title{Find correct imputation method to be used in the mice package}
 \usage{
-getCorrectMeth(
-  dataset = NULL,
-  missingPattern = NULL,
-  interaction = TRUE,
-  studyname = NULL,
-  treatmentname = NULL,
-  outcomename = NULL
-)
+getCorrectMeth(dataset = NULL, missingPattern = NULL, interaction = TRUE)
 }
 \arguments{
 \item{dataset}{data which contains variables of interest}
@@ -19,12 +12,6 @@ getCorrectMeth(
 \item{missingPattern}{missing pattern object created using \code{\link{findMissingPattern}}}
 
 \item{interaction}{indicator for including covariate-treatment interactions}
-
-\item{studyname}{Study name in the data specified.}
-
-\item{treatmentname}{Treatment name in the data specified.}
-
-\item{outcomename}{Outcome name in the data specified.}
 }
 \description{
 Find correct imputation method for the mice package
