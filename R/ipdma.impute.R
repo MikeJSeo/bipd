@@ -21,6 +21,7 @@
 #' \item{missingPattern}{missing Pattern object returned by running \code{\link{findMissingPattern}}}
 #' \item{meth}{imputation method used with the mice function}
 #' \item{pred}{prediction matrix used with the mice function}
+#' \item{imp}{imputed datasets that is returned when running mice function}
 #' \item{imp.list}{imputed datasets in a list format}
 #'
 #' @export
@@ -71,7 +72,7 @@ ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, in
   impc.store <- impc[, c(".imp", studyname, treatmentname, outcomename, covariates)]
   imp.list <- mitools::imputationList(split(impc.store, impc.store[,1]))$imputations[-1]
 
-  list(missingPattern = missingPattern, meth = meth, pred = pred, imp.list = imp.list)
+  list(missingPattern = missingPattern, meth = meth, pred = pred, imp = imp, imp.list = imp.list)
 }
   
 

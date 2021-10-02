@@ -1,0 +1,26 @@
+---
+title: "Bayesian individual participant data meta analysis"
+author: "Michael Seo"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Bayesian network meta-analysis}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+In this vignette, we describe how to run a Bayesian individual participant data meta-analysis model using this package.
+
+
+```{r, eval = FALSE}
+#TODO
+```
