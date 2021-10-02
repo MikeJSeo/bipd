@@ -166,20 +166,19 @@ getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, interaction = 
   
   with(missingPattern, {
     
-    dataset <- dataset %>% select(all_of(c(studyname, treatmentname, outcomename, covariates)))
-    dataset[,covariates] <- dataset[,covariates] %>% mutate_if(typeofvar == "binary", as.factor)
-    
-    if(interaction == TRUE){
-      
-      trial <- paste0(covariates[1], treatmentname)
-      if(!trial %in% colnames(dataset)){
-        for(i in 1:length(covariates)){
-          varname <- paste0(covariates[i], treatmentname)
-          dataset[[varname]] <- NA
-        }
-      }
-    }
-    
+    # dataset <- dataset %>% select(all_of(c(studyname, treatmentname, outcomename, covariates)))
+    # dataset[,covariates] <- dataset[,covariates] %>% mutate_if(typeofvar == "binary", as.factor)
+    # 
+    # if(interaction == TRUE){
+    #   
+    #   trial <- paste0(covariates[1], treatmentname)
+    #   if(!trial %in% colnames(dataset)){
+    #     for(i in 1:length(covariates)){
+    #       varname <- paste0(covariates[i], treatmentname)
+    #       dataset[[varname]] <- NA
+    #     }
+    #   }
+    # }
     meth <- make.method(dataset)
     if(length(unique(dataset[,studyname])) == 1){
       
@@ -244,19 +243,19 @@ getCorrectPred <- function(dataset = NULL, missingPattern = NULL, interaction = 
   
   with(missingPattern, {
 
-  dataset <- dataset %>% select(all_of(c(studyname, treatmentname, outcomename, covariates)))
-  dataset[,covariates] <- dataset[,covariates] %>% mutate_if(typeofvar == "binary", as.factor)
-  
-  if(interaction == TRUE){
-    
-    trial <- paste0(covariates[1], treatmentname)
-    if(!trial %in% colnames(dataset)){
-      for(i in 1:length(covariates)){
-        varname <- paste0(covariates[i], treatmentname)
-        dataset[[varname]] <- NA
-      }
-    }
-  }
+  # dataset <- dataset %>% select(all_of(c(studyname, treatmentname, outcomename, covariates)))
+  # dataset[,covariates] <- dataset[,covariates] %>% mutate_if(typeofvar == "binary", as.factor)
+  # 
+  # if(interaction == TRUE){
+  #   
+  #   trial <- paste0(covariates[1], treatmentname)
+  #   if(!trial %in% colnames(dataset)){
+  #     for(i in 1:length(covariates)){
+  #       varname <- paste0(covariates[i], treatmentname)
+  #       dataset[[varname]] <- NA
+  #     }
+  #   }
+  # }
   
   if(length(unique(dataset[,studyname])) == 1){
     
