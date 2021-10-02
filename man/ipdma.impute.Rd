@@ -43,7 +43,7 @@ Order should follow that of covariates parameter specified. Covariates that are 
 \item{missingPattern}{missing Pattern object returned by running \code{\link{findMissingPattern}}}
 \item{meth}{imputation method used with the mice function}
 \item{pred}{prediction matrix used with the mice function}
-\item{imp}{imputed datasets that is returned when running mice function}
+\item{imp}{imputed datasets that is returned from the mice function}
 \item{imp.list}{imputed datasets in a list format}
 }
 \description{

@@ -23,7 +23,7 @@
 #' \item{missingPattern}{missing Pattern object returned by running \code{\link{findMissingPattern}}}
 #' \item{meth}{imputation method used with the mice function}
 #' \item{pred}{prediction matrix used with the mice function}
-#' \item{imp}{imputed datasets that is returned when running mice function}
+#' \item{imp}{imputed datasets that is returned from the mice function}
 #' \item{imp.list}{imputed datasets in a list format}
 #'
 #' @export
@@ -261,76 +261,73 @@ getCorrectPred <- function(dataset = NULL, missingPattern = NULL, interaction = 
   if(length(unique(dataset[,studyname])) == 1){
     
     # Case when there are only one cluster/study
-    with(missingPattern, {
-      pred <- make.predictorMatrix(dataset)
-      pred[,] <- 0
+    pred <- make.predictorMatrix(dataset)
+    pred[,] <- 0
       
-      #outcome imputation
-      pred[outcomename,] <- 1
-      pred[outcomename, studyname] <- 0
+    #outcome imputation
+    pred[outcomename,] <- 1
+    pred[outcomename, studyname] <- 0
       
-      # sporadically missing predictors imputation
-      if(length(spor_covariates) != 0){
-        pred[spor_covariates,] <- 1
+    # sporadically missing predictors imputation
+    if(length(spor_covariates) != 0){
+      pred[spor_covariates,] <- 1
         
-        for(i in 1:length(spor_covariates)){
-          pred[spor_covariates[i], paste0(spor_covariates[i], treatmentname)] <- 0
-        }
-        pred[spor_covariates, studyname] <- 0
+      for(i in 1:length(spor_covariates)){
+        pred[spor_covariates[i], paste0(spor_covariates[i], treatmentname)] <- 0
       }
-      diag(pred) <- 0
-      pred
-    })
+      pred[spor_covariates, studyname] <- 0
+    }
+    diag(pred) <- 0
   } else{
     
     # Case when there are multiple clusters/studies
-      pred <- make.predictorMatrix(dataset)
-      pred[,] <- 0
+    pred <- make.predictorMatrix(dataset)
+    pred[,] <- 0
       
-      # outcome imputation
-      pred[outcomename,] <- 1
+    # outcome imputation
+    pred[outcomename,] <- 1
       
-      if(treatmentname %in% colnames(pred)){
-        pred[outcomename, treatmentname] <- 2
-      }
-      pred[outcomename, studyname] <- -2
-      
-      # sporadically missing predictors imputation
-      if(length(spor_covariates) != 0){
-        pred[spor_covariates,] <- 1
-        
-        if(treatmentname %in% colnames(pred)){
-          pred[spor_covariates, treatmentname] <- 2
-        }
-        
-        if(interaction == TRUE){
-          for(i in 1:length(spor_covariates)){
-            pred[spor_covariates[i], paste0(spor_covariates[i], treatmentname)] <- 0
-          }
-        }
-        pred[spor_covariates, studyname] <- -2
-      }
-      
-      # systematically missing predictors imputation
-      if(length(sys_covariates) != 0){
-        pred[c(outcomename, sys_covariates),] <- 1
-        pred[sys_covariates, outcomename] <- 1
-        
-        if(treatmentname %in% colnames(pred)){
-          pred[c(outcomename, sys_covariates), treatmentname] <- 2
-        }
-        
-        if(interaction == TRUE){
-          for(i in 1:length(sys_covariates)){
-            pred[sys_covariates[i], paste0(sys_covariates[i], treatmentname)] <- 0
-          }
-        }
-        pred[c(outcomename, sys_covariates), studyname] <- -2
-      }
-      diag(pred) <- 0
-      
+    if(treatmentname %in% colnames(pred)){
+      pred[outcomename, treatmentname] <- 2
     }
-    return(pred)
+    pred[outcomename, studyname] <- -2
+      
+    # sporadically missing predictors imputation
+    if(length(spor_covariates) != 0){
+      pred[spor_covariates,] <- 1
+        
+    if(treatmentname %in% colnames(pred)){
+      pred[spor_covariates, treatmentname] <- 2
+    }
+        
+    if(interaction == TRUE){
+      for(i in 1:length(spor_covariates)){
+        pred[spor_covariates[i], paste0(spor_covariates[i], treatmentname)] <- 0
+      }
+    }
+    pred[spor_covariates, studyname] <- -2
+    }
+      
+    # systematically missing predictors imputation
+    if(length(sys_covariates) != 0){
+      pred[c(outcomename, sys_covariates),] <- 1
+      pred[sys_covariates, outcomename] <- 1
+        
+      if(treatmentname %in% colnames(pred)){
+        pred[c(outcomename, sys_covariates), treatmentname] <- 2
+      }
+        
+      if(interaction == TRUE){
+        for(i in 1:length(sys_covariates)){
+          pred[sys_covariates[i], paste0(sys_covariates[i], treatmentname)] <- 0
+        }
+      }
+      pred[c(outcomename, sys_covariates), studyname] <- -2
+    }
+    diag(pred) <- 0
+  }
+    
+  return(pred)
   })
 }
 
