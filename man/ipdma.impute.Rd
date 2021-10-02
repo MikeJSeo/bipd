@@ -2,7 +2,7 @@
 % Please edit documentation in R/ipdma.impute.R
 \name{ipdma.impute}
 \alias{ipdma.impute}
-\title{Impute missing data in individual participant data with study-level cluster.}
+\title{Impute missing data in individual participant data with two treatments (i.e. placebo and a treatment).}
 \usage{
 ipdma.impute(
   dataset = NULL,
@@ -22,9 +22,10 @@ ipdma.impute(
 
 \item{covariates}{Vector of variable names to find missing data pattern}
 
-\item{typeofvar}{Type of covariate variables; should be a vector of these values: "continuous", "binary", or "count". Order should follow that of covariates parameter specified.}
+\item{typeofvar}{Type of covariate variables; should be a vector of these values: "continuous", "binary", or "count".
+Order should follow that of covariates parameter specified. Covariates that are specified "binary" are automatically factored.}
 
-\item{interaction}{Indicator denoting whether treatment-covariate interactions should be included}
+\item{interaction}{Indicator denoting whether treatment-covariate interactions should be included. Default is set to true.}
 
 \item{meth}{User can specify imputation method to be used in the mice package. If left unspecified, function picks a reasonable one.}
 
@@ -42,12 +43,14 @@ ipdma.impute(
 \item{missingPattern}{missing Pattern object returned by running \code{\link{findMissingPattern}}}
 \item{meth}{imputation method used with the mice function}
 \item{pred}{prediction matrix used with the mice function}
+\item{imp}{imputed datasets that is returned when running mice function}
 \item{imp.list}{imputed datasets in a list format}
 }
 \description{
-Impute missing data in individual participant data where data is clustered by different studies.
-In the presence of systematically missing variables, we use 2l.2stage.norm, 2l.2stage.bin, 
-and 2l.2stage.pois methods depending on the type of the covariates to impute. 
+Impute missing data in individual participant data with two treatments. Data is clustered by different studies.
+In the presence of systematically missing variables, the function uses 2l.2stage.norm, 2l.2stage.bin, 
+and 2l.2stage.pois methods in micemd package depending on the type of the covariates to impute. 
 If there are no systematically missing variables, the function defaults to use 2l.pmm in miceadds package 
 which generalizes predictive mean matching using linear mixed model.
+If there is only one study available, the function defaults to use pmm in mice package.
 }

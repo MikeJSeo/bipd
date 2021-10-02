@@ -1,16 +1,18 @@
 
-#' Impute missing data in individual participant data with study-level cluster.
+#' Impute missing data in individual participant data with two treatments (i.e. placebo and a treatment).
 #'
-#' Impute missing data in individual participant data where data is clustered by different studies.
-#' In the presence of systematically missing variables, we use 2l.2stage.norm, 2l.2stage.bin, 
-#' and 2l.2stage.pois methods depending on the type of the covariates to impute. 
+#' Impute missing data in individual participant data with two treatments. Data is clustered by different studies.
+#' In the presence of systematically missing variables, the function uses 2l.2stage.norm, 2l.2stage.bin, 
+#' and 2l.2stage.pois methods in micemd package depending on the type of the covariates to impute. 
 #' If there are no systematically missing variables, the function defaults to use 2l.pmm in miceadds package 
 #' which generalizes predictive mean matching using linear mixed model.
+#' If there is only one study available, the function defaults to use pmm in mice package.
 #'
 #' @param dataset Data which contains variables of interests
 #' @param covariates Vector of variable names to find missing data pattern
-#' @param typeofvar Type of covariate variables; should be a vector of these values: "continuous", "binary", or "count". Order should follow that of covariates parameter specified.
-#' @param interaction Indicator denoting whether treatment-covariate interactions should be included
+#' @param typeofvar Type of covariate variables; should be a vector of these values: "continuous", "binary", or "count".
+#' Order should follow that of covariates parameter specified. Covariates that are specified "binary" are automatically factored.
+#' @param interaction Indicator denoting whether treatment-covariate interactions should be included. Default is set to true.
 #' @param meth User can specify imputation method to be used in the mice package. If left unspecified, function picks a reasonable one.
 #' @param pred User can specify correct prediction matrix to be used in the mice package. If left unspecified, function picks a reasonable one.
 #' @param studyname Study name in the data specified.
@@ -31,12 +33,12 @@ ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, in
                          m = 5
                          ){
   
-  if(is.null(studyname) | is.null(treatmentname) | is.null(outcomename)){
-    stop("studyname, treatmentname, and outcomename have to be specified.")
-  }
-  
   if(is.null(dataset) | is.null(covariates) | is.null(typeofvar)){
     stop("dataset, covariates, and typeofvar have to be specified.")
+  }
+  
+  if(is.null(studyname) | is.null(treatmentname) | is.null(outcomename)){
+    stop("studyname, treatmentname, and outcomename have to be specified.")
   }
   
   if(length(typeofvar) != length(covariates)){
@@ -78,11 +80,11 @@ ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, in
 
 #' Find missing data pattern in a given data
 #'
-#' Find missing data pattern in a given data i.e. whether they are systematically missing or sporadically missing. Also calculates missing count and percentage for exploratory analysis.
+#' Find missing data pattern in a given data i.e. whether they are systematically missing or sporadically missing. Also calculates missing count and percentage for exploratory purposes.
 #'
 #' @param dataset Data which contains variables of interests
 #' @param covariates Vector of variable names that the user is interested in finding a missing data pattern
-#' @param typeofvar Type of covariate variables; should be a vector of these values: "continuous", "binary", or "count". Order should follow that of covariates parameter specified.
+#' @param typeofvar Type of covariate variables; should be a vector of these values: "continuous", "binary", or "count". Order should follow that of covariates parameter.
 #' @param studyname Study name in the data specified.
 #' @param treatmentname Treatment name in the data specified.
 #' @param outcomename Outcome name in the data specified.
@@ -98,6 +100,14 @@ findMissingPattern <- function(dataset = NULL, covariates = NULL, typeofvar = NU
   
   if(is.null(studyname) | is.null(treatmentname) | is.null(outcomename)){
     stop("studyname, treatmentname, and outcomename have to be specified.")
+  }
+  
+  if(treatmentname %in% covariates){
+    stop("Treatment name should not be included as covariates")
+  }
+  
+  if(outcomename %in% covariates){
+    stop("Outcome name should not be included as covariates")
   }
 
   if(length(unique(dataset[,studyname])) == 1){
@@ -143,8 +153,7 @@ findMissingPattern <- function(dataset = NULL, covariates = NULL, typeofvar = NU
 #'
 #' @param dataset data which contains variables of interest
 #' @param missingPattern missing pattern object created using \code{\link{findMissingPattern}}
-#' @param interaction indicator for including covariate-treatment interactions
-#'
+#' @param interaction Indicator denoting whether treatment-covariate interactions should be included. Default is set to true.#'
 #' @export
 
 #Find correct imputation method to be used in the mice package
@@ -223,8 +232,7 @@ getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, interaction = 
 #'
 #' @param dataset data which contains variables of interest
 #' @param missingPattern missing pattern object created using \code{\link{findMissingPattern}}
-#' @param interaction indicator for including covariate-treatment interactions
-#'
+#' @param interaction Indicator denoting whether treatment-covariate interactions should be included. Default is set to true.#'
 #' @export
 
 getCorrectPred <- function(dataset = NULL, missingPattern = NULL, interaction = TRUE){
