@@ -22,5 +22,15 @@ In this vignette, we describe how to run a Bayesian individual participant data 
 
 
 ```{r, eval = FALSE}
-#TODO
+# If above doesn't work we can try by first find correct method and prediction matrix and
+# then using ipdma.impute using these obtained objects. Through this process, we can check if there is any errors
+# in setting up these objects.
+missP <- findMissingPattern(mydata, covariates = c("baseline", "gender"), typeofvar = c("continuous", "binary"), 
+                            studyname = "study",  treatmentname = "treat", outcomename = "y")
+correctMeth <- getCorrectMeth(mydata, missP)
+correctPred <- getCorrectPred(mydata, missP)
+imputations_test <- ipdma.impute(mydata, covariates = c("baseline", "gender"), typeofvar = c("continuous", "binary"),
+                             interaction = TRUE, meth = correctMeth, pred = correctPred,
+                             studyname = "study", treatmentname = "treat", outcomename = "y")
+
 ```
