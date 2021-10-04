@@ -173,8 +173,10 @@ getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, interaction = 
   
   with(missingPattern, {
     
+    totalstudies <- dataset %>% select(studyname) %>% n_distinct()
+    
     meth <- make.method(dataset)
-    if(length(unique(dataset[,studyname])) == 1){
+    if(totalstudies == 1){
       
       meth[paste0(without_sys_covariates, treatmentname)] <- paste0("~ I(as.numeric(as.character(", without_sys_covariates, ")) *", treatmentname, ")")
       
@@ -237,7 +239,9 @@ getCorrectPred <- function(dataset = NULL, missingPattern = NULL, interaction = 
   
   with(missingPattern, {
 
-  if(length(unique(dataset[,studyname])) == 1){
+  totalstudies <- dataset %>% select(studyname) %>% n_distinct()
+    
+  if(totalstudies == 1){
     
     # Case when there are only one cluster/study
     pred <- make.predictorMatrix(dataset)
