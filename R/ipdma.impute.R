@@ -109,8 +109,10 @@ findMissingPattern <- function(dataset = NULL, covariates = NULL, typeofvar = NU
   if(outcomename %in% covariates){
     stop("Outcome name should not be included as covariates")
   }
+  
+  totalstudies <- dataset %>% selet(studyname) %>% n_distinct()
 
-  if(length(unique(dataset[,studyname])) == 1){
+  if(totalstudies == 1){
     
     missingcount <- dataset %>% select(all_of(covariates))%>% summarize_all(~sum(is.na(.)))
     missingn <- dataset %>% select(all_of(covariates))  %>% summarise_all(~length(.))

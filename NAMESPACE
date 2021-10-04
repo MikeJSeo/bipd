@@ -3,6 +3,7 @@
 export(findMissingPattern)
 export(findPerformance)
 export(generate_ipdma_example)
+export(generate_sysmiss_ipdma_example)
 export(getCorrectMeth)
 export(getCorrectPred)
 export(ipd.run)
