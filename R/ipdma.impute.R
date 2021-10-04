@@ -47,7 +47,12 @@ ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, in
     names(typeofvar) <- covariates  
   }
   
-  dataset <- dataset %>% select(all_of(c(studyname, treatmentname, outcomename, covariates)))
+  if(treatmentname %in% colnames(dataset)){
+    dataset <- dataset %>% select(all_of(c(studyname, treatmentname, outcomename, covariates)))  
+  } else{
+    dataset <- dataset %>% select(all_of(c(studyname, outcomename, covariates)))
+  }
+  
   dataset[,covariates] <- dataset[,covariates] %>% mutate_if(typeofvar == "binary", as.factor)
   
   if(interaction == TRUE){
