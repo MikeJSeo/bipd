@@ -31,7 +31,7 @@ findPerformance <- function(testoutcome = NULL, predictions = NULL, aggregation 
     performances[2, ii] <- findMAE(testoutcome[[ii]], predictions[[ii]])
     performances[3, ii] <- findRsquared(testoutcome[[ii]], predictions[[ii]])
     
-    samplesize[ii] <- length(testdata_y[[ii]])
+    samplesize[ii] <- length(testoutcome[[ii]])
   }
   
   if(aggregation == "weighted"){
