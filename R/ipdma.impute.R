@@ -33,6 +33,47 @@ ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, in
                          m = 5
                          ){
   
+  dataset <- preprocess.data(dataset = dataset, covariates = covariates, typeofvar = typeofvar, interaction = interaction,
+                                         studyname = studyname, treatmentname = treatmentname, outcomename = outcomename)
+  
+  missingPattern <- findMissingPattern(dataset = dataset, covariates = covariates, typeofvar = typeofvar, 
+                                       studyname = studyname, treatmentname = treatmentname, outcomename = outcomename)
+  
+  if(is.null(meth)){
+    meth <- getCorrectMeth(dataset = dataset, missingPattern = missingPattern, interaction = interaction)
+  }
+  
+  if(is.null(pred)){
+    pred <- getCorrectPred(dataset = dataset, missingPattern = missingPattern, interaction = interaction)
+  }
+
+  imp <- mice(dataset, pred = pred, meth = meth, m = m)
+  
+  impc <- complete(imp, "long", include = "TRUE")
+  impc.store <- impc[, c(".imp", ".id", studyname, outcomename, covariates, grep(treatmentname, colnames(impc), value = TRUE))]
+  imp.list <- mitools::imputationList(split(impc.store, impc.store[,1])[-1])$imputations
+
+  list(missingPattern = missingPattern, meth = meth, pred = pred, imp = imp, imp.list = imp.list)
+}
+
+
+#' Function to preprocess dataset
+#'
+#' 
+#'
+#' @param dataset Data which contains variables of interests
+#' @param covariates Vector of variable names that the user is interested in finding a missing data pattern
+#' @param typeofvar Type of covariate variables; should be a vector of these values: "continuous", "binary", or "count". Order should follow that of covariates parameter.
+#' @param interaction Indicator denoting whether treatment-covariate interactions should be included. Default is set to true.
+#' @param studyname Study name in the data specified.
+#' @param treatmentname Treatment name in the data specified.
+#' @param outcomename Outcome name in the data specified.
+#' 
+#' @export
+
+preprocess.data <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, interaction = TRUE,
+                            studyname = NULL, treatmentname = NULL, outcomename = NULL){
+
   if(is.null(dataset) | is.null(covariates) | is.null(typeofvar)){
     stop("dataset, covariates, and typeofvar have to be specified.")
   }
@@ -61,27 +102,9 @@ ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, in
       dataset[[varname]] <- NA
     }
   }
-
-  missingPattern <- findMissingPattern(dataset = dataset, covariates = covariates, typeofvar = typeofvar, 
-                                       studyname = studyname, treatmentname = treatmentname, outcomename = outcomename)
-  
-  if(is.null(meth)){
-    meth <- getCorrectMeth(dataset = dataset, missingPattern = missingPattern, interaction = interaction)
-  }
-  
-  if(is.null(pred)){
-    pred <- getCorrectPred(dataset = dataset, missingPattern = missingPattern, interaction = interaction)
-  }
-
-  imp <- mice(dataset, pred = pred, meth = meth, m = m)
-  
-  impc <- complete(imp, "long", include = "TRUE")
-  impc.store <- impc[, c(".imp", ".id", studyname, outcomename, covariates, grep(treatmentname, colnames(impc), value = TRUE))]
-  imp.list <- mitools::imputationList(split(impc.store, impc.store[,1])[-1])$imputations
-
-  list(missingPattern = missingPattern, meth = meth, pred = pred, imp = imp, imp.list = imp.list)
+  return(dataset)
 }
-  
+    
 
 #' Find missing data pattern in a given data
 #'
