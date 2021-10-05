@@ -59,14 +59,14 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
   
   for(i in 1:Ncov){
     if(sign == "different"){
-      b_dummy <- abs(rnorm(Nstudies, 0.2, 0.1))
+      b_dummy <- abs(rnorm(Nstudies, 0.5, 0.1))
       if(Nstudies == 10){
         b_dummy[c(1,3,5,7,9)] <- -b_dummy[c(1,3,5,7,9)]
       } else{
         stop("Need to change code to allow Nstudies other than 10")
       }
     } else if (sign == "same"){
-      b_dummy <- abs(rnorm(Nstudies, 0.2, 0.1))
+      b_dummy <- abs(rnorm(Nstudies, 0.5, 0.1))
     }
     b_dummy <- rep(b_dummy, times = Npatients)
     b[,i] <- b_dummy
