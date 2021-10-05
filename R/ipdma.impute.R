@@ -226,11 +226,11 @@ getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, interaction = 
       if(length(sys_covariates) != 0){
         
         for(i in 1:length(sys_covariates)){
-          if(typeofvar[sys_covariates[i]] == "continuous"){
+          if(typeofvar[which(covariates == sys_covariates[i])] == "continuous"){
             meth[sys_covariates[i]] <- "2l.2stage.norm"
-          } else if(typeofvar[sys_covariates[i]] == "binary"){
+          } else if(typeofvar[which(covariates == sys_covariates[i])] == "binary"){
             meth[sys_covariates[i]] <- "2l.2stage.bin"
-          } else if(typeofvar[sys_covariates[i]] == "count"){
+          } else if(typeofvar[which(covariates == sys_covariates[i])] == "count"){
             meth[sys_covariates[i]] <- "2l.2stage.pois"
           }
         }
