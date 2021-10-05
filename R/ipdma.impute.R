@@ -28,26 +28,26 @@
 #'
 #' @export
 
-ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, interaction = TRUE,
+ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, interaction = NULL,
                          meth = NULL, pred = NULL, studyname = NULL, treatmentname = NULL, outcomename = NULL, 
                          m = 5
                          ){
   
-  dataset <- preprocess.data(dataset = dataset, covariates = covariates, typeofvar = typeofvar, interaction = interaction,
+  dataset.preprocessed <- preprocess.data(dataset = dataset, covariates = covariates, typeofvar = typeofvar, interaction = interaction,
                                          studyname = studyname, treatmentname = treatmentname, outcomename = outcomename)
   
-  missingPattern <- findMissingPattern(dataset = dataset, covariates = covariates, typeofvar = typeofvar, 
+  missingPattern <- findMissingPattern(dataset = dataset.preprocessed, covariates = covariates, typeofvar = typeofvar, 
                                        studyname = studyname, treatmentname = treatmentname, outcomename = outcomename)
   
   if(is.null(meth)){
-    meth <- getCorrectMeth(dataset = dataset, missingPattern = missingPattern, interaction = interaction)
+    meth <- getCorrectMeth(dataset = dataset.preprocessed, missingPattern = missingPattern, interaction = interaction)
   }
   
   if(is.null(pred)){
-    pred <- getCorrectPred(dataset = dataset, missingPattern = missingPattern, interaction = interaction)
+    pred <- getCorrectPred(dataset = dataset.preprocessed, missingPattern = missingPattern, interaction = interaction)
   }
 
-  imp <- mice(dataset, pred = pred, meth = meth, m = m)
+  imp <- mice(dataset.preprocessed, pred = pred, meth = meth, m = m)
   
   impc <- complete(imp, "long", include = "TRUE")
   impc.store <- impc[, c(".imp", ".id", studyname, outcomename, covariates, grep(treatmentname, colnames(impc), value = TRUE))]
@@ -71,7 +71,7 @@ ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, in
 #' 
 #' @export
 
-preprocess.data <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, interaction = TRUE,
+preprocess.data <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, interaction = NULL,
                             studyname = NULL, treatmentname = NULL, outcomename = NULL){
 
   if(is.null(dataset) | is.null(covariates) | is.null(typeofvar)){
@@ -138,7 +138,7 @@ findMissingPattern <- function(dataset = NULL, covariates = NULL, typeofvar = NU
     stop("Outcome name should not be included as covariates")
   }
   
-  totalstudies <- dataset %>% select(studyname) %>% n_distinct()
+  totalstudies <- dataset %>% select(all_of(studyname)) %>% n_distinct()
 
   if(totalstudies == 1){
     
@@ -196,7 +196,7 @@ getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, interaction = 
   
   with(missingPattern, {
     
-    totalstudies <- dataset %>% select(studyname) %>% n_distinct()
+    totalstudies <- dataset %>% select(all_of(studyname)) %>% n_distinct()
     
     meth <- make.method(dataset)
     if(totalstudies == 1){
@@ -262,7 +262,7 @@ getCorrectPred <- function(dataset = NULL, missingPattern = NULL, interaction = 
   
   with(missingPattern, {
 
-  totalstudies <- dataset %>% select(studyname) %>% n_distinct()
+  totalstudies <- dataset %>% select(all_of(studyname)) %>% n_distinct()
     
   if(totalstudies == 1){
     
