@@ -19,6 +19,8 @@
 #' @param treatmentname Treatment name in the data specified.
 #' @param outcomename Outcome name in the data specified.
 #' @param m Number of imputed datasets. Default is set to 5.
+#' @param sys_impute_method Method used for systematically missing studies. Options are "2l.glm", 2l.2stage", or "2l.jomo". Default is set to "2l.2stage".
+#' For more details, Read micemd package for suggestions on which method to use depending on observed clusters and observed values per cluster.
 #' @return 
 #' \item{missingPattern}{missing Pattern object returned by running \code{\link{findMissingPattern}}}
 #' \item{meth}{imputation method used with the mice function}
@@ -30,7 +32,7 @@
 
 ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, interaction = NULL,
                          meth = NULL, pred = NULL, studyname = NULL, treatmentname = NULL, outcomename = NULL, 
-                         m = 5
+                         m = 5, sys_impute_method = "2l.2stage"
                          ){
   
   dataset.preprocessed <- preprocess.data(dataset = dataset, covariates = covariates, typeofvar = typeofvar, interaction = interaction,
@@ -40,7 +42,7 @@ ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, in
                                        studyname = studyname, treatmentname = treatmentname, outcomename = outcomename)
   
   if(is.null(meth)){
-    meth <- getCorrectMeth(dataset = dataset.preprocessed, missingPattern = missingPattern, interaction = interaction)
+    meth <- getCorrectMeth(dataset = dataset.preprocessed, missingPattern = missingPattern, sys_impute_method = sys_impute_method, interaction = interaction)
   }
   
   if(is.null(pred)){
@@ -183,12 +185,14 @@ findMissingPattern <- function(dataset = NULL, covariates = NULL, typeofvar = NU
 #'
 #' @param dataset data which contains variables of interest
 #' @param missingPattern missing pattern object created using \code{\link{findMissingPattern}}
+#' @param sys_impute_method Method used for systematically missing studies. Options are "2l.glm", 2l.2stage", or "2l.jomo". Default is set to "2l.2stage".
+#' For more details, Read micemd package for suggestions on which method to use depending on observed clusters and observed values per cluster.
 #' @param interaction Indicator denoting whether treatment-covariate interactions should be included. Default is set to true.#'
 #' @export
 
 #Find correct imputation method to be used in the mice package
 
-getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, interaction = TRUE){
+getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, sys_impute_method = "2l.2stage", interaction = TRUE){
   
   if(is.null(dataset) | is.null(missingPattern)){
     stop("dataset and missingPattern have to be specified.")
@@ -225,11 +229,31 @@ getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, interaction = 
         
         for(i in 1:length(sys_covariates)){
           if(typeofvar[which(covariates == sys_covariates[i])] == "continuous"){
-            meth[sys_covariates[i]] <- "2l.2stage.norm"
+            
+            if(sys_impute_method == "2l.2stage"){
+              meth[sys_covariates[i]] <- "2l.2stage.norm"
+            } else if(sys_impute_method == "2l.glm"){
+              meth[sys_covariates[i]] <- "2l.glm.norm"
+            } else if(sys_impute_method == "2l.jomo"){
+              meth[sys_covariates[i]] <- "2l.jomo"
+            }
           } else if(typeofvar[which(covariates == sys_covariates[i])] == "binary"){
-            meth[sys_covariates[i]] <- "2l.2stage.bin"
+            
+            if(sys_impute_method == "2l.2stage"){
+              meth[sys_covariates[i]] <- "2l.2stage.bin"
+            } else if(sys_impute_method == "2l.glm"){
+              meth[sys_covariates[i]] <- "2l.glm.bin"
+            } else if(sys_impute_method == "2l.jomo"){
+              meth[sys_covariates[i]] <- "2l.jomo"
+            }
           } else if(typeofvar[which(covariates == sys_covariates[i])] == "count"){
-            meth[sys_covariates[i]] <- "2l.2stage.pois"
+            if(sys_impute_method == "2l.2stage"){
+              meth[sys_covariates[i]] <- "2l.2stage.pois"
+            } else if(sys_impute_method == "2l.glm"){
+              meth[sys_covariates[i]] <- "2l.glm.pois"
+            } else if(sys_impute_method == "2l.jomo"){
+              meth[sys_covariates[i]] <- "2l.jomo"
+            }
           }
         }
       }
