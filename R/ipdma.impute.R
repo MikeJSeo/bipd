@@ -19,7 +19,7 @@
 #' @param treatmentname Treatment name in the data specified.
 #' @param outcomename Outcome name in the data specified.
 #' @param m Number of imputed datasets. Default is set to 5.
-#' @param sys_impute_method Method used for systematically missing studies. Options are "2l.glm", 2l.2stage", or "2l.jomo". Default is set to "2l.2stage".
+#' @param sys_impute_method Method used for systematically missing studies. Options are "2l.glm", 2l.2stage", or "2l.jomo". Default is set to "2l.glm".
 #' For more details, Read micemd package for suggestions on which method to use depending on observed clusters and observed values per cluster.
 #' @return 
 #' \item{missingPattern}{missing Pattern object returned by running \code{\link{findMissingPattern}}}
@@ -32,7 +32,7 @@
 
 ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, interaction = NULL,
                          meth = NULL, pred = NULL, studyname = NULL, treatmentname = NULL, outcomename = NULL, 
-                         m = 5, sys_impute_method = "2l.2stage"
+                         m = 5, sys_impute_method = "2l.glm"
                          ){
   
   dataset.preprocessed <- preprocess.data(dataset = dataset, covariates = covariates, typeofvar = typeofvar, interaction = interaction,
@@ -192,7 +192,7 @@ findMissingPattern <- function(dataset = NULL, covariates = NULL, typeofvar = NU
 
 #Find correct imputation method to be used in the mice package
 
-getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, sys_impute_method = "2l.2stage", interaction = TRUE){
+getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, sys_impute_method = "2l.glm", interaction = TRUE){
   
   if(is.null(dataset) | is.null(missingPattern)){
     stop("dataset and missingPattern have to be specified.")
