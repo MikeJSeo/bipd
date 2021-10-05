@@ -39,8 +39,6 @@ ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, in
   missingPattern <- findMissingPattern(dataset = dataset.preprocessed, covariates = covariates, typeofvar = typeofvar, 
                                        studyname = studyname, treatmentname = treatmentname, outcomename = outcomename)
   
-  print(missingPattern)
-  
   if(is.null(meth)){
     meth <- getCorrectMeth(dataset = dataset.preprocessed, missingPattern = missingPattern, interaction = interaction)
   }
