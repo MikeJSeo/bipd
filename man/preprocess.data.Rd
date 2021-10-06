@@ -8,7 +8,7 @@ preprocess.data(
   dataset = NULL,
   covariates = NULL,
   typeofvar = NULL,
-  interaction = TRUE,
+  interaction = NULL,
   studyname = NULL,
   treatmentname = NULL,
   outcomename = NULL

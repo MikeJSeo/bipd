@@ -8,13 +8,14 @@ ipdma.impute(
   dataset = NULL,
   covariates = NULL,
   typeofvar = NULL,
-  interaction = TRUE,
+  interaction = NULL,
   meth = NULL,
   pred = NULL,
   studyname = NULL,
   treatmentname = NULL,
   outcomename = NULL,
-  m = 5
+  m = 5,
+  sys_impute_method = "2l.glm"
 )
 }
 \arguments{
@@ -38,6 +39,9 @@ Order should follow that of covariates parameter specified. Covariates that are 
 \item{outcomename}{Outcome name in the data specified.}
 
 \item{m}{Number of imputed datasets. Default is set to 5.}
+
+\item{sys_impute_method}{Method used for systematically missing studies. Options are "2l.glm", 2l.2stage", or "2l.jomo". Default is set to "2l.glm".
+For more details, Read micemd package for suggestions on which method to use depending on observed clusters and observed values per cluster.}
 }
 \value{
 \item{missingPattern}{missing Pattern object returned by running \code{\link{findMissingPattern}}}

@@ -23,8 +23,6 @@ generate_sysmiss_ipdma_example(
 \item{signal}{Signal to noise ratio between predictors and the outcome by changing the variance of the random error. Options are "small" or "large".}
 
 \item{interaction}{Whether to include treatment indicator and treatment}
-
-\item{typeofvar}{Type of}
 }
 \description{
 Generate a fake IPD-MA data with systematically missing covariates

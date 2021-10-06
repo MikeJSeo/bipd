@@ -4,12 +4,20 @@
 \alias{getCorrectMeth}
 \title{Find correct imputation method to be used in the mice package}
 \usage{
-getCorrectMeth(dataset = NULL, missingPattern = NULL, interaction = TRUE)
+getCorrectMeth(
+  dataset = NULL,
+  missingPattern = NULL,
+  sys_impute_method = "2l.glm",
+  interaction = TRUE
+)
 }
 \arguments{
 \item{dataset}{data which contains variables of interest}
 
 \item{missingPattern}{missing pattern object created using \code{\link{findMissingPattern}}}
+
+\item{sys_impute_method}{Method used for systematically missing studies. Options are "2l.glm", 2l.2stage", or "2l.jomo". Default is set to "2l.2stage".
+For more details, Read micemd package for suggestions on which method to use depending on observed clusters and observed values per cluster.}
 
 \item{interaction}{Indicator denoting whether treatment-covariate interactions should be included. Default is set to true.#'}
 }

@@ -4,7 +4,6 @@
 #' Generate a fake IPD-MA data with systematically missing covariates
 #' @param Nstudies Number of studies. Default is 10.
 #' @param Ncov Number of covariates in total. Options are 5 or 10 studies. Default is set to 5.
-#' @param typeofvar Type of
 #' @param sys_missing_prob Proportion of systematically missing studies for each covariate. Default is set to 0.3.
 #' @param signal Signal to noise ratio between predictors and the outcome by changing the variance of the random error. Options are "small" or "large".
 #' @param interaction Whether to include treatment indicator and treatment 
