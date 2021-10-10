@@ -30,5 +30,5 @@ preprocess.data(
 \item{outcomename}{Outcome name in the data specified.}
 }
 \description{
-Function to preprocess dataset
+Function to preprocess dataset: select only needed variables, change binary variables to factors, includes interaction terms if interaction is specified.
 }

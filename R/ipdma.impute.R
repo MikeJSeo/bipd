@@ -21,6 +21,7 @@
 #' @param m Number of imputed datasets. Default is set to 5.
 #' @param sys_impute_method Method used for systematically missing studies. Options are "2l.glm", "2l.2stage", or "2l.jomo". Default is set to "2l.2stage".
 #' For more details, Read micemd package for suggestions on which method to use depending on observed clusters and observed values per cluster.
+#' There is also last option where you simply ignore all the clustering level and impute using predictive mean matching. To specify such option, set this parameter to "pmm".
 #' @return 
 #' \item{missingPattern}{missing Pattern object returned by running \code{\link{findMissingPattern}}}
 #' \item{meth}{imputation method used with the mice function}
@@ -47,6 +48,10 @@ ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, in
   
   if(is.null(pred)){
     pred <- getCorrectPred(dataset = dataset.preprocessed, missingPattern = missingPattern, interaction = interaction)
+    if(sys_impute_method == "pmm"){
+      pred[pred==2] <- 1  
+      pred[,studyname] <- 0
+    }
   }
 
   imp <- mice(dataset.preprocessed, pred = pred, meth = meth, m = m)
@@ -60,8 +65,8 @@ ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, in
 
 
 #' Function to preprocess dataset
-#'
 #' 
+#' Function to preprocess dataset: select only needed variables, change binary variables to factors, includes interaction terms if interaction is specified.
 #'
 #' @param dataset Data which contains variables of interests
 #' @param covariates Vector of variable names that the user is interested in finding a missing data pattern
@@ -187,6 +192,7 @@ findMissingPattern <- function(dataset = NULL, covariates = NULL, typeofvar = NU
 #' @param missingPattern missing pattern object created using \code{\link{findMissingPattern}}
 #' @param sys_impute_method Method used for systematically missing studies. Options are "2l.glm", 2l.2stage", or "2l.jomo". Default is set to "2l.2stage".
 #' For more details, Read micemd package for suggestions on which method to use depending on observed clusters and observed values per cluster.
+#' There is also last option where you simply ignore all the clustering level and impute using predictive mean matching. To specify such option, set this parameter to "pmm".
 #' @param interaction Indicator denoting whether treatment-covariate interactions should be included. Default is set to true.#'
 #' @export
 
@@ -218,11 +224,21 @@ getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, sys_impute_met
     } else{
       
       if(meth[outcomename] != ""){
-        meth[outcomename] <- "2l.pmm" #assume outcome data is not systematically missing
+        #assume outcome data is not systematically missing
+        if(sys_impute_method == "pmm"){
+          meth[outcomename] <- "pmm"
+        } else{
+          meth[outcomename] <- "2l.pmm"
+        }
       }
       
       if(length(spor_covariates) != 0){
-        meth[spor_covariates] <- "2l.pmm"
+        
+        if(sys_impute_method == "pmm"){
+          meth[spor_covariates] <- "pmm"
+        } else{
+          meth[spor_covariates] <- "2l.pmm"  
+        }
       }
       
       if(length(sys_covariates) != 0){
@@ -236,7 +252,11 @@ getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, sys_impute_met
               meth[sys_covariates[i]] <- "2l.glm.norm"
             } else if(sys_impute_method == "2l.jomo"){
               meth[sys_covariates[i]] <- "2l.jomo"
+            } else if(sys_impute_method == "pmm"){
+              meth[sys_covariates[i]] <- "pmm"
             }
+            
+            
           } else if(typeofvar[which(covariates == sys_covariates[i])] == "binary"){
             
             if(sys_impute_method == "2l.2stage"){
@@ -245,7 +265,10 @@ getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, sys_impute_met
               meth[sys_covariates[i]] <- "2l.glm.bin"
             } else if(sys_impute_method == "2l.jomo"){
               meth[sys_covariates[i]] <- "2l.jomo"
+            } else if(sys_impute_method == "pmm"){
+              meth[sys_covariates[i]] <- "pmm"
             }
+            
           } else if(typeofvar[which(covariates == sys_covariates[i])] == "count"){
             if(sys_impute_method == "2l.2stage"){
               meth[sys_covariates[i]] <- "2l.2stage.pois"
@@ -253,6 +276,8 @@ getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, sys_impute_met
               meth[sys_covariates[i]] <- "2l.glm.pois"
             } else if(sys_impute_method == "2l.jomo"){
               meth[sys_covariates[i]] <- "2l.jomo"
+            } else if(sys_impute_method == "pmm"){
+              meth[sys_covariates[i]] <- "pmm"
             }
           }
         }
