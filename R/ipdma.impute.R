@@ -12,6 +12,9 @@
 #' @param covariates Vector of variable names to find missing data pattern
 #' @param typeofvar Type of covariate variables; should be a vector of these values: "continuous", "binary", or "count".
 #' Order should follow that of covariates parameter specified. Covariates that are specified "binary" are automatically factored.
+#' @param sys_impute_method Method used for systematically missing studies. Options are "2l.glm", "2l.2stage", or "2l.jomo". Default is set to "2l.2stage".
+#' For more details, Read micemd package for suggestions on which method to use depending on observed clusters and observed values per cluster.
+#' There is also last option where you simply ignore all the clustering level and impute using predictive mean matching. To specify such option, set this parameter to "pmm".
 #' @param interaction Indicator denoting whether treatment-covariate interactions should be included. Default is set to true.
 #' @param meth User can specify imputation method to be used in the mice package. If left unspecified, function picks a reasonable one.
 #' @param pred User can specify correct prediction matrix to be used in the mice package. If left unspecified, function picks a reasonable one.
@@ -19,9 +22,6 @@
 #' @param treatmentname Treatment name in the data specified.
 #' @param outcomename Outcome name in the data specified.
 #' @param m Number of imputed datasets. Default is set to 5.
-#' @param sys_impute_method Method used for systematically missing studies. Options are "2l.glm", "2l.2stage", or "2l.jomo". Default is set to "2l.2stage".
-#' For more details, Read micemd package for suggestions on which method to use depending on observed clusters and observed values per cluster.
-#' There is also last option where you simply ignore all the clustering level and impute using predictive mean matching. To specify such option, set this parameter to "pmm".
 #' @return 
 #' \item{missingPattern}{missing Pattern object returned by running \code{\link{findMissingPattern}}}
 #' \item{meth}{imputation method used with the mice function}
@@ -31,9 +31,9 @@
 #'
 #' @export
 
-ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, interaction = NULL,
+ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, sys_impute_method = "2l.2stage", interaction = NULL,
                          meth = NULL, pred = NULL, studyname = NULL, treatmentname = NULL, outcomename = NULL, 
-                         m = 5, sys_impute_method = "2l.2stage"
+                         m = 5
                          ){
   
   dataset.preprocessed <- preprocess.data(dataset = dataset, covariates = covariates, typeofvar = typeofvar, interaction = interaction,
