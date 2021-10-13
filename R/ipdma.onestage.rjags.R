@@ -111,10 +111,15 @@ shrinkage.prior.rjags <- function(ipd){
                        "\n}")
                        
       } else if (lambda.prior[[1]] == "dunif"){
+        if(response == "normal"){
+          code <- paste0(code, "\ntt <- lambda * sigma")
+        } else if(response == "binomial"){
+          code <- paste0(code, "\ntt <- lambda")
+        }
         code <- paste0(code, "\nlambda <- pow(lambda.inv, -1)",
                        "\nlambda.inv ~ dunif(", lambda.prior[[2]], ", ", lambda.prior[[3]], ")",
                        "\nfor(k in 1:Ncovariate){",
-                       "\n\tgamma[k] ~ ddexp(0, lambda)",
+                       "\n\tgamma[k] ~ ddexp(0, tt)",
                        "\n}")
       }
     } else if (shrinkage == "SSVS"){
