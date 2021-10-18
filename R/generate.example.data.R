@@ -66,7 +66,7 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
   
   # introduce systematically missing; first two predictors are always observed; first two studies are not systematically missing
   for(j in 3:Ncov){
-    for(i in 1:Nstudies){
+    for(i in 3:Nstudies){
       if(rbinom(1, 1, sys_missing_prob) == 1){
         X[study == i,j] <- NA  
       }
