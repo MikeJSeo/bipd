@@ -11,7 +11,7 @@
 #' @export
 
 generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_prob = 0.3,
-                                          signal = "small", sign = "different", interaction = FALSE) {
+                                          signal = "small", interaction = FALSE) {
 
   Npatients <- sample(150:500, Nstudies, replace = TRUE)
   Npatients.tot <- sum(Npatients)
@@ -57,33 +57,22 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
   b <- matrix(NA, Npatients.tot, Ncov)
   
   for(i in 1:Ncov){
-    if(sign == "different"){
-      b_dummy <- abs(rnorm(Nstudies, 0.5, 0.1))
-      if(Nstudies == 10){
-        b_dummy[c(1,3,5,7,9)] <- -b_dummy[c(1,3,5,7,9)]
-      } else{
-        stop("Need to change code to allow Nstudies other than 10")
-      }
-    } else if (sign == "same"){
-      b_dummy <- abs(rnorm(Nstudies, 0.5, 0.1))
-    }
+    b_dummy <- rnorm(Nstudies, 0.5, 0.3)
     b_dummy <- rep(b_dummy, times = Npatients)
     b[,i] <- b_dummy
   }
   
   y <- a + apply(X * b, 1, sum) + e_vec  
   
-  # introduce systematically missing; first two predictors are always observed
-  for(i in 3:Ncov){
-    systematic_missing_study <- sample(Nstudies, size = sys_missing_prob*Nstudies)
-    systematic_missing_study_dummy <- rep(0, Nstudies)
-    systematic_missing_study_dummy[systematic_missing_study] <- 1
-    
-    study_missing <- as.logical(rep(systematic_missing_study_dummy, times = Npatients))  
-    X[,i][study_missing] <- NA
-  }    
-  
-  
+  # introduce systematically missing; first two predictors are always observed; first two studies are not systematically missing
+  for(j in 3:Ncov){
+    for(i in 3:Nstudies){
+      if(rbinom(1, 1, sys_missing_prob) == 1){
+        X[study == i,j] <- NA  
+      }
+    }
+  }  
+
   # Define dataset to return
   dataset <- data.frame(y = y, X = X[,1:Ncov], study = study)
   colnames(dataset) <- c("y", paste0("x", 1:Ncov), "study")
@@ -103,7 +92,6 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
   
   dataset <- as_tibble(dataset)
   return(list(y = y , X = X, study = study, dataset = dataset))
-  
 }
   
   
