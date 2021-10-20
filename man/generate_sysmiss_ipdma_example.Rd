@@ -9,7 +9,6 @@ generate_sysmiss_ipdma_example(
   Ncov = 5,
   sys_missing_prob = 0.3,
   signal = "small",
-  sign = "different",
   interaction = FALSE
 )
 }

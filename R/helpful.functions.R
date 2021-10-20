@@ -10,13 +10,13 @@
 #' @param samples MCMC samples found from running `ipd.run`
 #' @param newpatient Covariate values of patients that you want to predict treatment effect on. Must have length equal to total number of covariates.
 #' @param reference Reference group used for finding patient-specific treatment effect. This is only used for "deft" approach
-#' @param quantile Quantiles finding confidence interavl of the patient-specific treatment effect
+#' @param quantiles Quantiles finding credible interval of the patient-specific treatment effect
 #' @references Seo M, White IR, Furukawa TA, et al. Comparing methods for estimating patient-specific treatment effects in individual patient data meta-analysis. \emph{Stat Med}. 2021;40(6):1553-1573. \doi{10.1002/sim.8859}
 #' @references Riley RD, Debray TP, Fisher D, et al. Individual participant data meta-analysis to examine interactions between treatment effect and participant-level covariates: Statistical recommendations for conduct and planning. \emph{Stat Med}. 2020:39(15):2115-2137. [\url{https://doi.org/10.1002/sim.8516}] 
 #' @export
 
 treatment.effect <- function(ipd = NULL, samples = NULL, newpatient = NULL, 
-                             reference = NULL, quantile = c(0.025, 0.5, 0.975)){
+                             reference = NULL, quantiles = c(0.025, 0.5, 0.975)){
 
   
   if(class(ipd) == "ipdma.onestage"){
@@ -34,15 +34,13 @@ treatment.effect <- function(ipd = NULL, samples = NULL, newpatient = NULL,
     }
     
     pred <- merged %*% c(1, newpatient)
-    mean1 <- mean(pred)
-    se1 <- sd(pred)
-    
+
     if(ipd$response == "normal"){
-      CI <- mean1 + qnorm(quantile)* se1
+      CI <- quantile(pred, probs = quantiles)
     } else if(ipd$response == "binomial"){
-      CI <- exp(mean1 + qnorm(quantile)* se1)    
+      CI <- exp(quantile(pred, probs = quantiles))
     }
-    names(CI) <- quantile
+    names(CI) <- quantiles
   } else if (class(ipd) == "ipdma.onestage.deft"){
     
     if(is.null(reference)){
@@ -61,20 +59,18 @@ treatment.effect <- function(ipd = NULL, samples = NULL, newpatient = NULL,
     }
     
     pred <- merged %*% c(1, newpatient)
-    mean1 <- mean(pred)
-    se1 <- sd(pred)
-    
+
     if(ipd$response == "normal"){
-      CI <- mean1 + qnorm(quantile)* se1
+      CI <- quantile(pred, probs = quantiles)
     } else if(ipd$response == "binomial"){
-      CI <- exp(mean1 + qnorm(quantile)* se1)    
+      CI <- exp(quantile(pred, probs = quantiles)) 
     }
-    names(CI) <- quantile
+    names(CI) <- quantiles
     
   } else{
     stop("Calculating patient specific treatment effect is not yet implemented for this method")
   }
   
-  return(list(CI = CI, pred = pred))
+  return(CI)
 }
 

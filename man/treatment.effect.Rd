@@ -9,7 +9,7 @@ treatment.effect(
   samples = NULL,
   newpatient = NULL,
   reference = NULL,
-  quantile = c(0.025, 0.5, 0.975)
+  quantiles = c(0.025, 0.5, 0.975)
 )
 }
 \arguments{
@@ -21,7 +21,7 @@ treatment.effect(
 
 \item{reference}{Reference group used for finding patient-specific treatment effect. This is only used for "deft" approach}
 
-\item{quantile}{Quantiles finding confidence interavl of the patient-specific treatment effect}
+\item{quantiles}{Quantiles finding credible interval of the patient-specific treatment effect}
 }
 \description{
 Convenient function for calculating the patient-specific treatment effect.
