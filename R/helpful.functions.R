@@ -75,6 +75,6 @@ treatment.effect <- function(ipd = NULL, samples = NULL, newpatient = NULL,
     stop("Calculating patient specific treatment effect is not yet implemented for this method")
   }
   
-  return(CI)
+  return(list(CI = CI, pred = pred))
 }
 
