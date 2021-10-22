@@ -65,7 +65,7 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
   }
   
   if(signal == "small"){
-    e_vec <- rnorm(Npatients.tot, 0, 0.5) # R squared around 0.1
+    e_vec <- rnorm(Npatients.tot, 0, 0.2) # R squared around 0.1
   } else if(signal == "large"){
     e_vec <- rnorm(Npatients.tot, 0, 0.2) # R squared around 0.6
   }
