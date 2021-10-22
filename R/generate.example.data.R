@@ -65,7 +65,7 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
   }
   
   if(signal == "small"){
-    e_vec <- rnorm(Npatients.tot, 0, 1.0) # R squared around 0.1
+    e_vec <- rnorm(Npatients.tot, 0, 0.5) # R squared around 0.1
   } else if(signal == "large"){
     e_vec <- rnorm(Npatients.tot, 0, 0.2) # R squared around 0.6
   }
@@ -73,21 +73,13 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
   b <- matrix(NA, Npatients.tot, Ncov)
   
   for(i in 1:Ncov){
-    b_dummy <- rnorm(Nstudies, 0.1, 0.3)
+    b_dummy <- rnorm(Nstudies, 0.2, 0.3)
     b_dummy <- rep(b_dummy, times = Npatients)
     b[,i] <- b_dummy
   }
   
   y <- a + apply(X * b, 1, sum) + e_vec  
-  
-  if(aggregation_bias == TRUE){
 
-    studymean <- aggregate(X, list(study), mean)[,-1]
-    studymean_full <- studymean[rep(seq_len(nrow(studymean)), times = Npatients),]
-
-    y <- y + as.matrix(studymean_full, ncol = Ncov) %*% rep(0.2, Ncov)
-  }
-  
   # introduce systematically missing; first two predictors are always observed; first two studies are not systematically missing
   for(j in 3:Ncov){
     for(i in 1:Nstudies){
