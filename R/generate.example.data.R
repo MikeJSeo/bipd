@@ -73,7 +73,7 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
   b <- matrix(NA, Npatients.tot, Ncov)
   
   for(i in 1:Ncov){
-    b_dummy <- rnorm(Nstudies, 0.5, 0.3)
+    b_dummy <- rnorm(Nstudies, 0.2, 0.3)
     b_dummy <- rep(b_dummy, times = Npatients)
     b[,i] <- b_dummy
   }
