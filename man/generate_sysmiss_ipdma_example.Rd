@@ -9,7 +9,8 @@ generate_sysmiss_ipdma_example(
   Ncov = 5,
   sys_missing_prob = 0.3,
   signal = "small",
-  interaction = FALSE
+  interaction = FALSE,
+  aggregation_bias = FALSE
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ generate_sysmiss_ipdma_example(
 \item{signal}{Signal to noise ratio between predictors and the outcome by changing the variance of the random error. Options are "small" or "large".}
 
 \item{interaction}{Whether to include treatment indicator and treatment}
+
+\item{aggregation_bias}{Induce aggregation bias in each predictors}
 }
 \description{
 Generate a fake IPD-MA data with systematically missing covariates

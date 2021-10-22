@@ -7,11 +7,12 @@
 #' @param sys_missing_prob Proportion of systematically missing studies for each covariate. Default is set to 0.3.
 #' @param signal Signal to noise ratio between predictors and the outcome by changing the variance of the random error. Options are "small" or "large".
 #' @param interaction Whether to include treatment indicator and treatment 
+#' @param aggregation_bias Induce aggregation bias in each predictors
 #'
 #' @export
 
 generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_prob = 0.3,
-                                          signal = "small", interaction = FALSE) {
+                                          signal = "small", interaction = FALSE, aggregation_bias = FALSE) {
 
   Npatients <- sample(150:500, Nstudies, replace = TRUE)
   Npatients.tot <- sum(Npatients)
@@ -31,10 +32,25 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
   sigma2 <- 1
   
   X <- NULL
-  for(i in 1:Nstudies){
-    mu <- runif(Ncov, -0.5, 0.5)
-    X <- rbind(X, rmvnorm(Npatients[i], mu, Omega * sigma2))
+  
+  if(aggregation_bias == FALSE){
+    for(i in 1:Nstudies){
+      mu <- runif(Ncov, -1, 1)
+      X <- rbind(X, rmvnorm(Npatients[i], mu, Omega * sigma2))
+    }
+  } else{
+    mu <- matrix(NA, Nstudies, Ncov)
+    for(k in 1:Ncov){
+      dummymu <- runif(Nstudies, -1, 1)
+      mu[,k] <- dummymu[order(dummymu)]
+    }
+
+    for(i in 1:Nstudies){
+      X <- rbind(X, rmvnorm(Npatients[i], mu[i,], Omega * sigma2))
+    }
   }
+  
+  
   
   #categorize predictors
   if(Ncov == 5){
