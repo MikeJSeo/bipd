@@ -80,6 +80,21 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
   
   y <- a + apply(X * b, 1, sum) + e_vec  
   
+  # if(aggregation_bias == TRUE){
+  #   
+  #   studymean <- aggregate(X, list(study), mean)[,-1]
+  #   studymean_full <- studymean[rep(seq_len(nrow(studymean)), times = Npatients),]
+  #  
+  #   b_bias <- matrix(NA, Npatients.tot, Ncov)
+  #   b_bias_dummy <- 
+  #   for(i in 1:Ncov){
+  #     b_bias_dummy <- rnorm(Nstudies, 0.1, 0.3)
+  #     b_bias_dummy <- rep(b_dummy, times = Npatients)
+  #     b_bias[,i] <- b_bias_dummy
+  #   }
+  #   y <- y + studymean_full %*% rep(0.2, Ncov)
+  # }
+  
   # introduce systematically missing; first two predictors are always observed; first two studies are not systematically missing
   for(j in 3:Ncov){
     for(i in 1:Nstudies){
