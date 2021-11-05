@@ -2,17 +2,18 @@
 #' Generate a fake IPD-MA data with systematically missing covariates 
 #'
 #' Generate a fake IPD-MA data with systematically missing covariates
-#' @param Nstudies Number of studies. Default is 10.
-#' @param Ncov Number of covariates in total. Options are 5 or 10 studies. Default is set to 5.
-#' @param sys_missing_prob Proportion of systematically missing studies for each covariate. Default is set to 0.3.
-#' @param signal Signal to noise ratio between predictors and the outcome by changing the variance of the random error. Options are "small" or "large".
-#' @param interaction Whether to include treatment indicator and treatment 
-#' @param aggregation_bias Induce aggregation bias in each predictors
+#' @param Nstudies number of studies. Default is 10.
+#' @param Ncov number of covariates in total. Options are 5 or 10 studies. Default is set to 5.
+#' @param sys_missing_prob probability of systematically missing studies for each covariate. Default is set to 0.3.
+#' @param magnitude magnitude of the regression estimates (the mean). Default is set to 0.2.
+#' @param heterogeneity heterogeneity of regression estimates across studies. Default is set to 0.1.
+#' @param interaction whether to include treatment indicator and treatment 
+#' @param aggregation_bias induce aggregation bias in each predictors
 #'
 #' @export
 
-generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_prob = 0.3,
-                                          signal = "small", interaction = FALSE, aggregation_bias = FALSE) {
+generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_prob = 0.1, magnitude = 0.3,
+                                           heterogeneity = 0.1, interaction = FALSE, aggregation_bias = FALSE) {
 
   Npatients <- sample(150:500, Nstudies, replace = TRUE)
   Npatients.tot <- sum(Npatients)
@@ -26,31 +27,16 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
   Omega <- diag(1, Ncov)
   for(i in 1:Ncov){
     for(j in 1:Ncov){
-      Omega[i,j] <- rho^abs(i - j) 
+      Omega[i,j] <- rho^abs(i - j)
     }
   }
   sigma2 <- 1
   
   X <- NULL
-  
-  if(aggregation_bias == FALSE){
-    for(i in 1:Nstudies){
-      mu <- runif(Ncov, -1, 1)
-      X <- rbind(X, rmvnorm(Npatients[i], mu, Omega * sigma2))
-    }
-  } else{
-    mu <- matrix(NA, Nstudies, Ncov)
-    for(k in 1:Ncov){
-      dummymu <- runif(Nstudies, -1, 1)
-      mu[,k] <- dummymu[order(dummymu)]
-    }
-
-    for(i in 1:Nstudies){
-      X <- rbind(X, rmvnorm(Npatients[i], mu[i,], Omega * sigma2))
-    }
+  for(i in 1:Nstudies){
+    mu <- runif(Ncov, -1, 1)
+    X <- rbind(X, rmvnorm(Npatients[i], mu, Omega * sigma2))
   }
-  
-  
   
   #categorize predictors
   if(Ncov == 5){
@@ -64,23 +50,46 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
     X[,10] <- ifelse(X[,10] > 1, 1, 0)
   }
   
-  if(signal == "small"){
-    e_vec <- rnorm(Npatients.tot, 0, 0.2) # R squared around 0.1
-  } else if(signal == "large"){
-    e_vec <- rnorm(Npatients.tot, 0, 0.2) # R squared around 0.6
-  }
-  
+  e_vec <- rnorm(Npatients.tot, 0, 0.3) 
   b <- matrix(NA, Npatients.tot, Ncov)
-  
+  #b[,1] <- rep(0.2, Npatients.tot)
+
   for(i in 1:Ncov){
-    b_dummy <- rnorm(Nstudies, 0.2, 0.3)
+    b_dummy <- rnorm(Nstudies, magnitude, heterogeneity)
     b_dummy <- rep(b_dummy, times = Npatients)
     b[,i] <- b_dummy
   }
   
-  y <- a + apply(X * b, 1, sum) + e_vec  
+  if(interaction == TRUE){
+    treat <- rbinom(Npatients.tot, 1, 0.5)
+    Xinteraction <- X[,1:Ncov] * treat
+    cvec <- matrix(NA, Npatients.tot, Ncov)
+    
+    for(i in 1:Ncov){
+      cvec_dummy <- rnorm(Nstudies, magnitude/2, heterogeneity)
+      cvec_dummy <- rep(cvec_dummy, times = Npatients)
+      cvec[,i] <- cvec_dummy
+    }
+    
+    d <- rnorm(Nstudies, 1, 0.5)
+    d <- rep(d, times = Npatients)
+  }
+  
+  if(interaction == FALSE){
+    y <- a + apply(X * b, 1, sum) + e_vec    
+  } else if(interaction == TRUE){
+    y <- a + apply(X * b, 1, sum) + e_vec + d *treat + apply(Xinteraction * cvec, 1, sum)
+  }
 
-  # introduce systematically missing; first two predictors are always observed; first two studies are not systematically missing
+  if(aggregation_bias == TRUE){
+
+    studymean <- aggregate(X, list(study), mean)[,-1] 
+    studymean_full <- studymean[rep(seq_len(nrow(studymean)), times = Npatients),][,1] # study mean for first covariate
+
+    y <- y + as.matrix(studymean_full, ncol = 1) * -b[,1]
+  }
+  
+  # introduce systematically missing; first two predictors are always observed
   for(j in 3:Ncov){
     for(i in 1:Nstudies){
       if(rbinom(1, 1, sys_missing_prob) == 1){
@@ -107,12 +116,17 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
   }  
   
   dataset <- as_tibble(dataset)
-  return(list(y = y , X = X, study = study, dataset = dataset))
+  
+  if(interaction == TRUE){
+    dataset <- cbind(dataset, treat = treat)
+    dataset <- as_tibble(dataset)
+    return(list(y = y , X = X, study = study, treat = treat, dataset = dataset))
+  } else if(interaction == FALSE){
+    dataset <- as_tibble(dataset)
+    return(list(y = y , X = X, study = study, dataset = dataset))
+  }
 }
   
-  
-  
-
 
 
 #' Generate a fake IPD-MA data for demonstration
@@ -175,7 +189,6 @@ generate_ipdma_example <- function(type = "continuous"){
       ds[(((i-1)*N)+1):(i*N), ] <- cbind(studyid[i], treat, w1, w2, y)
     }
     ds$studyid <- as.factor(ds$studyid)
-    
   }
   
   return(ds)
