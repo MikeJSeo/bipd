@@ -4,7 +4,7 @@
 #' Generate a fake IPD-MA data with systematically missing covariates
 #' @param Nstudies number of studies. Default is 10.
 #' @param Ncov number of covariates in total. Options are 5 or 10 studies. Default is set to 5.
-#' @param sys_missing_prob probability of systematically missing studies for each covariate. Default is set to 0.3.
+#' @param sys_missing_prob probability of systematically missing studies for each covariates. Default is set to 0.3.
 #' @param magnitude magnitude of the regression estimates (the mean). Default is set to 0.2.
 #' @param heterogeneity heterogeneity of regression estimates across studies. Default is set to 0.1.
 #' @param interaction whether to include treatment indicator and treatment 
