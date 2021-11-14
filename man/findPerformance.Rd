@@ -16,8 +16,9 @@ findPerformance(
 \item{predictions}{Predictions from model developed}
 
 \item{aggregation}{Aggregation method to be used to combine performance metrics across studies. 
-There are two options: "simple" gives you a simple average; "weighted" gives you a weighted average taking 
-into account the sample size of each study. Default is set to "weighted".}
+There are three options: "simple" gives you a simple average across studies; 
+"weighted" gives you a weighted average taking into account the sample size of each study. 
+"ignore" gives you a performance measure ignoring study level. Default is set to "weighted".}
 }
 \value{
 \item{performancemetrics}{A vector of MSE, MAE, and R-squared values}

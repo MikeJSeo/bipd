@@ -7,24 +7,24 @@
 generate_sysmiss_ipdma_example(
   Nstudies = 10,
   Ncov = 5,
-  sys_missing_prob = 0.3,
-  signal = "small",
-  interaction = FALSE,
-  aggregation_bias = FALSE
+  sys_missing_prob = 0.1,
+  magnitude = 0.3,
+  heterogeneity = 0.1,
+  interaction = FALSE
 )
 }
 \arguments{
-\item{Nstudies}{Number of studies. Default is 10.}
+\item{Nstudies}{number of studies. Default is 10.}
 
-\item{Ncov}{Number of covariates in total. Options are 5 or 10 studies. Default is set to 5.}
+\item{Ncov}{number of covariates in total. Options are 5 or 10 studies. Default is set to 5.}
 
-\item{sys_missing_prob}{Proportion of systematically missing studies for each covariate. Default is set to 0.3.}
+\item{sys_missing_prob}{probability of systematically missing studies for each covariates. Default is set to 0.3.}
 
-\item{signal}{Signal to noise ratio between predictors and the outcome by changing the variance of the random error. Options are "small" or "large".}
+\item{magnitude}{magnitude of the regression estimates (the mean). Default is set to 0.2.}
 
-\item{interaction}{Whether to include treatment indicator and treatment}
+\item{heterogeneity}{heterogeneity of regression estimates across studies. Default is set to 0.1.}
 
-\item{aggregation_bias}{Induce aggregation bias in each predictors}
+\item{interaction}{whether to include treatment indicator and treatment}
 }
 \description{
 Generate a fake IPD-MA data with systematically missing covariates

@@ -8,14 +8,13 @@
 #' @param magnitude magnitude of the regression estimates (the mean). Default is set to 0.2.
 #' @param heterogeneity heterogeneity of regression estimates across studies. Default is set to 0.1.
 #' @param interaction whether to include treatment indicator and treatment 
-#' @param aggregation_bias induce aggregation bias in each predictors
 #'
 #' @export
 
 generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_prob = 0.1, magnitude = 0.3,
-                                           heterogeneity = 0.1, interaction = FALSE, aggregation_bias = FALSE) {
+                                           heterogeneity = 0.1, interaction = FALSE) {
 
-  Npatients <- sample(150:500, Nstudies, replace = TRUE)
+  Npatients <- sample(150:300, Nstudies, replace = TRUE)
   Npatients.tot <- sum(Npatients)
   study <- rep(1:Nstudies, times = Npatients)
   
@@ -79,14 +78,6 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
     y <- a + apply(X * b, 1, sum) + e_vec    
   } else if(interaction == TRUE){
     y <- a + apply(X * b, 1, sum) + e_vec + d *treat + apply(Xinteraction * cvec, 1, sum)
-  }
-
-  if(aggregation_bias == TRUE){
-
-    studymean <- aggregate(X, list(study), mean)[,-1] 
-    studymean_full <- studymean[rep(seq_len(nrow(studymean)), times = Npatients),][,1] # study mean for first covariate
-
-    y <- y + as.matrix(studymean_full, ncol = 1) * -b[,1]
   }
   
   # introduce systematically missing; first two predictors are always observed
