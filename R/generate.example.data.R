@@ -18,8 +18,7 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
   Npatients.tot <- sum(Npatients)
   study <- rep(1:Nstudies, times = Npatients)
   
-  a <- runif(Nstudies, 0.9, 1.1)
-  #a <- runif(Nstudies, 0.5, 1.5)
+  a <- runif(Nstudies, 0.5, 1.5)
   a <- rep(a, times = Npatients)
   
   ### generate X
@@ -50,7 +49,7 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
     X[,10] <- ifelse(X[,10] > 1, 1, 0)
   }
   
-  e_vec <- rnorm(Npatients.tot, 0, 1.0) 
+  e_vec <- rnorm(Npatients.tot, 0, 0.5) 
   b <- matrix(NA, Npatients.tot, Ncov)
   #b[,1] <- rep(0.2, Npatients.tot)
 
