@@ -40,13 +40,13 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
   #categorize predictors
   if(Ncov == 5){
     X[,2] <- ifelse(X[,2] > 0, 1, 0)
-    X[,3] <- ifelse(X[,3] > 1, 1, 0)
+    X[,3] <- ifelse(X[,3] > 0.5, 1, 0)
   } else if(Ncov == 10){
     X[,2] <- ifelse(X[,2] > 0, 1, 0)
     X[,3] <- ifelse(X[,3] > 0, 1, 0)
     X[,8] <- ifelse(X[,8] > 0, 1, 0)
     X[,9] <- ifelse(X[,9] > 0.5, 1, 0)
-    X[,10] <- ifelse(X[,10] > 1, 1, 0)
+    X[,10] <- ifelse(X[,10] > 0.5, 1, 0)
   }
   
   e_vec <- rnorm(Npatients.tot, 0, 1) 
