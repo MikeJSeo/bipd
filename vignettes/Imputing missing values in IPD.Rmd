@@ -1,0 +1,63 @@
+---
+title: "Imputing missing values in IPD"
+author: "Michael Seo"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Imputing missing values in IPD}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+We describe how to impute missing data in an individual patient data (IPD) using multiple imputation. However, this package is not restricted to IPD, but can also be used for multilevel data. This package conveniently sets up correct input parameters that are needed to use imputation methods using mice and mice-extended packages (micemd and miceadds). We will first simulate a mock data that we will use for illustration.
+
+```{r}
+#install.packages("bipd")
+#or devtools::install_github("MikeJSeo/bipd")
+library(bipd)
+set.seed(1)
+simulated_dataset <- generate_sysmiss_ipdma_example(Nstudies = 10, Ncov = 5, sys_missing_prob = 0.3, magnitude = 0.2, heterogeneity = 0.1)
+```
+
+There are two types of missing data in an IPD. In an IPD, we have multiple studies reporting the same clinical outcome. However, in each study the set of predictors reported can be different. When we have predictors in some studies only partly reported, e.g. when some patients did not provide information on their age. We refer to this situation as ‘sporadically missing’ data. A different missing data problem, which is relevant for meta-analysis only, is that of 'systematically missing' predictors. This is when different studies measured different sets of predictors. There is a convenient function in this package that calculates how data is missing in each study. 
+
+```{r}
+missP <- findMissingPattern(simulated_dataset, covariates = c("x1", "x2", "x3", "x4", "x5"), typeofvar = c("continuous", "binary", "binary", "continuous", "continuous"), studyname = "study",  treatmentname = "treat", outcomename = "y")
+```
+
+The function calculates missing percentages of each variable for each study.
+
+```{r}
+missP$missingpercent
+```
+
+We see that for some studies we have variables that are systematically missing. For instance, in our mock dataset study 3 do not have variable x3 observed. Now let's introduce some sporadically missing values in the dataset.
+
+
+
+
+
+
+
+```{r, eval = FALSE}
+# If above doesn't work we can try by first find correct method and prediction matrix and
+# then using ipdma.impute using these obtained objects. Through this process, we can check if there is any errors
+# in setting up these objects.
+missP <- findMissingPattern(mydata, covariates = c("baseline", "gender"), typeofvar = c("continuous", "binary"), 
+                            studyname = "study",  treatmentname = "treat", outcomename = "y")
+correctMeth <- getCorrectMeth(mydata, missP)
+correctPred <- getCorrectPred(mydata, missP)
+imputations_test <- ipdma.impute(mydata, covariates = c("baseline", "gender"), typeofvar = c("continuous", "binary"),
+                             interaction = TRUE, meth = correctMeth, pred = correctPred,
+                             studyname = "study", treatmentname = "treat", outcomename = "y")
+
+```

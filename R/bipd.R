@@ -1,8 +1,8 @@
-#' bipd: A package for individual patient data (network) meta analysis using 'JAGS'
+#' bipd: A package for individual patient data meta analysis using 'JAGS'
 #'
-#' A package for running Bayesian individual patient data (network) meta analysis
+#' A package for running Bayesian individual patient data meta analysis
 #'
-#' We use a Bayesian approach to run individual patient data (network) meta analysis. The methods allow shrinkage of effect modifiers as described in Seo et al.
+#' We use a Bayesian approach to run individual patient data meta analysis. The methods allow shrinkage of effect modifiers as described in Seo et al.
 #' This package is a user friendly application that can run models without having to code a JAGS model.
 #' The program takes the input data and transforms it to a suitable format of analysis, generates a JAGS model and runs the model through the rjags package.
 #' Furthermore, package includes functions to calculate measures such as patient-specific treatment effect.
