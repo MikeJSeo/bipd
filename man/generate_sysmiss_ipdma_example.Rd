@@ -10,7 +10,7 @@ generate_sysmiss_ipdma_example(
   sys_missing_prob = 0.1,
   magnitude = 0.3,
   heterogeneity = 0.1,
-  interaction = FALSE
+  interaction = TRUE
 )
 }
 \arguments{
@@ -25,6 +25,9 @@ generate_sysmiss_ipdma_example(
 \item{heterogeneity}{heterogeneity of regression estimates across studies. Default is set to 0.1.}
 
 \item{interaction}{whether to include treatment indicator and treatment}
+}
+\value{
+\item{dataset}{dataset containing y (outcome), x (covariates), study indicator, and treatment indicator}
 }
 \description{
 Generate a fake IPD-MA data with systematically missing covariates

@@ -1,10 +1,10 @@
 ---
-title: "Bayesian individual participant data meta analysis"
+title: "Multiple imputation"
 author: "Michael Seo"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Bayesian network meta-analysis}
+  %\VignetteIndexEntry{Multiple imputation}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -18,7 +18,19 @@ knitr::opts_chunk$set(
 )
 ```
 
-In this vignette, we describe how to run a Bayesian individual participant data meta-analysis model using this package.
+In this vignette, we describe how to impute missing data in individual patient data using multiple imputation. The package conveniently sets up correct input that are needed to use imputation method using mice, micemd, and miceadds packages. We will first introduce a mock dataset that we will use for illustration.
+
+```{r}
+#install.packages("bipd")
+#or devtools::install_github("MikeJSeo/bipd")
+library(bipd)
+simulated_data <- generate_sysmiss_ipdma_example(Nstudies = 10, Ncov = 5, sys_missing_prob = 0.3, magnitude = 0.2, heterogeneity = 0.1)
+dataset <- simulated_data$dataset
+```
+
+There is two types of missing data in individual patient data. 
+
+
 
 
 ```{r, eval = FALSE}

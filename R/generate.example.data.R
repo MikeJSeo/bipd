@@ -8,11 +8,12 @@
 #' @param magnitude magnitude of the regression estimates (the mean). Default is set to 0.2.
 #' @param heterogeneity heterogeneity of regression estimates across studies. Default is set to 0.1.
 #' @param interaction whether to include treatment indicator and treatment 
-#'
+#' @return 
+#' \item{dataset}{dataset containing y (outcome), x (covariates), study indicator, and treatment indicator}
 #' @export
 
 generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_prob = 0.1, magnitude = 0.3,
-                                           heterogeneity = 0.1, interaction = FALSE) {
+                                           heterogeneity = 0.1, interaction = TRUE) {
 
   Npatients <- sample(150:300, Nstudies, replace = TRUE)
   Npatients.tot <- sum(Npatients)
@@ -111,11 +112,12 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
   if(interaction == TRUE){
     dataset <- cbind(dataset, treat = treat)
     dataset <- as_tibble(dataset)
-    return(list(y = y , X = X, study = study, treat = treat, dataset = dataset))
+    #return(list(y = y , X = X, study = study, treat = treat, dataset = dataset))
   } else if(interaction == FALSE){
     dataset <- as_tibble(dataset)
-    return(list(y = y , X = X, study = study, dataset = dataset))
+    #return(list(y = y , X = X, study = study, dataset = dataset))
   }
+  return(dataset)
 }
   
 
