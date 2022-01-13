@@ -18,7 +18,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-We describe how to impute missing data in an individual patient data (IPD) using multiple imputation. However, this package is not restricted to IPD, but can also be used for multilevel data. This package conveniently sets up correct input parameters that are needed to use imputation methods using mice and mice-extended packages (micemd and miceadds). We will first simulate a mock data that we will use for illustration.
+We describe how to impute missing data in an individual patient data (IPD) using multiple imputation. However, this package is not restricted to IPD, but can also be used for multilevel data. This package conveniently sets up correct input parameters that are needed to use imputaiton methods in mice and mice-extended packages (micemd and miceadds). We will first simulate a mock data that we will use for illustration.
+
+# Missing data
 
 ```{r}
 #install.packages("bipd")
@@ -26,38 +28,67 @@ We describe how to impute missing data in an individual patient data (IPD) using
 library(bipd)
 set.seed(1)
 simulated_dataset <- generate_sysmiss_ipdma_example(Nstudies = 10, Ncov = 5, sys_missing_prob = 0.3, magnitude = 0.2, heterogeneity = 0.1)
+head(simulated_dataset)
 ```
 
-There are two types of missing data in an IPD. In an IPD, we have multiple studies reporting the same clinical outcome. However, in each study the set of predictors reported can be different. When we have predictors in some studies only partly reported, e.g. when some patients did not provide information on their age. We refer to this situation as ‘sporadically missing’ data. A different missing data problem, which is relevant for meta-analysis only, is that of 'systematically missing' predictors. This is when different studies measured different sets of predictors. There is a convenient function in this package that calculates how data is missing in each study. 
+There are two types of missingness in an IPD. In an IPD, we have multiple studies reporting the same clinical outcome. However, in each study the set of predictors reported can be different. When we have predictors in some studies only partly reported, e.g. when some patients did not provide information on their age, we refer to this situation as ‘sporadically missing’ data. A different missing data problem, which is relevant for meta-analysis only, is that of 'systematically missing' predictors. This is when different studies measured different sets of predictors. We have written a convenient function that calculates percentage of missing patients for each predictor in each study and determines whether the variable is sporadically missing or systematically missing.
 
 ```{r}
 missP <- findMissingPattern(simulated_dataset, covariates = c("x1", "x2", "x3", "x4", "x5"), typeofvar = c("continuous", "binary", "binary", "continuous", "continuous"), studyname = "study",  treatmentname = "treat", outcomename = "y")
 ```
 
-The function calculates missing percentages of each variable for each study.
-
 ```{r}
 missP$missingpercent
+missP$sys_covariates
+missP$spor_covariates
 ```
 
-We see that for some studies we have variables that are systematically missing. For instance, in our mock dataset study 3 do not have variable x3 observed. Now let's introduce some sporadically missing values in the dataset.
+We see that x3, x4, and x5 are systematically missing, but we do not observe any sporadically missing variables. Now let's introduce some sporadically missing values in the dataset by randomly assigning some patient covariates to NA.
 
-
-
-
-
-
-
-```{r, eval = FALSE}
-# If above doesn't work we can try by first find correct method and prediction matrix and
-# then using ipdma.impute using these obtained objects. Through this process, we can check if there is any errors
-# in setting up these objects.
-missP <- findMissingPattern(mydata, covariates = c("baseline", "gender"), typeofvar = c("continuous", "binary"), 
-                            studyname = "study",  treatmentname = "treat", outcomename = "y")
-correctMeth <- getCorrectMeth(mydata, missP)
-correctPred <- getCorrectPred(mydata, missP)
-imputations_test <- ipdma.impute(mydata, covariates = c("baseline", "gender"), typeofvar = c("continuous", "binary"),
-                             interaction = TRUE, meth = correctMeth, pred = correctPred,
-                             studyname = "study", treatmentname = "treat", outcomename = "y")
-
+```{r}
+simulated_dataset2 <- simulated_dataset
+randomindex <- sample(c(TRUE,FALSE), dim(simulated_dataset)[1], replace = TRUE, prob = c(0.1, 0.9))
+simulated_dataset2[randomindex,"x1"] <- NA
+missP2 <- findMissingPattern(simulated_dataset2, covariates = c("x1", "x2", "x3", "x4", "x5"), typeofvar = c("continuous", "binary", "binary", "continuous", "continuous"), studyname = "study",  treatmentname = "treat", outcomename = "y")
+missP2$missingpercent
+missP2$sys_covariates
+missP2$spor_covariates
 ```
+
+Now we see that x1 is sporadically missing with percentages near 10%.
+
+# Imputations
+
+Now that we have explored missingness in our data, we can impute these missingness using a wrapper function that finds the correct method, predictor matrix, and calls the mice function to impute.
+
+```{r}
+imputation <- ipdma.impute(simulated_dataset, covariates = c("x1", "x2", "x3", "x4", "x5"), typeofvar = c("continuous", "binary", "binary", "continuous", "continuous"), interaction = TRUE, studyname = "study", treatmentname = "treat", outcomename = "y", m = 10)    
+```
+
+There are a lot of things to describe what goes underneath this wrapper. Firstly, the interaction parameter specifies whether we would like to have treatment-covariate interactions included in the imputation process. Another two parameters that are automatically set up are: imputation method (meth) and predictor matrix (pred). Imputation method specifies suitable imputation method for each incomplete covariates and predictor matrix specifies the variables that are used to impute each incomplete variable.
+
+```{r}
+imputation$meth
+imputation$pred
+```
+
+Notice that the systematically missing variables are assigned imputation methods (2l.2stage.bin and 2l.2stage.norm) which are from micemd package. In the predictor matrix, -2 is assigned for variable that denotes cluster or study. 2 is assigned for variable that are assumed to have random effects in the linear mixed effects model.
+
+```{r}
+ls(imputation)
+```
+
+There are two more additional output from the ipdma.impute function. 'imp' gives you the imputed dataset that is returned from the mice function and 'imp.list' gives you the imputed datasets in a list format. You may use whichever format that is easier for your analysis. Note that we have specified to impute 10 imputation datasets through parameter m = 10.
+
+```{r}
+str(imputation$imp.list)
+```
+
+Let's try another example using the dataset that has sporadically missing predictor that we have created before. For this example, we will assume that we do not include treatment-covariate interactions and we will use a different imputation method for systematically missing variable imputation. See help(ipdma.impute) for more details on the parameters.
+
+```{r}
+imputation2 <- ipdma.impute(simulated_dataset2, covariates = c("x1", "x2", "x3", "x4", "x5"), typeofvar = c("continuous", "binary", "binary", "continuous", "continuous"), sys_impute_method = "2l.glm", interaction = FALSE, studyname = "study", treatmentname = "treat", outcomename = "y", m = 10)  
+```
+
+
+

@@ -75,8 +75,6 @@ ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, sy
 #' @param studyname Study name in the data specified.
 #' @param treatmentname Treatment name in the data specified.
 #' @param outcomename Outcome name in the data specified.
-#' 
-#' @export
 
 preprocess.data <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, interaction = NULL,
                             studyname = NULL, treatmentname = NULL, outcomename = NULL){
@@ -194,7 +192,6 @@ findMissingPattern <- function(dataset = NULL, covariates = NULL, typeofvar = NU
 #' For more details, Read micemd package for suggestions on which method to use depending on observed clusters and observed values per cluster.
 #' There is also last option where you simply ignore all the clustering level and impute using predictive mean matching. To specify such option, set this parameter to "pmm".
 #' @param interaction Indicator denoting whether treatment-covariate interactions should be included. Default is set to true.#'
-#' @export
 
 #Find correct imputation method to be used in the mice package
 
@@ -299,8 +296,7 @@ getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, sys_impute_met
 #'
 #' @param dataset data which contains variables of interest
 #' @param missingPattern missing pattern object created using \code{\link{findMissingPattern}}
-#' @param interaction Indicator denoting whether treatment-covariate interactions should be included. Default is set to true.#'
-#' @export
+#' @param interaction Indicator denoting whether treatment-covariate interactions should be included. Default is set to true.
 
 getCorrectPred <- function(dataset = NULL, missingPattern = NULL, interaction = TRUE){
   
