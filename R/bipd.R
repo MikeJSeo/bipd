@@ -1,6 +1,6 @@
-#' bipd: A package for individual patient data meta analysis using 'JAGS'
+#' bipd: A package for individual patient data meta-analysis using 'JAGS'
 #'
-#' A package for running Bayesian individual patient data meta analysis
+#' A package for running Bayesian individual patient data meta-analysis
 #'
 #' We use a Bayesian approach to run individual patient data meta-analysis using 'JAGS'. 
 #' The methods incorporate shrinkage methods and calculate patient-specific treatment effects as described in Seo et al. (2021) <DOI:10.1002/sim.8859>. 

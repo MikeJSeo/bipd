@@ -3,9 +3,9 @@
 \docType{package}
 \name{bipd-package}
 \alias{bipd-package}
-\title{bipd: A package for individual patient data meta analysis using 'JAGS'}
+\title{bipd: A package for individual patient data meta-analysis using 'JAGS'}
 \description{
-A package for running Bayesian individual patient data meta analysis
+A package for running Bayesian individual patient data meta-analysis
 }
 \details{
 We use a Bayesian approach to run individual patient data meta-analysis using 'JAGS'. 
