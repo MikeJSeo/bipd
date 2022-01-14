@@ -13,6 +13,8 @@ The methods incorporate shrinkage methods and calculate patient-specific treatme
 This package also includes user-friendly functions that impute missing data in an individual patient data using mice-related packages.
 }
 \references{
+Audigier V, White I, Jolani S, et al. Multiple Imputation for Multilevel Data with Continuous and Binary Variables. \emph{Statistical Science}. 2018;33(2):160-183. \doi{10.1214/18-STS646}
+
 Debray TPA, Moons KGM, Valkenhoef G, et al. Get real in individual participant data (IPD) meta-analysis: a review of the methodology. \emph{Res Synth Methods}. 2015;6(4):293-309. \doi{10.1002/jrsm.1160}
 
 Fisher DJ, Carpenter JR, Morris TP, et al. Meta-analytical methods to identify who benefits most from treatments: daft, deluded, or deft approach?. \emph{BMJ}. 2017;356:j573 \doi{10.1136/bmj.j573}

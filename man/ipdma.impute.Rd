@@ -27,8 +27,7 @@ ipdma.impute(
 Order should follow that of covariates parameter specified. Covariates that are specified "binary" are automatically factored.}
 
 \item{sys_impute_method}{Method used for systematically missing studies. Options are "2l.glm", "2l.2stage", or "2l.jomo". Default is set to "2l.2stage".
-For more details, Read micemd package for suggestions on which method to use depending on observed clusters and observed values per cluster.
-There is also last option where you simply ignore all the clustering level and impute using predictive mean matching. To specify such option, set this parameter to "pmm".}
+There is also an option to ignore all the clustering level and impute using predictive mean matching by setting this parameter to "pmm".}
 
 \item{interaction}{Indicator denoting whether treatment-covariate interactions should be included. Default is set to true.}
 
@@ -53,8 +52,8 @@ There is also last option where you simply ignore all the clustering level and i
 }
 \description{
 Impute missing data in individual participant data with two treatments. Data is clustered by different studies.
-In the presence of systematically missing variables, the function uses 2l.2stage.norm, 2l.2stage.bin, 
-and 2l.2stage.pois methods in micemd package depending on the type of the covariates to impute. 
+In the presence of systematically missing variables, the function defaults to 2l.2stage.norm, 2l.2stage.bin, 
+and 2l.2stage.pois methods in micemd package. 
 If there are no systematically missing variables, the function defaults to use 2l.pmm in miceadds package 
 which generalizes predictive mean matching using linear mixed model.
 If there is only one study available, the function defaults to use pmm in mice package.
