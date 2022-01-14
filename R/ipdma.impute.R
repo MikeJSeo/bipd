@@ -64,18 +64,6 @@ ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, sy
 }
 
 
-#' Function to preprocess dataset
-#' 
-#' Function to preprocess dataset: select only needed variables, change binary variables to factors, includes interaction terms if interaction is specified.
-#'
-#' @param dataset Data which contains variables of interests
-#' @param covariates Vector of variable names that the user is interested in finding a missing data pattern
-#' @param typeofvar Type of covariate variables; should be a vector of these values: "continuous", "binary", or "count". Order should follow that of covariates parameter.
-#' @param interaction Indicator denoting whether treatment-covariate interactions should be included. Default is set to true.
-#' @param studyname Study name in the data specified.
-#' @param treatmentname Treatment name in the data specified.
-#' @param outcomename Outcome name in the data specified.
-
 preprocess.data <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, interaction = NULL,
                             studyname = NULL, treatmentname = NULL, outcomename = NULL){
 
@@ -182,19 +170,6 @@ findMissingPattern <- function(dataset = NULL, covariates = NULL, typeofvar = NU
 
 
 
-#' Find correct imputation method to be used in the mice package
-#'
-#' Find correct imputation method for the mice package
-#'
-#' @param dataset data which contains variables of interest
-#' @param missingPattern missing pattern object created using \code{\link{findMissingPattern}}
-#' @param sys_impute_method Method used for systematically missing studies. Options are "2l.glm", 2l.2stage", or "2l.jomo". Default is set to "2l.2stage".
-#' For more details, Read micemd package for suggestions on which method to use depending on observed clusters and observed values per cluster.
-#' There is also last option where you simply ignore all the clustering level and impute using predictive mean matching. To specify such option, set this parameter to "pmm".
-#' @param interaction Indicator denoting whether treatment-covariate interactions should be included. Default is set to true.#'
-
-#Find correct imputation method to be used in the mice package
-
 getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, sys_impute_method = "2l.2stage", interaction = TRUE){
   
   if(is.null(dataset) | is.null(missingPattern)){
@@ -289,14 +264,6 @@ getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, sys_impute_met
 
 }
 
-
-#' Find correct imputation prediction matrix to be used in the mice package
-#'
-#' Find correct imputation prediction matrix for the mice package
-#'
-#' @param dataset data which contains variables of interest
-#' @param missingPattern missing pattern object created using \code{\link{findMissingPattern}}
-#' @param interaction Indicator denoting whether treatment-covariate interactions should be included. Default is set to true.
 
 getCorrectPred <- function(dataset = NULL, missingPattern = NULL, interaction = TRUE){
   
