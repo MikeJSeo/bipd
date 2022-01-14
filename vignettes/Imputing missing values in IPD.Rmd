@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-We describe how to impute missing data in an individual patient data (IPD) using multiple imputation. However, this package is not restricted to IPD, but can also be used for multilevel data. This package conveniently sets up input parameters that are needed to use imputation methods in mice and mice-extended packages (micemd and miceadds). We will first simulate a mock data that we will use for illustration.
+We describe how to impute missing data in an individual patient data (IPD) using multiple imputation. However, this package is not restricted to IPD, but can also be used for multilevel data. This method is most appropriate for IPD with two treatments (i.e. placebo and treatment). This package conveniently sets up input parameters that are needed to use imputation methods in mice and mice-extended packages (micemd and miceadds). We will first simulate a mock data that we will use for illustration.
 
 ## Missing data exploration
 
@@ -67,8 +67,8 @@ library(micemd) #for multilevel datasets with systematically missing predictors.
 
 We can impute missing variables using ipdma.impute function that automatically sets up parameters and calls the mice imputation function.
 
-```{r, warning = FALSE, message = FALSE, results = 'hide', comment = FALSE}
-imputation <- ipdma.impute(simulated_dataset, covariates = c("x1", "x2", "x3", "x4", "x5"), typeofvar = c("continuous", "binary", "binary", "continuous", "continuous"), interaction = TRUE, studyname = "study", treatmentname = "treat", outcomename = "y", m = 10)    
+```{r}
+imputation <- ipdma.impute(simulated_dataset, covariates = c("x1", "x2", "x3", "x4", "x5"), typeofvar = c("continuous", "binary", "binary", "continuous", "continuous"), interaction = TRUE, studyname = "study", treatmentname = "treat", outcomename = "y", m = 5)    
 ```
 
 There are a lot to describe what goes underneath this function (ipdma.impute). The most important parameters that are automatically set up are: imputation method (meth) and predictor matrix (pred). "meth" specifies the imputation method for each incomplete covariates and "pred" specifies the variables that are used to impute each incomplete variable. Let's see what was used in the imputation process.
@@ -84,15 +84,15 @@ Note that the systematically missing variables are assigned imputation methods (
 ls(imputation)
 ```
 
-There are two additional output from the ipdma.impute function. 'imp' gives you the raw object that is returned from the mice function and 'imp.list' gives you the imputed datasets in a list format. You may use whichever format that is easier for your analysis. Note that we have specified to generate 10 imputed datasets through specifying parameter m = 10.
+There are two additional output from the ipdma.impute function. 'imp' gives you the raw object that is returned from the mice function and 'imp.list' gives you the imputed datasets in a list format. You may use whichever format that is easier for your analysis. Note that we have specified to generate 5 imputed datasets through specifying parameter m = 5.
 
 ```{r}
 length(imputation$imp.list)
 ```
 
-Let's try another example using the dataset that has sporadically missing predictor that we have created previously. For this example, we assume that we do not include treatment-covariate interactions and we use a different imputation method for systematically missing variables. "interaction" parameter tells the program whether to include treatment-covariate interactions in the imputation model. See help(ipdma.impute) for more details on the parameters.
+Let's try another example using the dataset that has sporadically missing predictor that we have created previously. For this example, we assume that we do not include treatment-covariate interactions and we use a different imputation method for systematically missing variables. "interaction" parameter tells the program whether to include treatment-covariate interactions in the imputation model. Currently this function only works for two treatment. We have not generalized it to multiple treatments and which is why it is called IPDMA and not IPDNMA. See help(ipdma.impute) for more details on the parameters.
 
-```{r, warning = FALSE, message = FALSE, results = 'hide', comment = FALSE}
+```{r}
 imputation2 <- ipdma.impute(simulated_dataset2, covariates = c("x1", "x2", "x3", "x4", "x5"), typeofvar = c("continuous", "binary", "binary", "continuous", "continuous"), sys_impute_method = "2l.glm", interaction = FALSE, studyname = "study", treatmentname = "treat", outcomename = "y", m = 5)  
 ```
 
@@ -105,10 +105,18 @@ imputation2$pred
 
 Since x1 is sporadically missing we have assigned a suitable imputation method (2l.pmm) which is from the miceadds package. This method uses predictive mean matching based on predictions from the linear mixed model. If the user would like to specify a different method for imputing x1, user can simply change the method by specifying the "meth" parameter in the ipdma.impute function.
 
-```{r, warning = FALSE, message = FALSE, results = 'hide', comment = FALSE}
+```{r}
 meth <- imputation2$meth
 meth["x1"] <- "2l.norm"
 imputation2 <- ipdma.impute(simulated_dataset2, covariates = c("x1", "x2", "x3", "x4", "x5"), typeofvar = c("continuous", "binary", "binary", "continuous", "continuous"), sys_impute_method = "2l.glm", interaction = FALSE, studyname = "study", treatmentname = "treat", outcomename = "y", m = 5, meth = meth) 
 ```
 
 Note how we have changed imputation method for x1 to normal linear mixed effects model (2l.norm). Similarly, the predictor matrix can be changed to adapt to user's needs by specifying "pred" differently.
+
+## Try your data
+
+It is quite likely that the with the data you have the multiple imputation accounting for study level do not work and requires some preprocessing. For instance, if you have a study where all patients observed were female, then the imputation methods that account for systematically missing predictors (i.e. methods from micemd) would not work. similarly, if you decide to include treatment-covariate interactions in the imputation model and a study administered treatment only to patients who were taking anti-psychotic drugs (binary covariate) then more advanced imputation models might not work. If for whatever reason multiple imputaiton method fails, I suggest first trying the simple multiple imputation method that ignore accounting for study level. "pmm" is a nice place to start and is the default method in the mice function. From impdma.impute function, user can specify it by setting sys_impute_method = "pmm".
+
+```{r}
+imputation2 <- ipdma.impute(simulated_dataset2, covariates = c("x1", "x2", "x3", "x4", "x5"), typeofvar = c("continuous", "binary", "binary", "continuous", "continuous"), sys_impute_method = "pmm", interaction = FALSE, studyname = "study", treatmentname = "treat", outcomename = "y", m = 5) 
+```

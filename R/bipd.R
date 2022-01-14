@@ -2,10 +2,9 @@
 #'
 #' A package for running Bayesian individual patient data meta analysis
 #'
-#' We use a Bayesian approach to run individual patient data meta analysis. The methods allow shrinkage of effect modifiers as described in Seo et al.
-#' This package is a user friendly application that can run models without having to code a JAGS model.
-#' The program takes the input data and transforms it to a suitable format of analysis, generates a JAGS model and runs the model through the rjags package.
-#' Furthermore, package includes functions to calculate measures such as patient-specific treatment effect.
+#' We use a Bayesian approach to run individual patient data meta-analysis using 'JAGS'. 
+#' The methods incorporate shrinkage methods and calculate patient-specific treatment effects as described in Seo et al. (2021) <DOI:10.1002/sim.8859>. 
+#' This package also includes user-friendly functions that impute missing data in an individual patient data using mice-related packages.
 #'
 #' @docType package
 #' @name bipd-package

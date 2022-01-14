@@ -11,7 +11,7 @@ getCorrectPred(dataset = NULL, missingPattern = NULL, interaction = TRUE)
 
 \item{missingPattern}{missing pattern object created using \code{\link{findMissingPattern}}}
 
-\item{interaction}{Indicator denoting whether treatment-covariate interactions should be included. Default is set to true.#'}
+\item{interaction}{Indicator denoting whether treatment-covariate interactions should be included. Default is set to true.}
 }
 \description{
 Find correct imputation prediction matrix for the mice package

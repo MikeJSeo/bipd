@@ -3,15 +3,14 @@
 \docType{package}
 \name{bipd-package}
 \alias{bipd-package}
-\title{bipd: A package for individual patient data (network) meta analysis using 'JAGS'}
+\title{bipd: A package for individual patient data meta analysis using 'JAGS'}
 \description{
-A package for running Bayesian individual patient data (network) meta analysis
+A package for running Bayesian individual patient data meta analysis
 }
 \details{
-We use a Bayesian approach to run individual patient data (network) meta analysis. The methods allow shrinkage of effect modifiers as described in Seo et al.
-This package is a user friendly application that can run models without having to code a JAGS model.
-The program takes the input data and transforms it to a suitable format of analysis, generates a JAGS model and runs the model through the rjags package.
-Furthermore, package includes functions to calculate measures such as patient-specific treatment effect.
+We use a Bayesian approach to run individual patient data meta-analysis using 'JAGS'. 
+The methods incorporate shrinkage methods and calculate patient-specific treatment effects as described in Seo et al. (2021) <DOI:10.1002/sim.8859>. 
+This package also includes user-friendly functions that impute missing data in an individual patient data using mice-related packages.
 }
 \references{
 Debray TPA, Moons KGM, Valkenhoef G, et al. Get real in individual participant data (IPD) meta-analysis: a review of the methodology. \emph{Res Synth Methods}. 2015;6(4):293-309. \doi{10.1002/jrsm.1160}
