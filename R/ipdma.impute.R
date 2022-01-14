@@ -113,7 +113,7 @@ preprocess.data <- function(dataset = NULL, covariates = NULL, typeofvar = NULL,
 
 #' Find missing data pattern in a given data
 #'
-#' Find missing data pattern in a given data i.e. whether they are systematically missing or sporadically missing. Also calculates missing count and percentage for exploratory purposes.
+#' Find missing data pattern in a given data i.e. whether variables are systematically missing or sporadically missing. Also calculates missing count and percentage for exploratory purposes.
 #'
 #' @param dataset Data which contains variables of interests
 #' @param covariates Vector of variable names that the user is interested in finding a missing data pattern

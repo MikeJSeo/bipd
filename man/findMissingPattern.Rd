@@ -27,5 +27,5 @@ findMissingPattern(
 \item{outcomename}{Outcome name in the data specified.}
 }
 \description{
-Find missing data pattern in a given data i.e. whether they are systematically missing or sporadically missing. Also calculates missing count and percentage for exploratory purposes.
+Find missing data pattern in a given data i.e. whether variables are systematically missing or sporadically missing. Also calculates missing count and percentage for exploratory purposes.
 }
