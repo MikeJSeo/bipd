@@ -71,7 +71,6 @@ This function sets up data and JAGS code that is needed to run (deft-approach) o
 }
 \examples{
 ds <- generate_ipdma_example(type = "continuous")
-
 ipd <- with(ds, ipdma.model.deft.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), 
 response = "normal"))
 cat(ipd$code)
