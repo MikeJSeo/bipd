@@ -8,9 +8,9 @@
 #' 
 #' @param ipd IPD object created from running model functions i.e. `ipdma.onestage.model`
 #' @param samples MCMC samples found from running `ipd.run`
-#' @param newpatient Covariate values of patients that you want to predict treatment effect on. Must have length equal to total number of covariates.
-#' @param reference Reference group used for finding patient-specific treatment effect. This is only used for "deft" approach
-#' @param quantiles Quantiles finding credible interval of the patient-specific treatment effect
+#' @param newpatient covariate values of patients that you want to predict treatment effect on. Must have length equal to total number of covariates.
+#' @param reference reference group used for finding patient-specific treatment effect. This is only used for "deft" approach
+#' @param quantiles quantiles finding credible interval of the patient-specific treatment effect
 #' @examples
 #' ds <- generate_ipdma_example(type = "continuous")
 #' ipd <- with(ds, ipdma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), 

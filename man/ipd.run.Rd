@@ -15,22 +15,22 @@ ipd.run(
 )
 }
 \arguments{
-\item{ipd}{ipd object created from ipd.data function}
+\item{ipd}{ipd object created from ipd.model type function}
 
-\item{pars.save}{parameters to save. "beta" - coefficients for main effects; "gamma" - coefficients for effect modifiers; "delta" - average treaetment effect}
+\item{pars.save}{parameters to save. For instance, "beta" - coefficients for main effects; "gamma" - coefficients for effect modifiers; "delta" - average treatment effect}
 
 \item{inits}{initial values specified for the parameters to save}
 
-\item{n.chains}{Number of MCMC chains to sample}
+\item{n.chains}{number of MCMC chains to sample}
 
-\item{n.adapt}{The number of iterations for adaptation (Note that the samples from adaptation phase is non-Markovian and do not constitute a Markov chain)}
+\item{n.adapt}{number of iterations for adaptation (Note that the samples from adaptation phase is non-Markovian and do not constitute a Markov chain)}
 
-\item{n.burnin}{The number of iterations for burn-in}
+\item{n.burnin}{number of iterations for burn-in}
 
-\item{n.iter}{The number of iterations to run after the adaptation}
+\item{n.iter}{number of iterations to run after the adaptation}
 }
 \description{
-This is the core function that runs the model in our program. Before running this function, we need to specify data, prior, JAGS code, etc. using ipd.data function.
+This is the core function that runs the model in our program. Before running this function, we need to specify data, prior, JAGS code, etc. using ipd.model type function.
 }
 \examples{
 ds <- generate_ipdma_example(type = "continuous")

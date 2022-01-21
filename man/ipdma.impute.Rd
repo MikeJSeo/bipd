@@ -19,29 +19,29 @@ ipdma.impute(
 )
 }
 \arguments{
-\item{dataset}{Data which contains variables of interests}
+\item{dataset}{data which contains variables of interests}
 
-\item{covariates}{Vector of variable names to find missing data pattern}
+\item{covariates}{vector of variable names to find missing data pattern}
 
-\item{typeofvar}{Type of covariate variables; should be a vector of these values: "continuous", "binary", or "count".
+\item{typeofvar}{type of covariate variables; should be a vector of these values: "continuous", "binary", or "count".
 Order should follow that of covariates parameter specified. Covariates that are specified "binary" are automatically factored.}
 
-\item{sys_impute_method}{Method used for systematically missing studies. Options are "2l.glm", "2l.2stage", or "2l.jomo". Default is set to "2l.2stage".
+\item{sys_impute_method}{method used for systematically missing studies. Options are "2l.glm", "2l.2stage", or "2l.jomo". Default is set to "2l.2stage".
 There is also an option to ignore all the clustering level and impute using predictive mean matching by setting this parameter to "pmm".}
 
-\item{interaction}{Indicator denoting whether treatment-covariate interactions should be included. Default is set to true.}
+\item{interaction}{indicator denoting whether treatment-covariate interactions should be included. Default is set to true.}
 
-\item{meth}{User can specify imputation method to be used in the mice package. If left unspecified, function picks a reasonable one.}
+\item{meth}{imputation method to be used in the mice package. If left unspecified, function picks a reasonable one.}
 
-\item{pred}{User can specify correct prediction matrix to be used in the mice package. If left unspecified, function picks a reasonable one.}
+\item{pred}{correct prediction matrix to be used in the mice package. If left unspecified, function picks a reasonable one.}
 
-\item{studyname}{Study name in the data specified.}
+\item{studyname}{study name in the data specified.}
 
-\item{treatmentname}{Treatment name in the data specified.}
+\item{treatmentname}{treatment name in the data specified.}
 
-\item{outcomename}{Outcome name in the data specified.}
+\item{outcomename}{outcome name in the data specified.}
 
-\item{m}{Number of imputed datasets. Default is set to 5.}
+\item{m}{number of imputed datasets. Default is set to 5.}
 }
 \value{
 \item{missingPattern}{missing Pattern object returned by running \code{\link{findMissingPattern}}}

@@ -17,11 +17,11 @@ treatment.effect(
 
 \item{samples}{MCMC samples found from running `ipd.run`}
 
-\item{newpatient}{Covariate values of patients that you want to predict treatment effect on. Must have length equal to total number of covariates.}
+\item{newpatient}{covariate values of patients that you want to predict treatment effect on. Must have length equal to total number of covariates.}
 
-\item{reference}{Reference group used for finding patient-specific treatment effect. This is only used for "deft" approach}
+\item{reference}{reference group used for finding patient-specific treatment effect. This is only used for "deft" approach}
 
-\item{quantiles}{Quantiles finding credible interval of the patient-specific treatment effect}
+\item{quantiles}{quantiles finding credible interval of the patient-specific treatment effect}
 }
 \description{
 Convenient function for calculating the patient-specific treatment effect.

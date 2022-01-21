@@ -14,17 +14,17 @@ findMissingPattern(
 )
 }
 \arguments{
-\item{dataset}{Data which contains variables of interests}
+\item{dataset}{data which contains variables of interests}
 
-\item{covariates}{Vector of variable names that the user is interested in finding a missing data pattern}
+\item{covariates}{vector of variable names that the user is interested in finding a missing data pattern}
 
-\item{typeofvar}{Type of covariate variables; should be a vector of these values: "continuous", "binary", or "count". Order should follow that of covariates parameter.}
+\item{typeofvar}{type of covariate variables; should be a vector of these values: "continuous", "binary", or "count". Order should follow that of covariates parameter.}
 
-\item{studyname}{Study name in the data specified.}
+\item{studyname}{study name in the data specified.}
 
-\item{treatmentname}{Treatment name in the data specified.}
+\item{treatmentname}{treatment name in the data specified.}
 
-\item{outcomename}{Outcome name in the data specified.}
+\item{outcomename}{outcome name in the data specified.}
 }
 \description{
 Find missing data pattern in a given data i.e. whether variables are systematically missing or sporadically missing. Also calculates missing count and percentage for exploratory purposes.

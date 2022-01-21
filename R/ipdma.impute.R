@@ -8,19 +8,19 @@
 #' which generalizes predictive mean matching using linear mixed model.
 #' If there is only one study available, the function defaults to use pmm in mice package.
 #'
-#' @param dataset Data which contains variables of interests
-#' @param covariates Vector of variable names to find missing data pattern
-#' @param typeofvar Type of covariate variables; should be a vector of these values: "continuous", "binary", or "count".
+#' @param dataset data which contains variables of interests
+#' @param covariates vector of variable names to find missing data pattern
+#' @param typeofvar type of covariate variables; should be a vector of these values: "continuous", "binary", or "count".
 #' Order should follow that of covariates parameter specified. Covariates that are specified "binary" are automatically factored.
-#' @param sys_impute_method Method used for systematically missing studies. Options are "2l.glm", "2l.2stage", or "2l.jomo". Default is set to "2l.2stage".
+#' @param sys_impute_method method used for systematically missing studies. Options are "2l.glm", "2l.2stage", or "2l.jomo". Default is set to "2l.2stage".
 #' There is also an option to ignore all the clustering level and impute using predictive mean matching by setting this parameter to "pmm".
-#' @param interaction Indicator denoting whether treatment-covariate interactions should be included. Default is set to true.
-#' @param meth User can specify imputation method to be used in the mice package. If left unspecified, function picks a reasonable one.
-#' @param pred User can specify correct prediction matrix to be used in the mice package. If left unspecified, function picks a reasonable one.
-#' @param studyname Study name in the data specified.
-#' @param treatmentname Treatment name in the data specified.
-#' @param outcomename Outcome name in the data specified.
-#' @param m Number of imputed datasets. Default is set to 5.
+#' @param interaction indicator denoting whether treatment-covariate interactions should be included. Default is set to true.
+#' @param meth imputation method to be used in the mice package. If left unspecified, function picks a reasonable one.
+#' @param pred correct prediction matrix to be used in the mice package. If left unspecified, function picks a reasonable one.
+#' @param studyname study name in the data specified.
+#' @param treatmentname treatment name in the data specified.
+#' @param outcomename outcome name in the data specified.
+#' @param m number of imputed datasets. Default is set to 5.
 #' @return 
 #' \item{missingPattern}{missing Pattern object returned by running \code{\link{findMissingPattern}}}
 #' \item{meth}{imputation method used with the mice function}
@@ -113,12 +113,12 @@ preprocess.data <- function(dataset = NULL, covariates = NULL, typeofvar = NULL,
 #'
 #' Find missing data pattern in a given data i.e. whether variables are systematically missing or sporadically missing. Also calculates missing count and percentage for exploratory purposes.
 #'
-#' @param dataset Data which contains variables of interests
-#' @param covariates Vector of variable names that the user is interested in finding a missing data pattern
-#' @param typeofvar Type of covariate variables; should be a vector of these values: "continuous", "binary", or "count". Order should follow that of covariates parameter.
-#' @param studyname Study name in the data specified.
-#' @param treatmentname Treatment name in the data specified.
-#' @param outcomename Outcome name in the data specified.
+#' @param dataset data which contains variables of interests
+#' @param covariates vector of variable names that the user is interested in finding a missing data pattern
+#' @param typeofvar type of covariate variables; should be a vector of these values: "continuous", "binary", or "count". Order should follow that of covariates parameter.
+#' @param studyname study name in the data specified.
+#' @param treatmentname treatment name in the data specified.
+#' @param outcomename outcome name in the data specified.
 #' @examples
 #' simulated_dataset <- generate_sysmiss_ipdma_example(Nstudies = 10, Ncov = 5, sys_missing_prob = 0.3, 
 #' magnitude = 0.2, heterogeneity = 0.1)
