@@ -6,7 +6,7 @@ output: rmarkdown::html_vignette
 vignette: >
   %\VignetteEngine{knitr::knitr}
   %\VignetteIndexEntry{Imputing missing values in IPD}
-  \usepackage[utf8]{inputenc}
+  %\usepackage[utf8]{inputenc}
 editor_options: 
   chunk_output_type: console
 ---

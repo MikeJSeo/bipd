@@ -5,7 +5,7 @@ Version: 0.1
 Date: 2022-01-21
 Depends: R (>= 2.10)
 Imports: rjags (>= 4-6), coda (>= 0.13), mvtnorm, dplyr
-Suggests: dclone, R2WinBUGS, mice, micemd, miceadds, mitools, markdown, knitr
+Suggests: dclone, R2WinBUGS, mice, micemd, miceadds, mitools, rmarkdown, VignetteBuilder: knitr
 Authors@R: c( 
 	person("Michael", "Seo", email = "swj8874@gmail.com", role = c("aut", "cre")))
 Description: We use a Bayesian approach to run individual patient data meta-analysis using 'JAGS'. The methods incorporate shrinkage methods and calculate patient-specific treatment effects as described in Seo et al. (2021) <DOI:10.1002/sim.8859>. This package also includes user-friendly functions that impute missing data in an individual patient data using mice-related packages.
