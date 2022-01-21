@@ -64,9 +64,9 @@ ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, sy
     }
   }
 
-  imp <- mice(dataset.preprocessed, pred = pred, meth = meth, m = m)
+  imp <- mice::mice(dataset.preprocessed, pred = pred, meth = meth, m = m)
   
-  impc <- complete(imp, "long", include = "TRUE")
+  impc <- mice::complete(imp, "long", include = "TRUE")
   impc.store <- impc[, c(".imp", ".id", studyname, outcomename, covariates, grep(treatmentname, colnames(impc), value = TRUE))]
   imp.list <- mitools::imputationList(split(impc.store, impc.store[,1])[-1])$imputations
 

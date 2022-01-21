@@ -99,6 +99,7 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
   
   code2 <- substring(code, 10)
   code2 <- sub("T(0,)", ";T(0,)", code2, fixed = T)
+  model.JAGS <- NULL
   eval(parse(text = paste('model.JAGS <- function() {', code2, sep='')))
 
   ipd <- list(data.JAGS = data.JAGS, code = code, model.JAGS = model.JAGS, response = response, scale_mean = scale_mean, scale_sd = scale_sd)
