@@ -198,7 +198,7 @@ getCorrectMeth <- function(dataset = NULL, missingPattern = NULL, sys_impute_met
     
     totalstudies <- dataset %>% select(all_of(studyname)) %>% n_distinct()
     
-    meth <- make.method(dataset)
+    meth <- mice::make.method(dataset)
     if(totalstudies == 1){
       
       meth[paste0(without_sys_covariates, treatmentname)] <- paste0("~ I(as.numeric(as.character(", without_sys_covariates, ")) *", treatmentname, ")")

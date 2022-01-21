@@ -2,11 +2,11 @@
 title: "IPD meta-analysis"
 author: "Michael Seo"
 date: "`r Sys.Date()`"
-output: pdf_document
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteEngine{knitr::knitr}
   %\VignetteIndexEntry{IPD meta-analysis}
-  %\usepackage[UTF-8]{inputenc}
+  \usepackage[utf8]{inputenc}
 editor_options: 
   chunk_output_type: console
 ---

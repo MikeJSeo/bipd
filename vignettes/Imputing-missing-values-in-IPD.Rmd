@@ -2,11 +2,11 @@
 title: "Imputing missing values in IPD"
 author: "Michael Seo"
 date: "`r Sys.Date()`"
-output: pdf_document
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteEngine{knitr::knitr}
   %\VignetteIndexEntry{Imputing missing values in IPD}
-  %\usepackage[UTF-8]{inputenc}
+  \usepackage[utf8]{inputenc}
 editor_options: 
   chunk_output_type: console
 ---
