@@ -13,9 +13,11 @@
 #' @param quantiles Quantiles finding credible interval of the patient-specific treatment effect
 #' @examples
 #' ds <- generate_ipdma_example(type = "continuous")
-#' ipd <- with(ds, ipdma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "none"))
+#' ipd <- with(ds, ipdma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), 
+#' response = "normal", shrinkage = "none"))
 #' \donttest{
-#' samples <- ipd.run(ipd, pars.save = c("beta", "gamma", "delta"), n.chains = 3, n.burnin = 500, n.iter = 5000)
+#' samples <- ipd.run(ipd, pars.save = c("beta", "gamma", "delta"), n.chains = 3, n.burnin = 500, 
+#' n.iter = 5000)
 #' treatment.effect(ipd, samples, newpatient = c(1,0.5))
 #' }
 #' @references Seo M, White IR, Furukawa TA, et al. Comparing methods for estimating patient-specific treatment effects in individual patient data meta-analysis. \emph{Stat Med}. 2021;40(6):1553-1573. \doi{10.1002/sim.8859}
