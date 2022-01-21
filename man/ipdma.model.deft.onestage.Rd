@@ -71,9 +71,11 @@ This function sets up data and JAGS code that is needed to run one-stage IPD-MA 
 }
 \examples{
 ds <- generate_ipdma_example(type = "continuous")
-ipd <- with(ds, ipdma.model.deft.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "none"))
+ipd <- with(ds, ipdma.model.deft.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), 
+response = "normal", shrinkage = "none"))
 \donttest{
-samples <- ipd.run(ipd, pars.save = c("beta", "gamma", "delta"), n.chains = 3, n.burnin = 500, n.iter = 5000)
+samples <- ipd.run(ipd, pars.save = c("beta", "gamma", "delta"), n.chains = 3, n.burnin = 500, 
+n.iter = 5000)
 treatment.effect(ipd, samples, newpatient= c(1,0.5), reference = c(0, 0))
 }
 }

@@ -32,9 +32,12 @@
 #' # library(mice) #for datasets with only one study level
 #' # library(miceadds) #for multilevel datasets without systematically missing predictors
 #' # library(micemd) #for multilevel datasets with systematically missing predictors.
-#' simulated_dataset <- generate_sysmiss_ipdma_example(Nstudies = 10, Ncov = 5, sys_missing_prob = 0.3, magnitude = 0.2, heterogeneity = 0.1)
+#' simulated_dataset <- generate_sysmiss_ipdma_example(Nstudies = 10, Ncov = 5, sys_missing_prob = 0.3, 
+#' magnitude = 0.2, heterogeneity = 0.1)
 #' \donttest{
-#' imputation <- ipdma.impute(simulated_dataset, covariates = c("x1", "x2", "x3", "x4", "x5"), typeofvar = c("continuous", "binary", "binary", "continuous", "continuous"), interaction = TRUE, studyname = "study", treatmentname = "treat", outcomename = "y", m = 5)
+#' imputation <- ipdma.impute(simulated_dataset, covariates = c("x1", "x2", "x3", "x4", "x5"), 
+#' typeofvar = c("continuous", "binary", "binary", "continuous", "continuous"), interaction = TRUE, 
+#' studyname = "study", treatmentname = "treat", outcomename = "y", m = 5)
 #' }
 #' @export
 
@@ -117,9 +120,12 @@ preprocess.data <- function(dataset = NULL, covariates = NULL, typeofvar = NULL,
 #' @param treatmentname Treatment name in the data specified.
 #' @param outcomename Outcome name in the data specified.
 #' @examples
-#' simulated_dataset <- generate_sysmiss_ipdma_example(Nstudies = 10, Ncov = 5, sys_missing_prob = 0.3, magnitude = 0.2, heterogeneity = 0.1)
+#' simulated_dataset <- generate_sysmiss_ipdma_example(Nstudies = 10, Ncov = 5, sys_missing_prob = 0.3, 
+#' magnitude = 0.2, heterogeneity = 0.1)
 #' \donttest{
-#' missP <- findMissingPattern(simulated_dataset, covariates = c("x1", "x2", "x3", "x4", "x5"), typeofvar = c("continuous", "binary", "binary", "continuous", "continuous"), studyname = "study",  treatmentname = "treat", outcomename = "y")
+#' missP <- findMissingPattern(simulated_dataset, covariates = c("x1", "x2", "x3", "x4", "x5"), 
+#' typeofvar = c("continuous", "binary", "binary", "continuous", "continuous"), studyname = "study",  
+#' treatmentname = "treat", outcomename = "y")
 #' missP
 #' }
 #' @export
