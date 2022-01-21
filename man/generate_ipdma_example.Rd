@@ -12,3 +12,7 @@ generate_ipdma_example(type = "continuous")
 \description{
 Generate a fake IPD-MA data for demonstration
 }
+\examples{
+ds <- generate_ipdma_example(type = "continuous")
+head(ds)
+}

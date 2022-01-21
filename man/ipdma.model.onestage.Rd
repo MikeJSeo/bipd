@@ -85,6 +85,10 @@ It should be a list of length 3, where first element should be the distribution 
 \description{
 This function sets up data and JAGS code that is needed to run one-stage IPD-MA models in JAGS.
 }
+\examples{
+ds <- generate_ipdma_example(type = "continuous")
+ipd <- with(ds, ipdma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "none"))
+}
 \references{
 Seo M, White IR, Furukawa TA, et al. Comparing methods for estimating patient-specific treatment effects in individual patient data meta-analysis. \emph{Stat Med}. 2021;40(6):1553-1573. \doi{10.1002/sim.8859}
 }

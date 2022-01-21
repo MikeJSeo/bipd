@@ -26,6 +26,13 @@
 #' \item{model.JAGS}{JAGS code in a function. This is used when running model in parallel}
 #' \item{Xbar}{Study specific average of covariates}
 #' @references Fisher DJ, Carpenter JR, Morris TP, et al. Meta-analytical methods to identify who benefits most from treatments: daft, deluded, or deft approach?. \emph{BMJ}. 2017;356:j573 \doi{10.1136/bmj.j573}
+#' @examples
+#' ds <- generate_ipdma_example(type = "continuous")
+#' ipd <- with(ds, ipdma.model.deft.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "none"))
+#' \donttest{
+#' samples <- ipd.run(ipd, pars.save = c("beta", "gamma", "delta"), n.chains = 3, n.burnin = 500, n.iter = 5000)
+#' treatment.effect(ipd, samples, newpatient= c(1,0.5), reference = c(0, 0))
+#' }
 #' @export
 
 ipdma.model.deft.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL, 

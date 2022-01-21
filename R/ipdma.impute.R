@@ -27,7 +27,15 @@
 #' \item{pred}{prediction matrix used with the mice function}
 #' \item{imp}{imputed datasets that is returned from the mice function}
 #' \item{imp.list}{imputed datasets in a list format}
-#'
+#' @examples
+#' # load in mice packages
+#' # library(mice) #for datasets with only one study level
+#' # library(miceadds) #for multilevel datasets without systematically missing predictors
+#' # library(micemd) #for multilevel datasets with systematically missing predictors.
+#' simulated_dataset <- generate_sysmiss_ipdma_example(Nstudies = 10, Ncov = 5, sys_missing_prob = 0.3, magnitude = 0.2, heterogeneity = 0.1)
+#' \donttest{
+#' imputation <- ipdma.impute(simulated_dataset, covariates = c("x1", "x2", "x3", "x4", "x5"), typeofvar = c("continuous", "binary", "binary", "continuous", "continuous"), interaction = TRUE, studyname = "study", treatmentname = "treat", outcomename = "y", m = 5)
+#' }
 #' @export
 
 ipdma.impute <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, sys_impute_method = "2l.2stage", interaction = NULL,
@@ -108,7 +116,12 @@ preprocess.data <- function(dataset = NULL, covariates = NULL, typeofvar = NULL,
 #' @param studyname Study name in the data specified.
 #' @param treatmentname Treatment name in the data specified.
 #' @param outcomename Outcome name in the data specified.
-#' 
+#' @examples
+#' simulated_dataset <- generate_sysmiss_ipdma_example(Nstudies = 10, Ncov = 5, sys_missing_prob = 0.3, magnitude = 0.2, heterogeneity = 0.1)
+#' \donttest{
+#' missP <- findMissingPattern(simulated_dataset, covariates = c("x1", "x2", "x3", "x4", "x5"), typeofvar = c("continuous", "binary", "binary", "continuous", "continuous"), studyname = "study",  treatmentname = "treat", outcomename = "y")
+#' missP
+#' }
 #' @export
 
 findMissingPattern <- function(dataset = NULL, covariates = NULL, typeofvar = NULL, 

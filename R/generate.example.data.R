@@ -8,8 +8,9 @@
 #' @param magnitude magnitude of the regression estimates (the mean). Default is set to 0.2.
 #' @param heterogeneity heterogeneity of regression estimates across studies. Default is set to 0.1.
 #' @param interaction whether to include treatment indicator and treatment 
-#' @return 
-#' \item{dataset}{dataset containing y (outcome), x (covariates), study indicator, and treatment indicator}
+#' @examples
+#' simulated_dataset <- generate_sysmiss_ipdma_example(Nstudies = 10, Ncov = 5, sys_missing_prob = 0.3, magnitude = 0.2, heterogeneity = 0.1)
+#' head(simulated_dataset)
 #' @export
 
 generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_prob = 0.1, magnitude = 0.3,
@@ -126,7 +127,9 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
 #'
 #' Generate a fake IPD-MA data for demonstration
 #' @param type "continuous" for continuous outcome and "binary" for binary outcome
-#'
+#' @examples
+#' ds <- generate_ipdma_example(type = "continuous")
+#' head(ds)
 #' @export
 
 generate_ipdma_example <- function(type = "continuous"){

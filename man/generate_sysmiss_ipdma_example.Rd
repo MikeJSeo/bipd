@@ -26,9 +26,10 @@ generate_sysmiss_ipdma_example(
 
 \item{interaction}{whether to include treatment indicator and treatment}
 }
-\value{
-\item{dataset}{dataset containing y (outcome), x (covariates), study indicator, and treatment indicator}
-}
 \description{
 Generate a fake IPD-MA data with systematically missing covariates
+}
+\examples{
+simulated_dataset <- generate_sysmiss_ipdma_example(Nstudies = 10, Ncov = 5, sys_missing_prob = 0.3, magnitude = 0.2, heterogeneity = 0.1)
+head(simulated_dataset)
 }

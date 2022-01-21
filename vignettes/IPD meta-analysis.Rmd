@@ -1,0 +1,96 @@
+---
+title: "IPD meta-analysis"
+author: "Michael Seo"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{IPD meta-analysis}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(rmarkdown.html_vignette.check_title = FALSE)
+```
+
+## Fitting IPD meta-analysis model
+
+We demonstrate how to run IPD meta-analysis using this package. First, let's generate sample IPD for illustration.
+
+```{r}
+#devtools::install_github("MikeJSeo/bipd")
+library(bipd) 
+
+##load in data
+ds <- generate_ipdma_example(type = "continuous")
+ds2 <- generate_ipdma_example(type = "binary")
+head(ds2)
+```
+
+The main function to set up the function for one-stage IPD meta-analysis is ipdma.model.onestage function. Refer to help(ipdma.model.onestage) for more details. Briefly to describe, "y" is the outcome of the study; "study" is a vector indicating which study the patient belongs to in a numerical sequence (i.e. 1, 2, 3, etc); "treat" is a vector indicating which treatment the patient was assigned to (i.e. 1 for treatment, 0 for placebo); "x" is a matrix of covariates for each patients; "response" is the outcome type, either "normal" or "binomial".
+
+Another important parameter is the "shrinkage" parameter. To specify IPD meta-analysis without shrinkage, we set shrinkage = "none".  
+
+```{r}
+# continuous outcome
+ipd <- with(ds, ipdma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "none"))
+```
+
+To view the JAGS code that was used to run the model, we can run the following command. Note that "alpha" is the study intercept, "beta" is the coefficient for main effects of the covariates, "gamma" is the coefficient for effect modifier, and "delta" is the average treatment effect.
+
+```{r}
+cat(ipd$code)
+```
+
+Once the model is set up using ipdma.model.onestage function, we use ipd.run function to run the model. help(ipd.run) describes possible parameters to specify.
+
+```{r}
+samples <- ipd.run(ipd, pars.save = c("beta", "gamma", "delta"), n.chains = 3, n.burnin = 500, n.iter = 5000)
+
+samples <- samples[,-3] #remove delta[1] which is 0
+summary(samples)
+#plot(samples) #traceplot and posterior of parameters
+#coda::gelman.plot(samples) #gelman diagnostic plot
+```
+
+We can find patient-specific treatment effect using the treatment.effect function. To do this we need to specify the covariate values for the patient that we want to predict patient-specific treatment effect.
+
+```{r}
+treatment.effect(ipd, samples, newpatient = c(1,0.5))
+```
+
+## Incorporating shrinkage and variable selection
+
+For the second example, let's use the same data, but include shrinkage (i.e. Bayesian LASSO) in the effect modifiers. We can specify Bayesian LASSO by setting shrinkage = "laplace". Lambda is the shrinkage parameter and we can set the prior for lambda using lambda.prior parameter. The default lambda prior for Bayesian LASSO is $\lambda^{-1} \sim dunif(0,5)$.
+
+```{r}
+ipd <- with(ds, ipdma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "laplace"))
+samples <- ipd.run(ipd, pars.save = c("lambda", "beta", "gamma", "delta"), n.chains = 3, n.burnin = 500, n.iter = 5000)
+summary(samples)
+```
+
+We can also use SSVS (stochastic search variable selection) by setting shrinkage = "SSVS". This time let's use the binomial dataset. "Ind" is the indicator for assigning a slab prior (instead of a spike prior) i.e. indicator for including a covariate. "eta" is the standard deviation of the slab prior.
+
+```{r}
+ipd <- with(ds2, ipdma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(w1, w2), response = "binomial", shrinkage = "SSVS"))
+samples <- ipd.run(ipd,  pars.save = c("beta", "gamma", "delta", "Ind", "eta"), n.chains = 3, n.burnin = 500, n.iter = 5000)
+summary(samples)
+treatment.effect(ipd, samples, newpatient = c(1,0.5)) # binary outcome reports odds ratio
+```
+
+## Running JAGS using parallel computing
+
+We can run methods in parallel using ipd.run.parallel function.
+
+```{r, warning = FALSE, message = FALSE, results = 'hide', comment = FALSE}
+library(dclone)
+library(R2WinBUGS)
+```
+
+```{r}
+samples <- ipd.run.parallel(ipd, pars.save = c("lambda", "beta", "gamma", "delta"), n.chains = 3, n.burnin = 500, n.iter = 5000)
+summary(samples)
+```

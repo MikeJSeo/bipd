@@ -9,7 +9,12 @@
 #' @param n.adapt The number of iterations for adaptation (Note that the samples from adaptation phase is non-Markovian and do not constitute a Markov chain)
 #' @param n.burnin The number of iterations for burn-in
 #' @param n.iter The number of iterations to run after the adaptation
-#'
+#' @examples
+#' ds <- generate_ipdma_example(type = "continuous")
+#' ipd <- with(ds, ipdma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "none"))
+#' \donttest{
+#' samples <- ipd.run(ipd, pars.save = c("beta", "gamma", "delta"), n.chains = 3, n.burnin = 500, n.iter = 5000)
+#' }
 #' @export
 
 ipd.run <- function(ipd, pars.save = c("beta", "gamma", "delta"), inits = NULL, n.chains = 3, n.adapt = 1000, n.burnin = 1000, n.iter = 10000){
@@ -32,7 +37,12 @@ ipd.run <- function(ipd, pars.save = c("beta", "gamma", "delta"), inits = NULL, 
 #' @param n.adapt The number of iterations for adaptation (Note that the samples from adaptation phase is non-Markovian and do not constitute a Markov chain)
 #' @param n.burnin The number of iterations for burn-in
 #' @param n.iter The number of iterations to run after the adaptation
-#'
+#' @examples
+#' ds <- generate_ipdma_example(type = "continuous")
+#' ipd <- with(ds, ipdma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "none"))
+#' \donttest{
+#' samples <- ipd.run.parallel(ipd, pars.save = c("beta", "gamma", "delta"), n.chains = 3, n.burnin = 500, n.iter = 5000)
+#' }
 #' @export
 
 
