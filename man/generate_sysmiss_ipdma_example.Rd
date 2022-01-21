@@ -30,6 +30,7 @@ generate_sysmiss_ipdma_example(
 Generate a fake IPD-MA data with systematically missing covariates
 }
 \examples{
-simulated_dataset <- generate_sysmiss_ipdma_example(Nstudies = 10, Ncov = 5, sys_missing_prob = 0.3, magnitude = 0.2, heterogeneity = 0.1)
+simulated_dataset <- generate_sysmiss_ipdma_example(Nstudies = 10, Ncov = 5, sys_missing_prob = 0.3, 
+magnitude = 0.2, heterogeneity = 0.1)
 head(simulated_dataset)
 }
