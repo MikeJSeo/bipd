@@ -52,7 +52,16 @@ ipd.run <- function(ipd, pars.save = c("beta", "gamma", "delta"), inits = NULL, 
 
 ipd.run.parallel <- function(ipd, pars.save = c("beta", "gamma", "delta"), inits = NULL, n.chains = 3, n.adapt = 1000, n.burnin = 1000, n.iter = 10000){
 
-  cl <- parallel::makePSOCKcluster(n.chains)
+  chk <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
+  
+  if (nzchar(chk) && chk == "TRUE") {
+    # use 2 cores in CRAN/Travis/AppVeyor
+    num_workers <- 2L
+  } else {
+    num_workers <- n.chains
+  }
+  
+  cl <- parallel::makePSOCKcluster(num_workers)
   samples <- dclone::jags.parfit(cl = cl, data = ipd$data.JAGS, params = pars.save, model = ipd$model.JAGS, inits = inits, n.chains = n.chains, n.adapt = n.adapt, n.update = n.burnin, n.iter = n.iter)
   parallel::stopCluster(cl)
   
