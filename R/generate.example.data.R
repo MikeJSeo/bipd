@@ -98,14 +98,14 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
   dataset <- as_tibble(dataset)
   
   if(Ncov == 5){
-    dataset <- dataset %>% mutate(x2 = as.factor(.data$x2),
-                                  x3 = as.factor(.data$x3))
+    dataset <- dataset %>% mutate(x2 = as.factor(x2),
+                                  x3 = as.factor(x3))
   } else if(Ncov == 10){
-    dataset <- dataset %>% mutate(x2 = as.factor(.data$x2),
-                                  x3 = as.factor(.data$x3),
-                                  x8 = as.factor(.data$x8),
-                                  x9 = as.factor(.data$x9),
-                                  x10 = as.factor(.data$x10)
+    dataset <- dataset %>% mutate(x2 = as.factor(x2),
+                                  x3 = as.factor(x3),
+                                  x8 = as.factor(x8),
+                                  x9 = as.factor(x9),
+                                  x10 = as.factor(x10))
     )
   }  
   
