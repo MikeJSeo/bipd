@@ -30,7 +30,7 @@ ipd.run <- function(ipd, pars.save = c("beta", "gamma", "delta"), inits = NULL, 
 
 #' Run the model using the ipd object with parallel computation
 #' 
-#' This function runs the model through parallel computation from dclone package. Before running this function, we need to specify data, prior, JAGS code, etc. using ipd.model type function.
+#' This function runs the model through parallel computation using dclone R package. Before running this function, we need to specify data, prior, JAGS code, etc. using ipd.model type function.
 #' 
 #' @param ipd ipd object created from ipd.model type function
 #' @param pars.save parameters to save. For instance, "beta" - coefficients for main effects; "gamma" - coefficients for effect modifiers; "delta" - average treatment effect

@@ -1,6 +1,6 @@
-#' Make a (Deft-approach) one-stage individual patient data meta-analysis (IPD-MA) object containing data, priors, and a JAGS model code
+#' Make a (deft-approach) one-stage individual patient data meta-analysis (IPD-MA) object containing data, priors, and a JAGS model code
 #'
-#' This function sets up data and JAGS code that is needed to run one-stage IPD-MA models in JAGS.
+#' This function sets up data and JAGS code that is needed to run (deft-approach) one-stage IPD-MA models in JAGS.
 #' 
 #' @param y outcome of the study. Can be continuous or binary. 
 #' @param study vector indicating which study the patient belongs to. Please change the study names into numbers (i.e. 1, 2, 3, etc)
@@ -19,12 +19,12 @@
 #' @param mean.delta prior mean for the average treatment effect
 #' @param prec.delta prior precision for the average treatment effect
 #' @param hy.prior prior for the heterogeneity parameter. Supports uniform, gamma, and half normal for normal and binomial response
-#' It should be a list of length 3, where first element should be the distribution (one of dunif, dgamma, dhnorm) and the next two are the parameters associated with the distribution. For example, list("dunif", 0, 5) give uniform prior with lower bound 0 and upper bound 5 for the heterogeneity parameter.
+#' It should be a list of length 3, where first element should be the distribution (one of dunif, dgamma, dhnorm) and the next two are the parameters associated with the distribution. For example, list("dunif", 0, 5) gives uniform prior with lower bound 0 and upper bound 5 for the heterogeneity parameter.
 #' @return 
 #' \item{data.JAGS}{data organized in a list so that it can be used when running code in JAGS}
 #' \item{code}{JAGS code that is used to run the model. Use cat(code) to see the code in a readable format}
 #' \item{model.JAGS}{JAGS code in a function. This is used when running model in parallel}
-#' \item{Xbar}{study specific average of covariates}
+#' \item{Xbar}{study specific averages of covariates}
 #' @references Fisher DJ, Carpenter JR, Morris TP, et al. Meta-analytical methods to identify who benefits most from treatments: daft, deluded, or deft approach?. \emph{BMJ}. 2017;356:j573 \doi{10.1136/bmj.j573}
 #' @examples
 #' ds <- generate_ipdma_example(type = "continuous")

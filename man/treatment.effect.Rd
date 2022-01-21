@@ -13,18 +13,18 @@ treatment.effect(
 )
 }
 \arguments{
-\item{ipd}{IPD object created from running model functions i.e. `ipdma.onestage.model`}
+\item{ipd}{IPD object created from running ipdma.model type function}
 
-\item{samples}{MCMC samples found from running `ipd.run`}
+\item{samples}{MCMC samples found from running ipd.run function}
 
 \item{newpatient}{covariate values of patients that you want to predict treatment effect on. Must have length equal to total number of covariates.}
 
-\item{reference}{reference group used for finding patient-specific treatment effect. This is only used for "deft" approach}
+\item{reference}{reference group used for finding patient-specific treatment effect. This is only used for deft approach}
 
-\item{quantiles}{quantiles finding credible interval of the patient-specific treatment effect}
+\item{quantiles}{quantiles for credible interval of the patient-specific treatment effect}
 }
 \description{
-Convenient function for calculating the patient-specific treatment effect.
+Function for calculating the patient-specific treatment effect.
 Patient-specific treatment effect includes the main effect of treatment and 
 treatment-covariate interaction effect (i.e. effect modification). 
 Reports odds ratio for the binary outcome.

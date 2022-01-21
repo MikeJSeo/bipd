@@ -1,16 +1,16 @@
 
 #' Calculate patient-specific treatment effect
 #'
-#' Convenient function for calculating the patient-specific treatment effect.
+#' Function for calculating the patient-specific treatment effect.
 #' Patient-specific treatment effect includes the main effect of treatment and 
 #' treatment-covariate interaction effect (i.e. effect modification). 
 #' Reports odds ratio for the binary outcome.
 #' 
-#' @param ipd IPD object created from running model functions i.e. `ipdma.onestage.model`
-#' @param samples MCMC samples found from running `ipd.run`
+#' @param ipd IPD object created from running ipdma.model type function
+#' @param samples MCMC samples found from running ipd.run function
 #' @param newpatient covariate values of patients that you want to predict treatment effect on. Must have length equal to total number of covariates.
-#' @param reference reference group used for finding patient-specific treatment effect. This is only used for "deft" approach
-#' @param quantiles quantiles finding credible interval of the patient-specific treatment effect
+#' @param reference reference group used for finding patient-specific treatment effect. This is only used for deft approach
+#' @param quantiles quantiles for credible interval of the patient-specific treatment effect
 #' @examples
 #' ds <- generate_ipdma_example(type = "continuous")
 #' ipd <- with(ds, ipdma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), 

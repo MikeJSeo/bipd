@@ -2,7 +2,7 @@
 % Please edit documentation in R/ipdma.onestage.deft.model.R
 \name{ipdma.model.deft.onestage}
 \alias{ipdma.model.deft.onestage}
-\title{Make a (Deft-approach) one-stage individual patient data meta-analysis (IPD-MA) object containing data, priors, and a JAGS model code}
+\title{Make a (deft-approach) one-stage individual patient data meta-analysis (IPD-MA) object containing data, priors, and a JAGS model code}
 \usage{
 ipdma.model.deft.onestage(
   y = NULL,
@@ -58,16 +58,16 @@ ipdma.model.deft.onestage(
 \item{prec.delta}{prior precision for the average treatment effect}
 
 \item{hy.prior}{prior for the heterogeneity parameter. Supports uniform, gamma, and half normal for normal and binomial response
-It should be a list of length 3, where first element should be the distribution (one of dunif, dgamma, dhnorm) and the next two are the parameters associated with the distribution. For example, list("dunif", 0, 5) give uniform prior with lower bound 0 and upper bound 5 for the heterogeneity parameter.}
+It should be a list of length 3, where first element should be the distribution (one of dunif, dgamma, dhnorm) and the next two are the parameters associated with the distribution. For example, list("dunif", 0, 5) gives uniform prior with lower bound 0 and upper bound 5 for the heterogeneity parameter.}
 }
 \value{
 \item{data.JAGS}{data organized in a list so that it can be used when running code in JAGS}
 \item{code}{JAGS code that is used to run the model. Use cat(code) to see the code in a readable format}
 \item{model.JAGS}{JAGS code in a function. This is used when running model in parallel}
-\item{Xbar}{study specific average of covariates}
+\item{Xbar}{study specific averages of covariates}
 }
 \description{
-This function sets up data and JAGS code that is needed to run one-stage IPD-MA models in JAGS.
+This function sets up data and JAGS code that is needed to run (deft-approach) one-stage IPD-MA models in JAGS.
 }
 \examples{
 ds <- generate_ipdma_example(type = "continuous")

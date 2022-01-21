@@ -44,7 +44,7 @@ There is also an option to ignore all the clustering level and impute using pred
 \item{m}{number of imputed datasets. Default is set to 5.}
 }
 \value{
-\item{missingPattern}{missing Pattern object returned by running \code{\link{findMissingPattern}}}
+\item{missingPattern}{missing pattern object returned by running findMissingPattern function}
 \item{meth}{imputation method used with the mice function}
 \item{pred}{prediction matrix used with the mice function}
 \item{imp}{imputed datasets that is returned from the mice function}

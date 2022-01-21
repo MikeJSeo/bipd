@@ -30,7 +30,7 @@ ipd.run.parallel(
 \item{n.iter}{number of iterations to run after the adaptation}
 }
 \description{
-This function runs the model through parallel computation from dclone package. Before running this function, we need to specify data, prior, JAGS code, etc. using ipd.model type function.
+This function runs the model through parallel computation using dclone R package. Before running this function, we need to specify data, prior, JAGS code, etc. using ipd.model type function.
 }
 \examples{
 ds <- generate_ipdma_example(type = "continuous")
