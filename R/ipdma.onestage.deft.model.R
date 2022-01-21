@@ -1,4 +1,4 @@
-#' Make a (deft-approach) one-stage individual patient data meta-analysis (IPD-MA) object containing data, priors, and a JAGS model code
+#' Make a (deft-approach) one-stage individual patient data meta-analysis object containing data, priors, and a JAGS model code
 #'
 #' This function sets up data and JAGS code that is needed to run (deft-approach) one-stage IPD-MA models in JAGS.
 #' 

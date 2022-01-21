@@ -2,7 +2,7 @@
 % Please edit documentation in R/ipdma.onestage.deft.model.R
 \name{ipdma.model.deft.onestage}
 \alias{ipdma.model.deft.onestage}
-\title{Make a (deft-approach) one-stage individual patient data meta-analysis (IPD-MA) object containing data, priors, and a JAGS model code}
+\title{Make a (deft-approach) one-stage individual patient data meta-analysis object containing data, priors, and a JAGS model code}
 \usage{
 ipdma.model.deft.onestage(
   y = NULL,
