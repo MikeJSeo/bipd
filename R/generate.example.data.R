@@ -9,7 +9,8 @@
 #' @param heterogeneity heterogeneity of regression estimates across studies. Default is set to 0.1.
 #' @param interaction whether to include treatment indicator and treatment 
 #' @examples
-#' simulated_dataset <- generate_sysmiss_ipdma_example(Nstudies = 10, Ncov = 5, sys_missing_prob = 0.3, magnitude = 0.2, heterogeneity = 0.1)
+#' simulated_dataset <- generate_sysmiss_ipdma_example(Nstudies = 10, Ncov = 5, sys_missing_prob = 0.3, 
+#' magnitude = 0.2, heterogeneity = 0.1)
 #' head(simulated_dataset)
 #' @export
 
