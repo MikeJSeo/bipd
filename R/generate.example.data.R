@@ -21,7 +21,7 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
   Npatients.tot <- sum(Npatients)
   study <- rep(1:Nstudies, times = Npatients)
   
-  a <- runif(Nstudies, 0.5, 1.5)
+  a <- stats::runif(Nstudies, 0.5, 1.5)
   a <- rep(a, times = Npatients)
   
   ### generate X
@@ -36,8 +36,8 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
   
   X <- NULL
   for(i in 1:Nstudies){
-    mu <- runif(Ncov, -1, 1)
-    X <- rbind(X, rmvnorm(Npatients[i], mu, Omega * sigma2))
+    mu <- stats::runif(Ncov, -1, 1)
+    X <- rbind(X, mvtnorm::rmvnorm(Npatients[i], mu, Omega * sigma2))
   }
   
   #categorize predictors
@@ -52,28 +52,28 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
     X[,10] <- ifelse(X[,10] > 0.5, 1, 0)
   }
   
-  e_vec <- rnorm(Npatients.tot, 0, 1) 
+  e_vec <- stats::rnorm(Npatients.tot, 0, 1) 
   b <- matrix(NA, Npatients.tot, Ncov)
   #b[,1] <- rep(0.2, Npatients.tot)
 
   for(i in 1:Ncov){
-    b_dummy <- rnorm(Nstudies, magnitude, heterogeneity)
+    b_dummy <- stats::rnorm(Nstudies, magnitude, heterogeneity)
     b_dummy <- rep(b_dummy, times = Npatients)
     b[,i] <- b_dummy
   }
   
   if(interaction == TRUE){
-    treat <- rbinom(Npatients.tot, 1, 0.5)
+    treat <- stats::rbinom(Npatients.tot, 1, 0.5)
     Xinteraction <- X[,1:Ncov] * treat
     cvec <- matrix(NA, Npatients.tot, Ncov)
     
     for(i in 1:Ncov){
-      cvec_dummy <- rnorm(Nstudies, magnitude/2, heterogeneity)
+      cvec_dummy <- stats::rnorm(Nstudies, magnitude/2, heterogeneity)
       cvec_dummy <- rep(cvec_dummy, times = Npatients)
       cvec[,i] <- cvec_dummy
     }
     
-    d <- rnorm(Nstudies, 1, 0.5)
+    d <- stats::rnorm(Nstudies, 1, 0.5)
     d <- rep(d, times = Npatients)
   }
   
@@ -86,7 +86,7 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
   # introduce systematically missing; first two predictors are always observed
   for(j in 3:Ncov){
     for(i in 1:Nstudies){
-      if(rbinom(1, 1, sys_missing_prob) == 1){
+      if(stats::rbinom(1, 1, sys_missing_prob) == 1){
         X[study == i,j] <- NA  
       }
     }
@@ -98,14 +98,14 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
   dataset <- as_tibble(dataset)
   
   if(Ncov == 5){
-    dataset <- dataset %>% mutate(x2 = as.factor(x2),
-                                  x3 = as.factor(x3))
+    dataset <- dataset %>% mutate(x2 = as.factor(.data$x2),
+                                  x3 = as.factor(.data$x3))
   } else if(Ncov == 10){
-    dataset <- dataset %>% mutate(x2 = as.factor(x2),
-                                  x3 = as.factor(x3),
-                                  x8 = as.factor(x8),
-                                  x9 = as.factor(x9),
-                                  x10 = as.factor(x10)
+    dataset <- dataset %>% mutate(x2 = as.factor(.data$x2),
+                                  x3 = as.factor(.data$x3),
+                                  x8 = as.factor(.data$x8),
+                                  x9 = as.factor(.data$x9),
+                                  x10 = as.factor(.data$x10)
     )
   }  
   
@@ -150,9 +150,9 @@ generate_ipdma_example <- function(type = "continuous"){
     ds <- as.data.frame(array(NA, dim=c(N*6, 5)))
     colnames(ds) <- c("studyid", "treat", "z1","z2", "y")
     for (i in 1:N.trials) {
-      treat <- rbinom(N,1,0.5)
-      z1 <- rnorm(N, mean=0, sd=1)
-      z2 <- rnorm(N, mean=0, sd=1)
+      treat <- stats::rbinom(N,1,0.5)
+      z1 <- stats::rnorm(N, mean=0, sd=1)
+      z2 <- stats::rnorm(N, mean=0, sd=1)
       y <- round(alpha[i] + delta[i]*treat + beta1[i]*z1 + beta2[i]*z2 + gamma1[i]*z1*treat + gamma2[i]*z2*treat)
       ds[(((i-1)*N)+1):(i*N), ] <- cbind(studyid[i], treat, z1,z2, y)
     }
@@ -178,11 +178,11 @@ generate_ipdma_example <- function(type = "continuous"){
     }
     
     for (i in 1:N.trials) {
-      treat <- rbinom(N,1,0.5)
-      w1 <- rnorm(N, mean=0, sd=1) 
-      w2 <- rnorm(N, mean=0, sd=1)
+      treat <- stats::rbinom(N,1,0.5)
+      w1 <- stats::rnorm(N, mean=0, sd=1) 
+      w2 <- stats::rnorm(N, mean=0, sd=1)
       linearpredictor <- alpha[i] + delta[i]*treat + beta1[i]*w1 + beta2[i]*w2 + gamma1[i]*w1*treat + gamma2[i]*w2*treat
-      y <- rbinom(N, 1, expit(linearpredictor))
+      y <- stats::rbinom(N, 1, expit(linearpredictor))
       ds[(((i-1)*N)+1):(i*N), ] <- cbind(studyid[i], treat, w1, w2, y)
     }
     ds$studyid <- as.factor(ds$studyid)

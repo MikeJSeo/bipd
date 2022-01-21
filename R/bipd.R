@@ -26,5 +26,8 @@ NULL
 #' @import dplyr
 NULL
 
-#' @importFrom stats update
+#' @importFrom stats update quantile rbinom rnorm runif sd
+NULL
+
+#' @importFrom rlang .data
 NULL
