@@ -28,6 +28,3 @@ NULL
 
 #' @importFrom stats update quantile rbinom rnorm runif sd
 NULL
-
-#' @importFrom rlang .data
-NULL
