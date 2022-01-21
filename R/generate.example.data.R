@@ -12,7 +12,6 @@
 #' simulated_dataset <- generate_sysmiss_ipdma_example(Nstudies = 10, Ncov = 5, sys_missing_prob = 0.3, 
 #' magnitude = 0.2, heterogeneity = 0.1)
 #' head(simulated_dataset)
-#' @importFrom rlang .data
 #' @export
 
 generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_prob = 0.1, magnitude = 0.3,

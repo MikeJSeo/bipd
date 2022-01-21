@@ -16,7 +16,6 @@
 #' @references Seo M, White IR, Furukawa TA, et al. Comparing methods for estimating patient-specific treatment effects in individual patient data meta-analysis. \emph{Stat Med}. 2021;40(6):1553-1573. \doi{10.1002/sim.8859}
 NULL
 
-
 #' @import coda
 NULL
 
