@@ -2,11 +2,11 @@
 title: "IPD meta-analysis"
 author: "Michael Seo"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: pdf_document
 vignette: >
+  %\VignetteEngine{knitr::knitr}
   %\VignetteIndexEntry{IPD meta-analysis}
-  %\VignetteEncoding{UTF-8}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\usepackage[UTF-8]{inputenc}
 editor_options: 
   chunk_output_type: console
 ---
@@ -14,6 +14,10 @@ editor_options:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 options(rmarkdown.html_vignette.check_title = FALSE)
+
+# sometimes pdf chunks go out of page; need to install formatR R package if this doesn't solve it
+library(formatR)
+knitr::opts_chunk$set(message=FALSE, tidy.opts=list(width.cutoff=60), tidy=TRUE, collapse = TRUE, warning = FALSE) 
 ```
 
 ## Fitting IPD meta-analysis model
