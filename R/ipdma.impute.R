@@ -297,7 +297,7 @@ getCorrectPred <- function(dataset = NULL, missingPattern = NULL, interaction = 
   if(totalstudies == 1){
     
     # Case when there are only one cluster/study
-    pred <- make.predictorMatrix(dataset)
+    pred <- mice::make.predictorMatrix(dataset)
     pred[,] <- 0
       
     #outcome imputation
@@ -317,7 +317,7 @@ getCorrectPred <- function(dataset = NULL, missingPattern = NULL, interaction = 
   } else{
     
     # Case when there are multiple clusters/studies
-    pred <- make.predictorMatrix(dataset)
+    pred <- mice::make.predictorMatrix(dataset)
     pred[,] <- 0
       
     # outcome imputation
