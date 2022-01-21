@@ -28,11 +28,12 @@
 #' @references Fisher DJ, Carpenter JR, Morris TP, et al. Meta-analytical methods to identify who benefits most from treatments: daft, deluded, or deft approach?. \emph{BMJ}. 2017;356:j573 \doi{10.1136/bmj.j573}
 #' @examples
 #' ds <- generate_ipdma_example(type = "continuous")
+#' 
 #' ipd <- with(ds, ipdma.model.deft.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), 
-#' response = "normal", shrinkage = "none"))
+#' response = "normal"))
+#' cat(ipd$code)
 #' \donttest{
-#' samples <- ipd.run(ipd, pars.save = c("beta", "gamma", "delta"), n.chains = 3, n.burnin = 500, 
-#' n.iter = 5000)
+#' samples <- ipd.run(ipd, pars.save = c("beta", "gamma.within", "gamma.across", "delta"))
 #' treatment.effect(ipd, samples, newpatient= c(1,0.5), reference = c(0, 0))
 #' }
 #' @export
