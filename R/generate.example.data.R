@@ -105,7 +105,7 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
                                   x3 = as.factor(x3),
                                   x8 = as.factor(x8),
                                   x9 = as.factor(x9),
-                                  x10 = as.factor(x10))
+                                  x10 = as.factor(x10)
     )
   }  
   
