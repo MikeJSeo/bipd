@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 
 # sometimes pdf chunks go out of page; need to install formatR R package if this doesn't solve it
-library(formatR)
+#library(formatR)
 knitr::opts_chunk$set(message=FALSE, tidy.opts=list(width.cutoff=60), tidy=TRUE, collapse = TRUE, warning = FALSE) 
 ```
 
