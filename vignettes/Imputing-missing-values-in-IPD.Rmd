@@ -14,6 +14,10 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+# sometimes pdf chunks go out of page; need to install formatR R package if this doesn't solve it
+library(formatR)
+knitr::opts_chunk$set(message=FALSE, tidy.opts=list(width.cutoff=60), tidy=TRUE, collapse = TRUE, warning = FALSE) 
 ```
 
 We describe how to impute missing data in an individual patient data (IPD) using multiple imputation. However, this package is not restricted to IPD, but can also be used for multilevel data. This method is most appropriate for IPD with two treatments (i.e. placebo and treatment). This package conveniently sets up input parameters that are needed to use imputation methods in mice and mice-extended packages (micemd and miceadds). We will first simulate a mock data that we will use for illustration.

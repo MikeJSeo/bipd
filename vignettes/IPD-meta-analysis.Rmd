@@ -14,7 +14,10 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-#options(rmarkdown.html_vignette.check_title = FALSE)
+
+# sometimes pdf chunks go out of page; need to install formatR R package if this doesn't solve it
+library(formatR)
+knitr::opts_chunk$set(message=FALSE, tidy.opts=list(width.cutoff=60), tidy=TRUE, collapse = TRUE, warning = FALSE) 
 ```
 
 ## Fitting IPD meta-analysis model
@@ -80,18 +83,4 @@ ipd <- with(ds2, ipdma.model.onestage(y = y, study = studyid, treat = treat, X =
 samples <- ipd.run(ipd,  pars.save = c("beta", "gamma", "delta", "Ind", "eta"), n.chains = 3, n.burnin = 500, n.iter = 5000)
 summary(samples)
 treatment.effect(ipd, samples, newpatient = c(1,0.5)) # binary outcome reports odds ratio
-```
-
-## Running JAGS using parallel computing
-
-We can run methods in parallel using ipd.run.parallel function.
-
-```{r, warning = FALSE, message = FALSE, results = 'hide', comment = FALSE}
-library(dclone)
-library(R2WinBUGS)
-```
-
-```{r}
-samples <- ipd.run.parallel(ipd, pars.save = c("lambda", "beta", "gamma", "delta"), n.chains = 3, n.burnin = 500, n.iter = 5000)
-summary(samples)
 ```
