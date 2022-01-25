@@ -29,6 +29,9 @@ ipd.run.parallel(
 
 \item{n.iter}{number of iterations to run after the adaptation}
 }
+\value{
+MCMC samples stored using JAGS. The returned samples have the form of mcmc.list and can be directly applied to coda functions
+}
 \description{
 This function runs the model through parallel computation using dclone R package. Before running this function, we need to specify data, prior, JAGS code, etc. using ipd.model type function.
 }

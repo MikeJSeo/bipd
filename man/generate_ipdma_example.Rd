@@ -2,15 +2,18 @@
 % Please edit documentation in R/generate.example.data.R
 \name{generate_ipdma_example}
 \alias{generate_ipdma_example}
-\title{Generate a fake IPD-MA data for demonstration}
+\title{Generate a simulated IPD-MA data for demonstration}
 \usage{
 generate_ipdma_example(type = "continuous")
 }
 \arguments{
 \item{type}{"continuous" for continuous outcome and "binary" for binary outcome}
 }
+\value{
+returns simulated IPD-MA data
+}
 \description{
-Generate a fake IPD-MA data for demonstration
+Generate a simulated IPD-MA data for demonstration
 }
 \examples{
 ds <- generate_ipdma_example(type = "continuous")

@@ -9,6 +9,7 @@
 #' @param n.adapt number of iterations for adaptation (Note that the samples from adaptation phase is non-Markovian and do not constitute a Markov chain)
 #' @param n.burnin number of iterations for burn-in
 #' @param n.iter number of iterations to run after the adaptation
+#' @return MCMC samples stored using JAGS. The returned samples have the form of mcmc.list and can be directly applied to coda functions
 #' @examples
 #' ds <- generate_ipdma_example(type = "continuous")
 #' ipd <- with(ds, ipdma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), 
@@ -39,6 +40,7 @@ ipd.run <- function(ipd, pars.save = c("beta", "gamma", "delta"), inits = NULL, 
 #' @param n.adapt number of iterations for adaptation (Note that the samples from adaptation phase is non-Markovian and do not constitute a Markov chain)
 #' @param n.burnin number of iterations for burn-in
 #' @param n.iter number of iterations to run after the adaptation
+#' @return MCMC samples stored using JAGS. The returned samples have the form of mcmc.list and can be directly applied to coda functions
 #' @examples
 #' ds <- generate_ipdma_example(type = "continuous")
 #' ipd <- with(ds, ipdma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), 

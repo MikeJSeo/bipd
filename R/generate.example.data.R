@@ -1,13 +1,14 @@
 
-#' Generate a fake IPD-MA data with systematically missing covariates 
+#' Generate a simulated IPD-MA data with systematically missing covariates 
 #'
-#' Generate a fake IPD-MA data with systematically missing covariates
+#' Generate a simulated IPD-MA data with systematically missing covariates
 #' @param Nstudies number of studies. Default is 10.
 #' @param Ncov number of covariates in total. Options are 5 or 10 studies. Default is set to 5.
 #' @param sys_missing_prob probability of systematically missing studies for each covariates. Default is set to 0.3.
 #' @param magnitude magnitude of the regression estimates (the mean). Default is set to 0.2.
 #' @param heterogeneity heterogeneity of regression estimates across studies. Default is set to 0.1.
-#' @param interaction whether to include treatment indicator and treatment 
+#' @param interaction whether to include treatment indicator and treatment
+#' @return returns simulated IPD-MA data with systematically missing covariates
 #' @examples
 #' simulated_dataset <- generate_sysmiss_ipdma_example(Nstudies = 10, Ncov = 5, sys_missing_prob = 0.3, 
 #' magnitude = 0.2, heterogeneity = 0.1)
@@ -124,10 +125,11 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
   
 
 
-#' Generate a fake IPD-MA data for demonstration
+#' Generate a simulated IPD-MA data for demonstration
 #'
-#' Generate a fake IPD-MA data for demonstration
+#' Generate a simulated IPD-MA data for demonstration
 #' @param type "continuous" for continuous outcome and "binary" for binary outcome
+#' @return returns simulated IPD-MA data
 #' @examples
 #' ds <- generate_ipdma_example(type = "continuous")
 #' head(ds)

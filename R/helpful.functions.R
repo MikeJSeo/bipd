@@ -11,6 +11,7 @@
 #' @param newpatient covariate values of patients that you want to predict treatment effect on. Must have length equal to total number of covariates.
 #' @param reference reference group used for finding patient-specific treatment effect. This is only used for deft approach
 #' @param quantiles quantiles for credible interval of the patient-specific treatment effect
+#' @return patient-specific treatment effect with credible interval at specified quantiles
 #' @examples
 #' ds <- generate_ipdma_example(type = "continuous")
 #' ipd <- with(ds, ipdma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), 

@@ -20,11 +20,24 @@ findMissingPattern(
 
 \item{typeofvar}{type of covariate variables; should be a vector of these values: "continuous", "binary", or "count". Order should follow that of covariates parameter.}
 
-\item{studyname}{study name in the data specified.}
+\item{studyname}{study name in the data specified}
 
-\item{treatmentname}{treatment name in the data specified.}
+\item{treatmentname}{treatment name in the data specified}
 
-\item{outcomename}{outcome name in the data specified.}
+\item{outcomename}{outcome name in the data specified}
+}
+\value{
+\item{missingcount}{missing number of patients for each study and covariate}
+\item{missingpercent}{missing percentage of patients for each study and covariate}
+\item{sys_missing}{a vector indicating whether each covariate is systematically missing}
+\item{spor_missing}{a vector indicating whether each covariate is sporadically missing}
+\item{sys_covariates}{a vector of systematically missing covariates}
+\item{spor_covariates}{a vector of sporadically missing covariates}
+\item{without_sys_covariates}{a vector of covariates that are not systematically missing}
+\item{covariates}{vector of variable names that the user is interested in finding a missing data pattern}
+\item{studyname}{study name in the data specified}
+\item{treatmentname}{treatment name in the data specified}
+\item{outcomename}{outcome name in the data specified}
 }
 \description{
 Find missing data pattern in a given data i.e. whether variables are systematically missing or sporadically missing. Also calculates missing count and percentage for exploratory purposes.

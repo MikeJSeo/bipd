@@ -23,6 +23,9 @@ treatment.effect(
 
 \item{quantiles}{quantiles for credible interval of the patient-specific treatment effect}
 }
+\value{
+patient-specific treatment effect with credible interval at specified quantiles
+}
 \description{
 Function for calculating the patient-specific treatment effect.
 Patient-specific treatment effect includes the main effect of treatment and 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/generate.example.data.R
 \name{generate_sysmiss_ipdma_example}
 \alias{generate_sysmiss_ipdma_example}
-\title{Generate a fake IPD-MA data with systematically missing covariates}
+\title{Generate a simulated IPD-MA data with systematically missing covariates}
 \usage{
 generate_sysmiss_ipdma_example(
   Nstudies = 10,
@@ -26,8 +26,11 @@ generate_sysmiss_ipdma_example(
 
 \item{interaction}{whether to include treatment indicator and treatment}
 }
+\value{
+returns simulated IPD-MA data with systematically missing covariates
+}
 \description{
-Generate a fake IPD-MA data with systematically missing covariates
+Generate a simulated IPD-MA data with systematically missing covariates
 }
 \examples{
 simulated_dataset <- generate_sysmiss_ipdma_example(Nstudies = 10, Ncov = 5, sys_missing_prob = 0.3, 
