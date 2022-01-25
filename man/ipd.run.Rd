@@ -30,7 +30,7 @@ ipd.run(
 \item{n.iter}{number of iterations to run after the adaptation}
 }
 \value{
-MCMC samples stored using JAGS. The returned samples have the form of mcmc.list and can be directly applied to coda functions
+MCMC samples stored using JAGS. The returned samples have the form of mcmc.list and coda functions can be directly applied.
 }
 \description{
 This is the core function that runs the model in our program. Before running this function, we need to specify data, prior, JAGS code, etc. using ipd.model type function.
