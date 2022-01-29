@@ -24,7 +24,7 @@ library(bipd)
 ##load in data
 ds <- generate_ipdma_example(type = "continuous")
 ds2 <- generate_ipdma_example(type = "binary")
-head(ds2)
+head(ds)
 ```
 
 The main function to set up the function for one-stage IPD meta-analysis is ipdma.model.onestage function. Refer to help(ipdma.model.onestage) for more details. Briefly to describe, "y" is the outcome of the study; "study" is a vector indicating which study the patient belongs to in a numerical sequence (i.e. 1, 2, 3, etc); "treat" is a vector indicating which treatment the patient was assigned to (i.e. 1 for treatment, 0 for placebo); "x" is a matrix of covariates for each patients; "response" is the outcome type, either "normal" or "binomial".
@@ -61,7 +61,7 @@ treatment.effect(ipd, samples, newpatient = c(1,0.5))
 
 ## Incorporating shrinkage and variable selection
 
-For the second example, let's use the same data, but include shrinkage (i.e. Bayesian LASSO) in the effect modifiers. We can specify Bayesian LASSO by setting shrinkage = "laplace". Lambda is the shrinkage parameter and we can set the prior for lambda using lambda.prior parameter. The default lambda prior for Bayesian LASSO is $\lambda^{-1} \sim dunif(0,5)$.
+For the second example, let's use the same data, but include shrinkage (i.e. Bayesian LASSO) in the effect modifiers (i.e. treatment-covariate interactions). We can specify Bayesian LASSO by setting shrinkage = "laplace". Lambda is the shrinkage parameter and we can set the prior for lambda using lambda.prior parameter. The default lambda prior for Bayesian LASSO is $\lambda^{-1} \sim dunif(0,5)$.
 
 ```{r}
 ipd <- with(ds, ipdma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "laplace"))
