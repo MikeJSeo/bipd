@@ -137,9 +137,9 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
 generate_ipdma_example <- function(type = "continuous"){
   
   # continuous outcome
-  N <- 100  #number of patients per trial
+  N <- 1000  #number of patients per trial
   N.trials <- 6 #number of trials
-  studyid <- rep(1:6, each = 100)
+  studyid <- rep(1:6, each = N)
   
   if(type == "continuous"){
     
