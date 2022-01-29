@@ -136,40 +136,49 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
 
 generate_ipdma_example <- function(type = "continuous"){
   
+  # continuous outcome
+  N <- 100  #number of patients per trial
+  N.trials <- 6 #number of trials
+  studyid <- rep(1:6, each = 100)
+  
   if(type == "continuous"){
     
-    # continuous outcome
-    N <- 100  #number of patients per trial
-    N.trials <- 6 #number of trials
     alpha <- rep(c(11, 8, 10.5, 9.6, 12.9, 15.8), each = N) #study effects
     delta <- rep(c(-2.95, -2.97, -2.89, -2.91, -2.93, -2.90), each = N) #treatment effects
     beta1 <- rep(c(0.24, 0.21, 0.20, 0.18, 0.25, 0.22), each = N) #prognostic effects of z1
     gamma1 <- rep(c(-0.9, -0.5, -0.6, -0.7, -0.1, -0.3), each = N) #interaction effects of z1
     beta2 <- rep(c(0.15, 0.21, 0.30, 0.38, 0.45, 0.42), each = N) #prognostic effects of z2
     gamma2 <- rep(c(0.9, 0.5, 0.5, 0.7, 0.1, 0.5), each = N) #interaction effects of z2
-    studyid <- rep(1:6, each = 100)
     
     z1 <- stats::rnorm(N*N.trials)
     z2 <- stats::rnorm(N*N.trials)
-    w1 <- stats::rnorm(N*N.trials)
-    w2 <- stats::rnorm(N*N.trials) 
     treat <- rbinom(N*N.trials, 1, 0.5)
     
+    y <- round(alpha + delta*treat + beta1*z1 + beta2*z2 + gamma1*z1*treat + gamma2*z2*treat) 
+    ds <- as.data.frame(cbind(studyid, treat, z1, z2, y))
+    ds$studyid <- as.factor(studyid)
+  } else if (type == "binary"){
+    
+    alpha <- rep(c(0.11, 0.8, 1.05, 0.96, 0.129, 0.158), each = N) #study effects
+    delta <- rep(c(-0.95, -0.97, -0.89, -0.91, -0.93, -0.90), each = N) #treatment effects
+    beta1 <- rep(c(0.24, 0.21, 0.20, 0.18, 0.25, 0.22), each = N) #prognostic effects of w1
+    gamma1 <- rep(c(-0.9, -0.5, -0.6, -0.7, -0.1, -0.3), each = N) #interaction effects of w1
+    beta2 <- rep(c(0.15, 0.21, 0.30, 0.38, 0.45, 0.42), each = N) #prognostic effects of w2
+    gamma2 <- rep(c(0.9, 0.5, 0.5, 0.7, 0.1, 0.5), each = N) #interaction effects of w2
+    
+    w1 <- stats::rnorm(N*N.trials)
+    w2 <- stats::rnorm(N*N.trials)
+    treat <- rbinom(N*N.trials, 1, 0.5)
     
     expit <- function(x){
       exp(x)/(1+exp(x))
     }
-    
-    if(type == "continuous"){
-      y <- round(alpha + delta*treat + beta1*z1 + beta2*z2 + gamma1*z1*treat + gamma2*z2*treat)  
-    } else if(type == "binary"){
-      linearpredictor <- round(alpha + delta*treat + beta1*w1 + beta2*w2 + gamma1*w1*treat + gamma2*w2*treat
-      y <- stats::rbinom(N, 1, expit(linearpredictor))
-    }
-    
-    ds <- as.data.frame(cbind(studyid, treat, z1, z2, y))
+    linearpredictor <- round(alpha + delta*treat + beta1*w1 + beta2*w2 + gamma1*w1*treat + gamma2*w2*treat)
+    y <- stats::rbinom(N, 1, expit(linearpredictor))
+    ds <- as.data.frame(cbind(studyid, treat, w1, w2, y))
     ds$studyid <- as.factor(studyid)
-    
+  }  
+
   return(ds)
 }
 
@@ -181,6 +190,7 @@ generate_ipdma_example <- function(type = "continuous"){
 #' @return return simulated IPD-NMA data
 #' ds <- generate_ipdnma_example(type = "continuous")
 #' head(ds)
+#' @export
 
 generate_ipdnma_example <- function(type = "continuous"){
   
@@ -217,6 +227,6 @@ generate_ipdnma_example <- function(type = "continuous"){
       
     
   } else if(type == "binary"){
-    print("Hi")
+    print("hi") 
   }
 }
