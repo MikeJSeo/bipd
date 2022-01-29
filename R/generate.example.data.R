@@ -181,7 +181,6 @@ generate_ipdma_example <- function(type = "continuous"){
 #' @return return simulated IPD-NMA data
 #' ds <- generate_ipdnma_example(type = "continuous")
 #' head(ds)
-#' @export
 
 generate_ipdnma_example <- function(type = "continuous"){
   
@@ -218,6 +217,6 @@ generate_ipdnma_example <- function(type = "continuous"){
       
     
   } else if(type == "binary"){
-    
+    print("Hi")
   }
 }
