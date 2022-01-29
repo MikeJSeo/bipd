@@ -249,4 +249,5 @@ generate_ipdnma_example <- function(type = "continuous"){
     ds <- as.data.frame(cbind(studyid, treat, w1, w2, y))
     ds$studyid <- as.factor(studyid)
   }
+  return(ds)
 }
