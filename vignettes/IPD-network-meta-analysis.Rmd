@@ -28,8 +28,11 @@ ds2 <- generate_ipdnma_example(type = "binary")
 head(ds)
 ```
 
-The main function to set up the function for one-stage IPD network meta-analysis is ipdnma.model.onestage function. Refer to help(ipdnma.model.onestage) for more details. Briefly to describe, "y" is the outcome of the study; "study" is a vector indicating which study the patient belongs to in a numerical sequence (i.e. 1, 2, 3, etc); "treat" is a vector indicating which treatment the patient was assigned to (i.e. 1 for baseline treatment, 2, 3, etc.); "x" is a matrix of covariates for each patients; "response" is the outcome type, either "normal" or "binomial".
+The main function to set up the function for one-stage IPD network meta-analysis is ipdnma.model.onestage function. The function is very similar to ipdma.model.onestage except that now we have number of treatments greater than 2. Refer to help(ipdnma.model.onestage) for more details. Briefly to describe, "y" is the outcome of the study; "study" is a vector indicating which study the patient belongs to in a numerical sequence (i.e. 1, 2, 3, etc); "treat" is a vector indicating which treatment the patient was assigned to (i.e. 1 for baseline treatment, 2, 3, etc.); "x" is a matrix of covariates for each patients; "response" is the outcome type, either "normal" or "binomial".
+
+Another important parameter is the "shrinkage" parameter. To specify IPD meta-analysis without shrinkage, we set shrinkage = "none".  
 
 ```{r}
-
+# continuous outcome
+ipd <- with(ds, ipdma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "none"))
 ```
