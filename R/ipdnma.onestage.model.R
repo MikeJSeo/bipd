@@ -1,10 +1,11 @@
-#' Make an one-stage individual patient data meta-analysis object containing data, priors, and a JAGS model code
+#' Make an one-stage individual patient data network meta-analysis object containing data, priors, and a JAGS model code
 #'
-#' This function sets up data and JAGS code that is needed to run one-stage IPD-MA models in JAGS.
+#' This function sets up data and JAGS code that is needed to run one-stage IPD-NMA models in JAGS.
 #' 
 #' @param y outcome of the study. Can be continuous or binary. 
 #' @param study vector indicating which study the patient belongs to. Please change the study names into numbers (i.e. 1, 2, 3, etc)
-#' @param treat vector indicating which treatment the patient was assigned to (i.e. 1 for treatment, 0 for placebo)
+#' @param treat vector indicating which treatment the patient was assigned to. Since this is a network meta-analysis and there would be more than 2 treatments,
+#' careful naming of treatment is needed. This vector needs to be a sequence from 1:NT where NT is the total number of treatments. Treatment that is assigned 1 would be the baseline treatment.
 #' @param X matrix of covariate values for each patient. Dimension would be number of patients x number of covariates.
 #' @param response specification of the outcome type. Must specify either "normal" or "binomial".
 #' @param type assumption on the treatment effect: either "random" for random effects model or "fixed" for fixed effects model. Default is "random".
@@ -36,30 +37,31 @@
 #' @references O'Hara RB, Sillanpaa MJ. A review of Bayesian variable selection methods: what, how and which. \emph{Bayesian Anal}. 2009;4(1):85-117. \doi{10.1214/09-BA403}
 #' @references Seo M, White IR, Furukawa TA, et al. Comparing methods for estimating patient-specific treatment effects in individual patient data meta-analysis. \emph{Stat Med}. 2021;40(6):1553-1573. \doi{10.1002/sim.8859}
 #' @examples
-#' ds <- generate_ipdma_example(type = "continuous")
-#' ipd <- with(ds, ipdma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), 
+#' ds <- generate_ipdnma_example(type = "continuous")
+#' ipd <- with(ds, ipdnma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), 
 #' response = "normal", shrinkage = "none"))
 #' @export
 
-ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL, 
-                      response = "normal", type = "random", shrinkage = "none", scale = TRUE,
-                      mean.alpha = 0, prec.alpha = 0.001, mean.beta = 0, prec.beta = 0.001, 
-                      mean.gamma = 0, prec.gamma = 0.001, mean.delta = 0, prec.delta = 0.001,
-                      hy.prior = list("dhnorm", 0, 1), lambda.prior = NULL, p.ind = NULL, g = NULL, hy.prior.eta = NULL
-                      ){
 
+
+ipdnma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL, 
+                                  response = "normal", type = "random", shrinkage = "none", scale = TRUE,
+                                  mean.alpha = 0, prec.alpha = 0.001, mean.beta = 0, prec.beta = 0.001, 
+                                  mean.gamma = 0, prec.gamma = 0.001, mean.delta = 0, prec.delta = 0.001,
+                                  hy.prior = list("dhnorm", 0, 1), lambda.prior = NULL, p.ind = NULL, g = NULL, hy.prior.eta = NULL
+){
+  
   if(!all(grepl("^-?[0-9.]+$", study))){
     stop("Please change the study names into numbers (i.e. 1,2,3,etc)")
   }
   
-  if(length(unique(treat)) > 2){
-    stop("There are more than 2 different treatments specified; need to use ipdnma.model.onestage")
+  if(length(unique(treat)) == 2){
+    stop("There are only 2 treatments specified; need to use ipdma.model.onestage")
   }
-
+  
   if(shrinkage== "none" & (!is.null(lambda.prior) || !is.null(p.ind) || !is.null(g) || !is.null(hy.prior.eta))){
     stop("Shrinkage is set to none but have specified prior for shrinkage parameters")
   }
-  
   
   #center the covariates
   scale_mean <- scale_sd <- NULL
@@ -88,23 +90,24 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
   if(shrinkage == "SSVS"){
     data.JAGS$p.ind <- p.ind
   }
-
+  
   ipd <- list(y = y, study = study, treat = treat, X = X, response = response, type = type, 
               shrinkage = shrinkage, mean.alpha = mean.alpha, prec.alpha = prec.alpha, 
               mean.beta = mean.beta, prec.beta = prec.beta, mean.gamma = mean.gamma, 
               prec.gamma = prec.gamma, mean.delta = mean.delta, prec.delta = prec.delta,
               hy.prior = hy.prior, lambda.prior = lambda.prior, p.ind = p.ind, g = g, hy.prior.eta = hy.prior.eta)
   
-  code <- ipdma.onestage.rjags(ipd)
-  
-  code2 <- substring(code, 10)
-  code2 <- sub("T(0,)", ";T(0,)", code2, fixed = T)
+  code <- NULL
   model.JAGS <- NULL
-  eval(parse(text = paste('model.JAGS <- function() {', code2, sep='')))
-
+  # code <- ipdnma.onestage.rjags(ipd)
+  # 
+  # code2 <- substring(code, 10)
+  # code2 <- sub("T(0,)", ";T(0,)", code2, fixed = T)
+  # model.JAGS <- NULL
+  # eval(parse(text = paste('model.JAGS <- function() {', code2, sep='')))
+  
   ipd <- list(data.JAGS = data.JAGS, code = code, model.JAGS = model.JAGS, response = response, scale_mean = scale_mean, scale_sd = scale_sd)
-  class(ipd) <- "ipdma.onestage"
+  class(ipd) <- "ipdnma.onestage"
   return(ipd)
+
 }
-
-

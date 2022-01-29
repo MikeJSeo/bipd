@@ -136,7 +136,6 @@ generate_sysmiss_ipdma_example <- function(Nstudies = 10, Ncov = 5, sys_missing_
 
 generate_ipdma_example <- function(type = "continuous"){
   
-  # continuous outcome
   N <- 100  #number of patients per trial
   N.trials <- 6 #number of trials
   studyid <- rep(1:6, each = N)
@@ -194,39 +193,60 @@ generate_ipdma_example <- function(type = "continuous"){
 
 generate_ipdnma_example <- function(type = "continuous"){
   
+  N <- 100  #number of patients per trial
+  N.trials <- 10 #number of trials
+  studyid <- rep(1:10, each = N)
+  
+  treat <- c(sample(c(1,2), size = 300, replace = TRUE), sample(c(1,3), size = 200, replace = TRUE),
+             sample(c(2,3), size = 200, replace = TRUE), sample(c(1,2,3), size = 300, replace = TRUE))
+  
   if(type == "continuous"){
     
-    study <- c(rep(1:7, each = 2), rep(8:10, each = 3))
-    treat <- c(1,2, 1,2, 1,2, 1, 3, 1, 3, 2, 3, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3)
-    alpha <- c(11, 8, 10.5, 9.6, 12.9, 15.8, 10.3, 11.2, 10.2, 9.2) #study effects
-    delta12 <- c(-2.95, -2.97, -2.89) #treatment effects
-    delta13 <- c()
-    delta23 <- 
+    alpha <- rep(c(11, 8, 10.5, 9.6, 12.9, 15.8, 10.3, 11.2, 10.2, 9.2), each = N) #study effects
+    delta12 <- rep(c(-2.95, -2.97, -2.89, -2.88, -2.73, -2.59, -2.89, -3.21, -3.01, -2.94), each = N) #treatment effects
+    delta13 <- rep(c(-1.21, -1.1, -1.05, -1.11, -1.30, -0.95, -1.0, -1.2, -1.17, -1.01), each = N)
     
-    studyid <- c(1:6)
-    ds <- cbind(studyid, treat, z1, z2, z3)
+    beta1 <- rep(c(0.24, 0.21, 0.20, 0.18, 0.25, 0.22, 0.19, 0.22, 0.23, 0.25), each = N) #prognostic effects of z1
+    gamma1_12 <- rep(c(-0.9, -0.5, -0.6, -0.7, -0.1, -0.3, -0.5, -0.6, -0.7, -0.8), each = N) #interaction effects of z1
+    gamma1_13 <- rep(c(-0.1, -0.2, -0.4, -0.6, -0.1, -0.3, -0.2, -0.5, -0.4, -0.3), each = N)
     
-    ds <- as.data.frame(array(NA, dim=c(N*6, 5)))
-    colnames(ds) <- c("studyid", "treat", "z1","z2", "y")
-    for (i in 1:N.trials) {
-      treat <- stats::rbinom(N,1,0.5)
-      z1 <- stats::rnorm(N, mean=0, sd=1)
-      z2 <- stats::rnorm(N, mean=0, sd=1)
-      y <- round(alpha[i] + delta[i]*treat + beta1[i]*z1 + beta2[i]*z2 + gamma1[i]*z1*treat + gamma2[i]*z2*treat)
-      ds[(((i-1)*N)+1):(i*N), ] <- cbind(studyid[i], treat, z1,z2, y)
-    }
-    ds$studyid <- as.factor(ds$studyid)  
-      
+    beta2 <- rep(c(0.15, 0.21, 0.30, 0.38, 0.45, 0.42, 0.33, 0.34, 0.36, 0.37), each = N) #prognostic effects of z2
+    gamma2_12 <- rep(c(0.9, 0.5, 0.5, 0.7, 0.1, 0.5, 0.4, 0.8, 0.5, 0.6), each = N) #interaction effects of z2
+    gamma2_13 <-rep(c(0.8, 0.5, 0.4, 0.5, 0.2, 0.5, 0.1, 0.8, 0.2, 0.1), each = N)
     
-    beta1 <- c(0.24, 0.21, 0.20, 0.18, 0.25, 0.22) #prognostic effects of z1
-    gamma1 <- c(-0.9, -0.5, -0.6, -0.7, -0.1, -0.3) #interaction effects of z1
-    beta2 <- c(0.15, 0.21, 0.30, 0.38, 0.45, 0.42) #prognostic effects of z2
-    gamma2 <- c(0.9, 0.5, 0.5, 0.7, 0.1, 0.5) #interaction effects of z2
-    studyid <- c(1:6)
+    z1 <- stats::rnorm(N*N.trials)
+    z2 <- stats::rnorm(N*N.trials)
     
-      
+    y <- round(alpha + delta12*(treat==2) + delta13*(treat==3) + beta1*z1 + beta2*z2 + 
+                 gamma1_12*z1*(treat==2) + gamma1_13*z1*(treat==3) + gamma2_12*z2*(treat==2) + gamma2_13*z2*(treat==3)) 
+    ds <- as.data.frame(cbind(studyid, treat, z1, z2, y))
+    ds$studyid <- as.factor(studyid)
     
   } else if(type == "binary"){
-    print("hi") 
+    
+    alpha <- rep(c(0.11, 0.8, 1.05, 0.96, 0.129, 0.158, 0.13, 0.15, 0.33, 0.50), each = N) #study effects
+    delta12 <- rep(c(-0.95, -0.97, -0.89, -0.91, -0.93, -0.90, -1.01, -0.99, -1.05, -0.95), each = N) #treatment effects
+    delta13 <- rep(c(-0.55, -0.53, -0.49, -0.76, -0.53, -0.52, -0.52, -0.44, -0.50, -0.39), each = N)
+    
+    beta1 <- rep(c(0.24, 0.21, 0.20, 0.18, 0.25, 0.22, 0.22, 0.12, 0.15, 0.24), each = N) #prognostic effects of w1
+    gamma1_12 <- rep(c(-0.9, -0.5, -0.6, -0.7, -0.1, -0.3, -0.5, -0.6, -0.7, -0.8), each = N) #interaction effects of w1
+    gamma1_13 <- rep(c(-0.1, -0.2, -0.4, -0.6, -0.1, -0.3, -0.2, -0.5, -0.4, -0.3), each = N)
+    
+    beta2 <- rep(c(0.15, 0.21, 0.30, 0.38, 0.45, 0.42, 0.33, 0.34, 0.22, 0.13), each = N) #prognostic effects of w2
+    gamma2_12 <- rep(c(0.9, 0.5, 0.5, 0.7, 0.1, 0.5, 0.4, 0.8, 0.5, 0.6), each = N) #interaction effects of w2
+    gamma2_13 <-rep(c(0.8, 0.5, 0.4, 0.5, 0.2, 0.5, 0.1, 0.8, 0.2, 0.1), each = N)
+    
+    w1 <- stats::rnorm(N*N.trials)
+    w2 <- stats::rnorm(N*N.trials)
+    treat <- rbinom(N*N.trials, 1, 0.5)
+    
+    expit <- function(x){
+      exp(x)/(1+exp(x))
+    }
+    linearpredictor <- round(alpha + delta12*(treat==2) + delta13*(treat==3) + beta1*w1 + beta2*w2 + 
+                      gamma1_12*w1*(treat==2) + gamma1_13*w1*(treat==3) + gamma2_12*w2*(treat==2) + gamma2_13*w2*(treat==3)) 
+    y <- stats::rbinom(N, 1, expit(linearpredictor))
+    ds <- as.data.frame(cbind(studyid, treat, w1, w2, y))
+    ds$studyid <- as.factor(studyid)
   }
 }

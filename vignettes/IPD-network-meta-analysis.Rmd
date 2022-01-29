@@ -1,0 +1,35 @@
+---
+title: "IPD meta-analysis"
+author: "Michael Seo"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{IPD meta-analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(comment = "#>", message=FALSE, tidy.opts=list(width.cutoff=60), tidy=TRUE, collapse = TRUE, warning = FALSE) 
+```
+
+
+## Fitting IPD meta-analysis model
+
+We demonstrate how to run IPD network meta-analysis using this package. First, let's generate sample IPD for illustration.
+
+```{r}
+#devtools::install_github("MikeJSeo/bipd")
+library(bipd) 
+
+##load in data
+ds <- generate_ipdnma_example(type = "continuous")
+ds2 <- generate_ipdnma_example(type = "binary")
+head(ds)
+```
+
+The main function to set up the function for one-stage IPD network meta-analysis is ipdnma.model.onestage function. Refer to help(ipdnma.model.onestage) for more details. Briefly to describe, "y" is the outcome of the study; "study" is a vector indicating which study the patient belongs to in a numerical sequence (i.e. 1, 2, 3, etc); "treat" is a vector indicating which treatment the patient was assigned to (i.e. 1 for baseline treatment, 2, 3, etc.); "x" is a matrix of covariates for each patients; "response" is the outcome type, either "normal" or "binomial".
+
+```{r}
+
+```
