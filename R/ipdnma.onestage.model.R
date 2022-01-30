@@ -78,7 +78,7 @@ ipdnma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL
          X = X,
          Np = dim(X)[1],
          studyid = study,
-         treat = treat + 1,
+         treat = treat,
          y = y)
   
   # default prior assignment
@@ -99,7 +99,7 @@ ipdnma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL
   
   code <- NULL
   model.JAGS <- NULL
-  # code <- ipdnma.onestage.rjags(ipd)
+  code <- ipdnma.onestage.rjags(ipd)
   # 
   # code2 <- substring(code, 10)
   # code2 <- sub("T(0,)", ";T(0,)", code2, fixed = T)
