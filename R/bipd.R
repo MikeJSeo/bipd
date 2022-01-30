@@ -2,8 +2,8 @@
 #'
 #' A package for individual patient data meta-analysis using 'JAGS'
 #'
-#' We use a Bayesian approach to run individual patient data meta-analysis using 'JAGS'. 
-#' The methods incorporate shrinkage methods and calculate patient-specific treatment effects as described in Seo et al. (2021) <DOI:10.1002/sim.8859>. 
+#' We use a Bayesian approach to run individual patient data meta-analysis and network meta-analysis using 'JAGS'. 
+#' The methods incorporate shrinkage methods and calculate patient-specific treatment effects as described in Seo et al. (2021) <DOI:10.1002/sim.8859>.
 #' This package also includes user-friendly functions that impute missing data in an individual patient data using mice-related packages.
 #'
 #' @docType package
