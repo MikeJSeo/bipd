@@ -97,15 +97,17 @@ ipdnma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL
     list(Nstudies = length(unique(study)),
          Ncovariate = dim(X)[2],
          Ntreat = length(unique(treat)),
-         na = na,
-         treatment.arm = treatment.arm,
-         t = t,
          X = X,
          Np = dim(X)[1],
          studyid = study,
          treat = treat,
          y = y)
   
+  if(type == "random"){
+    data.JAGS$t <- t
+    data.JAGS$treatment.arm <- treatment.arm
+    data.JAGS$na <- na
+  }
   
   
   # default prior assignment
@@ -124,15 +126,14 @@ ipdnma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL
               prec.gamma = prec.gamma, mean.delta = mean.delta, prec.delta = prec.delta,
               hy.prior = hy.prior, lambda.prior = lambda.prior, p.ind = p.ind, g = g, hy.prior.eta = hy.prior.eta)
   
-  code <- NULL
-  model.JAGS <- NULL
-  code <- ipdnma.onestage.rjags(ipd)
-  # 
-  # code2 <- substring(code, 10)
-  # code2 <- sub("T(0,)", ";T(0,)", code2, fixed = T)
-  # model.JAGS <- NULL
-  # eval(parse(text = paste('model.JAGS <- function() {', code2, sep='')))
   
+  code <- ipdnma.onestage.rjags(ipd)
+
+  code2 <- substring(code, 10)
+  code2 <- sub("T(0,)", ";T(0,)", code2, fixed = T)
+  model.JAGS <- NULL
+  eval(parse(text = paste('model.JAGS <- function() {', code2, sep='')))
+
   ipd <- list(data.JAGS = data.JAGS, code = code, model.JAGS = model.JAGS, response = response, scale_mean = scale_mean, scale_sd = scale_sd)
   class(ipd) <- "ipdnma.onestage"
   return(ipd)
