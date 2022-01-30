@@ -11,42 +11,49 @@ ipdnma.onestage.rjags <- function(ipd){
       
       code <- paste0(code, "\n\ty[i] ~ dbern(p[i])",
                      "\n\tlogit(p[i]) <- alpha[studyid[i]] + inprod(beta[], X[i,]) +",
-                     "\n\t\tinprod(gamma[,treat[i]], X[i,]) ")  
+                     "\n\t\tinprod(gamma[,treat[i]], X[i,]) +")  
       
     } else if(response == "normal"){
       
       code <- paste0(code, "\n\ty[i] ~ dnorm(mu[i], sigma)",
                      "\n\tmu[i] <- alpha[studyid[i]] + inprod(beta[], X[i,]) +",
-                     "\n\t\tinprod(gamma[,treat[i]], X[i,]) ")  
+                     "\n\t\tinprod(gamma[,treat[i]], X[i,]) +")  
     }
     
-    code <- paste0(code, "\n}")
-    
-    # if(type == "random"){
-    #   code <- paste0(code, " d[studyid[i],treat[i]]",
-    #                  "\n}")
-    # } else if (type == "fixed"){
-    #   code <- paste0(code, " delta[treat[i]]",
-    #                  "\n}")
-    # }
+    if(type == "random"){
+      code <- paste0(code, " d[studyid[i],treatment.arm[i]]",
+                     "\n}")
+    } else if (type == "fixed"){
+      code <- paste0(code, " delta[treat[i]]",
+                     "\n}")
+    }
     
     if(response == "normal"){
       code <- paste0(code, "\nsigma ~ dgamma(0.001, 0.001)")
     }
     
-    # if(type == "random"){
-    #   code <- paste0(code, "\n\n#####treatment effect",
-    #                  "\nfor(j in 1:Nstudies){",
-    #                  "\n\td[j,1] <- 0",
-    #                  "\n\td[j,2] ~ dnorm(delta[2], tau)",
-    #                  "\n}")
-    #   code <- paste0(code, hy.prior.rjags(ipd))  
-    # }
-    # 
-    # code <- paste0(code, "\n\n## prior distribution for the average treatment effect",
-    #                "\ndelta[1] <- 0",
-    #                "\ndelta[2] ~ dnorm(", mean.delta, ", ", prec.delta, ")\n")
-    
+    if(type == "random"){
+      code <- paste0(code, "\n\n#####treatment effect",
+                     "\nfor(i in 1:Nstudies){",
+                     "\n\tw[i,1] <- 0",
+                     "\n\td[i,1] <- 0",
+                     "\n\tfor(k in 2:na[i]){",
+                     "\n\t\td[i,k] ~ dnorm(mdelta[i,k], taudelta[i,k])",
+                     "\n\t\tmdelta[i,k] <-  delta[t[i,k]] - delta[t[i,1] + sw[i,k]",
+                     "\n\t\ttaudelta[i,k] <- tau * 2 * (k-1)/k",
+                     "\n\t\tw[i,k] <- d[i,k] - delta[t[i,k]] + delta[t[i,1]]",
+                     "\n\t\tsw[i,k] <- sum( w[i, 1:(k-1)]) / (k-1)",
+                     "\n\t}",
+                     "\n}")
+      code <- paste0(code, hy.prior.rjags(ipd))
+    }
+
+    code <- paste0(code, "\n\n## prior distribution for the average treatment effect",
+                   "\ndelta[1] <- 0",
+                   "\nfor(k in 2:Ntreat){",
+                   "\n\tdelta[k] ~ dnorm(", mean.delta, ", ", prec.delta, ")",
+                   "\n}")
+
     code <- paste0(code, "\n\n## prior distribution for the study intercept",
                    "\nfor (j in 1:Nstudies){",
                    "\n\talpha[j] ~ dnorm(", mean.alpha, ", ", prec.alpha, ")",

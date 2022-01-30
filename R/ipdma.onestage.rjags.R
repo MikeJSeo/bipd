@@ -43,7 +43,7 @@ ipdma.onestage.rjags <- function(ipd){
     
     code <- paste0(code, "\n\n## prior distribution for the average treatment effect",
                    "\ndelta[1] <- 0",
-                   "\ndelta[2] ~ dnorm(", mean.delta, ", ", prec.delta, ")\n")
+                   "\ndelta[2] ~ dnorm(", mean.delta, ", ", prec.delta, ")")
     
     code <- paste0(code, "\n\n## prior distribution for the study intercept",
                    "\nfor (j in 1:Nstudies){",

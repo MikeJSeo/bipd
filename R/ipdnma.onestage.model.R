@@ -77,6 +77,16 @@ ipdnma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL
             treat ~ study,
             function(x) length(unique(x)))$treat)
   
+  # find unique treatment in each study
+  unique.treatment <- stats::aggregate(data = dummydata,
+                      treat ~ study,
+                      function(x) unique(x)[order(unique(x))])$treat
+  
+  t <- matrix(NA, nrow = length(unique(study)), ncol = max(na))
+  for(i in 1:dim(t)[1]){
+    t[i, 1:na[i]] <- unique.treatment[[i]]
+  }
+  
   #find what the treatment arm is for each treatment in the study
   treatment.arm <- unlist(lapply(1:length(unique(study)), function(i){
     as.numeric(factor(dummydata[study ==i,"treat"]))
@@ -89,6 +99,7 @@ ipdnma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL
          Ntreat = length(unique(treat)),
          na = na,
          treatment.arm = treatment.arm,
+         t = t,
          X = X,
          Np = dim(X)[1],
          studyid = study,
