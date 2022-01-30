@@ -75,6 +75,7 @@ ipdnma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL
   data.JAGS <- 
     list(Nstudies = length(unique(study)),
          Ncovariate = dim(X)[2],
+         Ntreat = length(unique(treat)),
          X = X,
          Np = dim(X)[1],
          studyid = study,

@@ -20,6 +20,8 @@ ipdnma.onestage.rjags <- function(ipd){
                      "\n\t\tinprod(gamma[,treat[i]], X[i,]) ")  
     }
     
+    code <- paste0(code, "\n}")
+    
     # if(type == "random"){
     #   code <- paste0(code, " d[studyid[i],treat[i]]",
     #                  "\n}")
