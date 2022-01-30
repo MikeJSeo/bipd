@@ -65,7 +65,7 @@ For the second example, let's use the same data, but include shrinkage (i.e. Bay
 
 ```{r}
 ipd <- with(ds, ipdma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "laplace"))
-samples <- ipd.run(ipd, pars.save = c("lambda", "beta", "gamma", "delta"), n.chains = 3, n.burnin = 500, n.iter = 5000)
+samples <- ipd.run(ipd, pars.save = c("beta", "gamma", "delta", "lambda", "tt"), n.chains = 3, n.burnin = 500, n.iter = 5000)
 summary(samples)
 ```
 
@@ -99,4 +99,18 @@ samples <- ipd.run(ipd,  pars.save = c("beta", "gamma", "delta"), n.chains = 3, 
 summary(samples)
 ```
 
-p.s. Note that in the network meta-analysis literature, "d" usually refers to average treatment effect and "delta" refers to study-specific treatment effect. In this R package I have flipped around the two notations.
+We can apply shrinkage on the effect modifiers as before.
+
+```{r}
+ipd <- with(ds, ipdnma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "SSVS"))
+samples <- ipd.run(ipd,  pars.save = c("beta", "gamma", "delta", "Ind", "eta"), n.chains = 3, n.burnin = 500, n.iter = 5000)
+summary(samples)
+```
+
+```{r}
+ipd <- with(ds, ipdnma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "laplace", lambda.prior = list("dgamma",2,0.1)))
+samples <- ipd.run(ipd,  pars.save = c("beta", "gamma", "delta", "lambda", "tt"), n.chains = 3, n.burnin = 500, n.iter = 5000)
+summary(samples)
+```
+
+p.s. Note that in the network meta-analysis literature, "d" usually refers to average treatment effect and "delta" refers to study-specific treatment effect. In this R package, we have flipped around the two notations.

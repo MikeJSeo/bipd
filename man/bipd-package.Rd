@@ -17,6 +17,8 @@ Audigier V, White I, Jolani S, et al. Multiple Imputation for Multilevel Data wi
 
 Debray TPA, Moons KGM, Valkenhoef G, et al. Get real in individual participant data (IPD) meta-analysis: a review of the methodology. \emph{Res Synth Methods}. 2015;6(4):293-309. \doi{10.1002/jrsm.1160}
 
+Dias S, Sutton AJ, Ades AE, et al. A Generalized Linear Modeling Framework for Pairwise and Network Meta-analysis of Randomized Controlled Trials. \emph{Medical Decision Making}. 2013;33(5):607-617. \doi{10.1177/0272989X12458724}
+
 Fisher DJ, Carpenter JR, Morris TP, et al. Meta-analytical methods to identify who benefits most from treatments: daft, deluded, or deft approach?. \emph{BMJ}. 2017;356:j573. \doi{10.1136/bmj.j573}
 
 O'Hara RB, Sillanpaa MJ. A review of Bayesian variable selection methods: what, how and which. \emph{Bayesian Anal}. 2009;4(1):85-117. \doi{10.1214/09-BA403}

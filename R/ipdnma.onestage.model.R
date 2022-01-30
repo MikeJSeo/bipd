@@ -34,6 +34,7 @@
 #' \item{model.JAGS}{JAGS code in a function. This is used when running model in parallel}
 #' \item{scale.mean}{mean used in scaling covariates}
 #' \item{scale.sd}{standard deviation used in scaling covariates}
+#' @references Dias S, Sutton AJ, Ades AE, et al. A Generalized Linear Modeling Framework for Pairwise and Network Meta-analysis of Randomized Controlled Trials. \emph{Medical Decision Making}. 2013;33(5):607-617. \doi{10.1177/0272989X12458724}
 #' @references O'Hara RB, Sillanpaa MJ. A review of Bayesian variable selection methods: what, how and which. \emph{Bayesian Anal}. 2009;4(1):85-117. \doi{10.1214/09-BA403}
 #' @references Seo M, White IR, Furukawa TA, et al. Comparing methods for estimating patient-specific treatment effects in individual patient data meta-analysis. \emph{Stat Med}. 2021;40(6):1553-1573. \doi{10.1002/sim.8859}
 #' @examples
