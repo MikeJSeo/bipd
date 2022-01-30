@@ -39,7 +39,7 @@ ipdnma.onestage.rjags <- function(ipd){
                      "\n\td[i,1] <- 0",
                      "\n\tfor(k in 2:na[i]){",
                      "\n\t\td[i,k] ~ dnorm(mdelta[i,k], taudelta[i,k])",
-                     "\n\t\tmdelta[i,k] <-  delta[t[i,k]] - delta[t[i,1] + sw[i,k]",
+                     "\n\t\tmdelta[i,k] <-  delta[t[i,k]] - delta[t[i,1]] + sw[i,k]",
                      "\n\t\ttaudelta[i,k] <- tau * 2 * (k-1)/k",
                      "\n\t\tw[i,k] <- d[i,k] - delta[t[i,k]] + delta[t[i,1]]",
                      "\n\t\tsw[i,k] <- sum( w[i, 1:(k-1)]) / (k-1)",
