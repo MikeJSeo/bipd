@@ -73,10 +73,10 @@ nma.shrinkage.prior.rjags <- function(ipd){
     if(shrinkage == "none"){
       code <- paste0(code, "\n## prior distribution for the effect modifiers under no shrinkage",
                      "\nfor(k in 1:Ncovariate){",
-                     "\n\tgamma[k,1] <- 0"
+                     "\n\tgamma[k,1] <- 0",
                      "\n\tfor(l in 2:Ntreat){",
                      "\n\t\tgamma[k,l] ~ dnorm(", mean.gamma, ", ", prec.gamma, ") ",
-                     "\n\t}"
+                     "\n\t}",
                      "\n}")
       
     } else if(shrinkage == "laplace"){
