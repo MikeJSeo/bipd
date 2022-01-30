@@ -94,4 +94,6 @@ The main function to set up the function for one-stage IPD network meta-analysis
 ```{r}
 # continuous outcome
 ipd <- with(ds, ipdnma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "none"))
+samples <- ipd.run(ipd,  pars.save = c("beta", "gamma"), n.chains = 3, n.burnin = 500, n.iter = 5000)
+summary(samples)
 ```
