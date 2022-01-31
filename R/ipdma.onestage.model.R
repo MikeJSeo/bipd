@@ -46,7 +46,7 @@
 ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL, 
                       response = "normal", type = "random", shrinkage = "none", scale = TRUE,
                       mean.alpha = 0, prec.alpha = 0.001, mean.beta = 0, prec.beta = 0.001, 
-                      mean.gamma = 0, prec.gamma = 0.001, mean.d = 0, prec.d = 0.001,
+                      mean.gamma = 0, prec.gamma = 0.001, mean.d = 0, prec.d = 0.001, mean.delta, prec.delta,
                       hy.prior = list("dhnorm", 0, 1), lambda.prior = NULL, p.ind = NULL, g = NULL, hy.prior.eta = NULL
                       ){
 
