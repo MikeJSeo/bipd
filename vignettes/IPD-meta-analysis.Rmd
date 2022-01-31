@@ -89,7 +89,7 @@ ds2 <- generate_ipdnma_example(type = "binary")
 head(ds)
 ```
 
-The main function to set up the function for one-stage IPD network meta-analysis is ipdnma.model.onestage function. The function is very similar to ipdma.model.onestage except that now we have number of treatments greater than 2. Consequently, "treat" parameter is slightly different. 1 assigns baseline treatment and other treatments should be be assigned numbers 2, 3, 4, etc. 
+The main function to set up the function for one-stage IPD network meta-analysis is ipdnma.model.onestage function. The function is very similar to ipdma.model.onestage except that now we have number of treatments greater than 2. Consequently, "treat" parameter is defined differently i.e. 1 assigns baseline treatment and other treatments should be be assigned 2, 3, 4, etc. 
 
 ```{r}
 # continuous outcome
@@ -99,17 +99,12 @@ samples <- ipd.run(ipd,  pars.save = c("beta", "gamma", "delta"), n.chains = 3, 
 summary(samples)
 ```
 
-We can apply shrinkage on the effect modifiers as before.
+We can apply shrinkage on the effect modifiers (treatment-covariate interactions) as before.
 
 ```{r}
 ipd <- with(ds, ipdnma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "SSVS"))
+#ipd <- with(ds, ipdnma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "laplace", lambda.prior = list("dgamma",2,0.1)))
 samples <- ipd.run(ipd,  pars.save = c("beta", "gamma", "delta", "Ind", "eta"), n.chains = 3, n.burnin = 500, n.iter = 5000)
-summary(samples)
-```
-
-```{r}
-ipd <- with(ds, ipdnma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "laplace", lambda.prior = list("dgamma",2,0.1)))
-samples <- ipd.run(ipd,  pars.save = c("beta", "gamma", "delta", "lambda", "tt"), n.chains = 3, n.burnin = 500, n.iter = 5000)
 summary(samples)
 ```
 
