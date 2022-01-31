@@ -21,8 +21,6 @@ ipdma.model.onestage(
   prec.gamma = 0.001,
   mean.d = 0,
   prec.d = 0.001,
-  mean.delta,
-  prec.delta,
   hy.prior = list("dhnorm", 0, 1),
   lambda.prior = NULL,
   p.ind = NULL,
@@ -66,10 +64,6 @@ See O'hara et al (2009) for more details.}
 
 \item{prec.d}{prior precision for the average treatment effect}
 
-\item{mean.delta}{same as mean.d. Use mean.d instead.}
-
-\item{prec.delta}{same as prec.d. Use prec.d instead.}
-
 \item{hy.prior}{prior for the heterogeneity parameter. Supports uniform, gamma, and half normal for normal and binomial response
 It should be a list of length 3, where first element should be the distribution (one of dunif, dgamma, dhnorm) and the next two are the parameters associated with the distribution. For example, list("dunif", 0, 5) gives uniform prior with lower bound 0 and upper bound 5 for the heterogeneity parameter.}
 
@@ -80,6 +74,10 @@ It should be a list of length 3, where first element should be the distribution 
 \item{g}{(only for shrinkage = "SSVS") multiplier for the precision of spike. Default is g = 1000.}
 
 \item{hy.prior.eta}{(only for shrinkage = "SSVS") standard deviation of the slab prior. Currently only support uniform distribution. Default is list("dunif", 0, 5)}
+
+\item{mean.delta}{same as mean.d. Use mean.d instead.}
+
+\item{prec.delta}{same as prec.d. Use prec.d instead.}
 }
 \value{
 \item{data.JAGS}{data organized in a list so that it can be used when running code in JAGS}

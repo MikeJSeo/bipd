@@ -42,8 +42,7 @@
 ipdma.model.deft.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL, 
                                  response = "normal", type = "random",
                                  mean.alpha = 0, prec.alpha = 0.001, mean.beta = 0, prec.beta = 0.001, 
-                                 mean.gamma.within = 0, prec.gamma.within = 0.001, mean.gamma.across = 0, prec.gamma.across = 0.001, 
-                                 mean.d = 0, prec.d = 0.001, mean.delta, prec.delta,
+                                 mean.gamma.within = 0, prec.gamma.within = 0.001, mean.gamma.across = 0, prec.gamma.across = 0.001, mean.d = 0, prec.d = 0.001,
                                  hy.prior = list("dhnorm", 0, 1)
 ){
   

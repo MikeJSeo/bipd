@@ -21,8 +21,6 @@ ipdma.model.deft.onestage(
   prec.gamma.across = 0.001,
   mean.d = 0,
   prec.d = 0.001,
-  mean.delta,
-  prec.delta,
   hy.prior = list("dhnorm", 0, 1)
 )
 }
@@ -59,12 +57,12 @@ ipdma.model.deft.onestage(
 
 \item{prec.d}{prior precision for the average treatment effect}
 
+\item{hy.prior}{prior for the heterogeneity parameter. Supports uniform, gamma, and half normal for normal and binomial response
+It should be a list of length 3, where first element should be the distribution (one of dunif, dgamma, dhnorm) and the next two are the parameters associated with the distribution. For example, list("dunif", 0, 5) gives uniform prior with lower bound 0 and upper bound 5 for the heterogeneity parameter.}
+
 \item{mean.delta}{same as mean.d. Use mean.d instead.}
 
 \item{prec.delta}{same as prec.d. Use prec.d instead.}
-
-\item{hy.prior}{prior for the heterogeneity parameter. Supports uniform, gamma, and half normal for normal and binomial response
-It should be a list of length 3, where first element should be the distribution (one of dunif, dgamma, dhnorm) and the next two are the parameters associated with the distribution. For example, list("dunif", 0, 5) gives uniform prior with lower bound 0 and upper bound 5 for the heterogeneity parameter.}
 }
 \value{
 \item{data.JAGS}{data organized in a list so that it can be used when running code in JAGS}
