@@ -11,13 +11,13 @@ ipdnma.onestage.rjags <- function(ipd){
       
       code <- paste0(code, "\n\ty[i] ~ dbern(p[i])",
                      "\n\tlogit(p[i]) <- alpha[studyid[i]] + inprod(beta[], X[i,]) +",
-                     "\n\t\tinprod(gamma[,treat[i]], X[i,]) +")  
+                     "\n\t\tinprod(gamma[treat[i],], X[i,]) +")  
       
     } else if(response == "normal"){
       
       code <- paste0(code, "\n\ty[i] ~ dnorm(mu[i], sigma)",
                      "\n\tmu[i] <- alpha[studyid[i]] + inprod(beta[], X[i,]) +",
-                     "\n\t\tinprod(gamma[,treat[i]], X[i,]) +")  
+                     "\n\t\tinprod(gamma[treat[i],], X[i,]) +")  
     }
     
     if(type == "random"){
