@@ -74,6 +74,10 @@ It should be a list of length 3, where first element should be the distribution 
 \item{g}{(only for shrinkage = "SSVS") multiplier for the precision of spike. Default is g = 1000.}
 
 \item{hy.prior.eta}{(only for shrinkage = "SSVS") standard deviation of the slab prior. Currently only support uniform distribution. Default is list("dunif", 0, 5)}
+
+\item{mean.delta}{same as mean.d. Use mean.d instead.}
+
+\item{prec.delta}{same as prec.d. Use prec.d instead.}
 }
 \value{
 \item{data.JAGS}{data organized in a list so that it can be used when running code in JAGS}

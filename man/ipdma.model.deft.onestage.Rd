@@ -59,6 +59,10 @@ ipdma.model.deft.onestage(
 
 \item{hy.prior}{prior for the heterogeneity parameter. Supports uniform, gamma, and half normal for normal and binomial response
 It should be a list of length 3, where first element should be the distribution (one of dunif, dgamma, dhnorm) and the next two are the parameters associated with the distribution. For example, list("dunif", 0, 5) gives uniform prior with lower bound 0 and upper bound 5 for the heterogeneity parameter.}
+
+\item{mean.delta}{same as mean.d. Use mean.d instead.}
+
+\item{prec.delta}{same as prec.d. Use prec.d instead.}
 }
 \value{
 \item{data.JAGS}{data organized in a list so that it can be used when running code in JAGS}

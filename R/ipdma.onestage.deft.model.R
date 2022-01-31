@@ -18,6 +18,8 @@
 #' @param prec.gamma.across prior precision for the effect modifiers of across study information
 #' @param mean.d prior mean for the average treatment effect
 #' @param prec.d prior precision for the average treatment effect
+#' @param mean.delta same as mean.d. Use mean.d instead.
+#' @param prec.delta same as prec.d. Use prec.d instead.
 #' @param hy.prior prior for the heterogeneity parameter. Supports uniform, gamma, and half normal for normal and binomial response
 #' It should be a list of length 3, where first element should be the distribution (one of dunif, dgamma, dhnorm) and the next two are the parameters associated with the distribution. For example, list("dunif", 0, 5) gives uniform prior with lower bound 0 and upper bound 5 for the heterogeneity parameter.
 #' @return 
@@ -52,6 +54,7 @@ ipdma.model.deft.onestage <- function(y = NULL, study = NULL, treat = NULL, X = 
     stop("There are more than 2 different treatments specified; need to use ipdnma.model.onestage (under development)")
   }
   
+  # changed notation between d and delta
   calls <- names(sapply(match.call(), deparse))[-1]
   if(any("mean.delta" %in% calls)){
     mean.d <- mean.delta
