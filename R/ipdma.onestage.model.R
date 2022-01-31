@@ -19,8 +19,8 @@
 #' @param prec.beta prior precision for the regression coefficients of the main effects of the covariates
 #' @param mean.gamma prior mean for the effect modifiers. This parameter is not used if penalization is placed on effect modifiers.
 #' @param prec.gamma prior precision for the effect modifiers. This parameter is not used if penalization is placed on effect modifiers.
-#' @param mean.delta prior mean for the average treatment effect
-#' @param prec.delta prior precision for the average treatment effect
+#' @param mean.d prior mean for the average treatment effect
+#' @param prec.d prior precision for the average treatment effect
 #' @param hy.prior prior for the heterogeneity parameter. Supports uniform, gamma, and half normal for normal and binomial response
 #' It should be a list of length 3, where first element should be the distribution (one of dunif, dgamma, dhnorm) and the next two are the parameters associated with the distribution. For example, list("dunif", 0, 5) gives uniform prior with lower bound 0 and upper bound 5 for the heterogeneity parameter.
 #' @param lambda.prior (only for shrinkage = "laplace") two options for laplace shrinkage. We can put a gamma prior on the lambda (i.e. list("dgamma",2,0.1)) or put a uniform prior on the inverse of lambda (i.e. list("dunif",0,5))
@@ -44,7 +44,7 @@
 ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL, 
                       response = "normal", type = "random", shrinkage = "none", scale = TRUE,
                       mean.alpha = 0, prec.alpha = 0.001, mean.beta = 0, prec.beta = 0.001, 
-                      mean.gamma = 0, prec.gamma = 0.001, mean.delta = 0, prec.delta = 0.001,
+                      mean.gamma = 0, prec.gamma = 0.001, mean.d = 0, prec.d = 0.001,
                       hy.prior = list("dhnorm", 0, 1), lambda.prior = NULL, p.ind = NULL, g = NULL, hy.prior.eta = NULL
                       ){
 
@@ -60,6 +60,13 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
     stop("Shrinkage is set to none but have specified prior for shrinkage parameters")
   }
   
+  calls <- names(sapply(match.call(), deparse))[-1]
+  if(any("mean.delta" %in% calls)){
+    mean.d <- mean.delta
+  }
+  if(any("prec.delta" %in% calls)){
+    prec.d <- prec.delta
+  }
   
   #center the covariates
   scale_mean <- scale_sd <- NULL
@@ -92,7 +99,7 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
   ipd <- list(y = y, study = study, treat = treat, X = X, response = response, type = type, 
               shrinkage = shrinkage, mean.alpha = mean.alpha, prec.alpha = prec.alpha, 
               mean.beta = mean.beta, prec.beta = prec.beta, mean.gamma = mean.gamma, 
-              prec.gamma = prec.gamma, mean.delta = mean.delta, prec.delta = prec.delta,
+              prec.gamma = prec.gamma, mean.d = mean.d, prec.d = prec.d,
               hy.prior = hy.prior, lambda.prior = lambda.prior, p.ind = p.ind, g = g, hy.prior.eta = hy.prior.eta)
   
   code <- ipdma.onestage.rjags(ipd)
