@@ -36,7 +36,7 @@ Another important parameter is the "shrinkage" parameter. To specify IPD meta-an
 ipd <- with(ds, ipdma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "none"))
 ```
 
-To view the JAGS code that was used to run the model, we can run the following command. Note that "alpha" is the study intercept, "beta" is the coefficient for main effects of the covariates, "gamma" is the coefficient for effect modifier, and "d" is the average treatment effect. 
+To view the JAGS code that was used to run the model, we can run the following command. Note that "alpha" is the study intercept, "beta" is the coefficient for main effects of the covariates, "gamma" is the coefficient for effect modifier, and "delta" is the average treatment effect. 
 
 ```{r}
 cat(ipd$code)
@@ -45,7 +45,7 @@ cat(ipd$code)
 Once the model is set up using ipdma.model.onestage function, we use ipd.run function to run the model. help(ipd.run) describes possible parameters to specify.
 
 ```{r}
-samples <- ipd.run(ipd, pars.save = c("beta", "gamma", "d"), n.chains = 3, n.burnin = 500, n.iter = 5000)
+samples <- ipd.run(ipd, pars.save = c("beta", "gamma", "delta"), n.chains = 3, n.burnin = 500, n.iter = 5000)
 
 samples <- samples[,-3] #remove delta[1] which is 0
 summary(samples)

@@ -21,8 +21,6 @@
 #' @param prec.gamma prior precision for the effect modifiers. This parameter is not used if penalization is placed on effect modifiers.
 #' @param mean.d prior mean for the average treatment effect
 #' @param prec.d prior precision for the average treatment effect
-#' @param mean.delta same as mean.d. Use mean.d instead.
-#' @param prec.delta same as prec.d. Use prec.d instead.
 #' @param hy.prior prior for the heterogeneity parameter. Supports uniform, gamma, and half normal for normal and binomial response
 #' It should be a list of length 3, where first element should be the distribution (one of dunif, dgamma, dhnorm) and the next two are the parameters associated with the distribution. For example, list("dunif", 0, 5) gives uniform prior with lower bound 0 and upper bound 5 for the heterogeneity parameter.
 #' @param lambda.prior (only for shrinkage = "laplace") two options for laplace shrinkage. We can put a gamma prior on the lambda (i.e. list("dgamma",2,0.1)) or put a uniform prior on the inverse of lambda (i.e. list("dunif",0,5))
@@ -62,7 +60,6 @@ ipdma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL,
     stop("Shrinkage is set to none but have specified prior for shrinkage parameters")
   }
   
-  # changed notation between d and delta
   calls <- names(sapply(match.call(), deparse))[-1]
   if(any("mean.delta" %in% calls)){
     mean.d <- mean.delta
