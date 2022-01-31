@@ -19,8 +19,8 @@ ipdma.model.deft.onestage(
   prec.gamma.within = 0.001,
   mean.gamma.across = 0,
   prec.gamma.across = 0.001,
-  mean.d = 0,
-  prec.d = 0.001,
+  mean.delta = 0,
+  prec.delta = 0.001,
   hy.prior = list("dhnorm", 0, 1)
 )
 }
@@ -53,9 +53,9 @@ ipdma.model.deft.onestage(
 
 \item{prec.gamma.across}{prior precision for the effect modifiers of across study information}
 
-\item{mean.d}{prior mean for the average treatment effect}
+\item{mean.delta}{prior mean for the average treatment effect}
 
-\item{prec.d}{prior precision for the average treatment effect}
+\item{prec.delta}{prior precision for the average treatment effect}
 
 \item{hy.prior}{prior for the heterogeneity parameter. Supports uniform, gamma, and half normal for normal and binomial response
 It should be a list of length 3, where first element should be the distribution (one of dunif, dgamma, dhnorm) and the next two are the parameters associated with the distribution. For example, list("dunif", 0, 5) gives uniform prior with lower bound 0 and upper bound 5 for the heterogeneity parameter.}
@@ -75,7 +75,7 @@ ipd <- with(ds, ipdma.model.deft.onestage(y = y, study = studyid, treat = treat,
 response = "normal"))
 cat(ipd$code)
 \donttest{
-samples <- ipd.run(ipd, pars.save = c("beta", "gamma.within", "gamma.across", "d"))
+samples <- ipd.run(ipd, pars.save = c("beta", "gamma.within", "gamma.across", "delta"))
 treatment.effect(ipd, samples, newpatient= c(1,0.5), reference = c(0, 0))
 }
 }
