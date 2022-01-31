@@ -17,7 +17,7 @@
 #' ipd <- with(ds, ipdma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), 
 #' response = "normal", shrinkage = "none"))
 #' \donttest{
-#' samples <- ipd.run(ipd, pars.save = c("beta", "gamma", "delta"), n.chains = 3, n.burnin = 500, 
+#' samples <- ipd.run(ipd, pars.save = c("beta", "gamma", "d"), n.chains = 3, n.burnin = 500, 
 #' n.iter = 5000)
 #' treatment.effect(ipd, samples, newpatient = c(1,0.5))
 #' }
@@ -34,7 +34,7 @@ treatment.effect <- function(ipd = NULL, samples = NULL, newpatient = NULL,
     
     newpatient <- (newpatient - ipd$scale_mean)/ipd$scale_sd
       
-    index0 <- which(colnames(samples[[1]]) == "delta[2]") 
+    index0 <- which(colnames(samples[[1]]) == "d[2]") 
     index1 <- grep("gamma", colnames(samples[[1]]))
     index <- c(index0, index1)
     samples2 <- samples[,index]
@@ -59,7 +59,7 @@ treatment.effect <- function(ipd = NULL, samples = NULL, newpatient = NULL,
     }
     newpatient <- newpatient - reference
     
-    index0 <- which(colnames(samples[[1]]) == "delta[2]") 
+    index0 <- which(colnames(samples[[1]]) == "d[2]") 
     index1 <- grep("gamma.within", colnames(samples[[1]]))
     index <- c(index0, index1)
     samples2 <- samples[,index]

@@ -19,8 +19,8 @@ ipdma.model.onestage(
   prec.beta = 0.001,
   mean.gamma = 0,
   prec.gamma = 0.001,
-  mean.delta = 0,
-  prec.delta = 0.001,
+  mean.d = 0,
+  prec.d = 0.001,
   hy.prior = list("dhnorm", 0, 1),
   lambda.prior = NULL,
   p.ind = NULL,
@@ -60,9 +60,9 @@ See O'hara et al (2009) for more details.}
 
 \item{prec.gamma}{prior precision for the effect modifiers. This parameter is not used if penalization is placed on effect modifiers.}
 
-\item{mean.delta}{prior mean for the average treatment effect}
+\item{mean.d}{prior mean for the average treatment effect}
 
-\item{prec.delta}{prior precision for the average treatment effect}
+\item{prec.d}{prior precision for the average treatment effect}
 
 \item{hy.prior}{prior for the heterogeneity parameter. Supports uniform, gamma, and half normal for normal and binomial response
 It should be a list of length 3, where first element should be the distribution (one of dunif, dgamma, dhnorm) and the next two are the parameters associated with the distribution. For example, list("dunif", 0, 5) gives uniform prior with lower bound 0 and upper bound 5 for the heterogeneity parameter.}

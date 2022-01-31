@@ -18,10 +18,10 @@ ipdma.onestage.deft.rjags <- function(ipd){
     }
     
     if(type == "random"){
-      code <- paste0(code, " d[studyid[i],treat[i]]",
+      code <- paste0(code, " delta[studyid[i],treat[i]]",
                      "\n}")
     } else if (type == "fixed"){
-      code <- paste0(code, " delta[treat[i]]",
+      code <- paste0(code, " d[treat[i]]",
                      "\n}")
     }
     
@@ -32,15 +32,15 @@ ipdma.onestage.deft.rjags <- function(ipd){
     if(type == "random"){
       code <- paste0(code, "\n\n#####treatment effect",
                      "\nfor(j in 1:Nstudies){",
-                     "\n\td[j,1] <- 0",
-                     "\n\td[j,2] ~ dnorm(delta[2], tau)",
+                     "\n\tdelta[j,1] <- 0",
+                     "\n\tdelta[j,2] ~ dnorm(d[2], tau)",
                      "\n}")
       code <- paste0(code, hy.prior.rjags(ipd))  
     }
     
     code <- paste0(code, "\n\n## prior distribution for the average treatment effect",
-                   "\ndelta[1] <- 0",
-                   "\ndelta[2] ~ dnorm(", mean.delta, ", ", prec.delta, ")\n")
+                   "\nd[1] <- 0",
+                   "\nd[2] ~ dnorm(", mean.d, ", ", prec.d, ")\n")
     
     code <- paste0(code, "\n\n## prior distribution for the study intercept",
                    "\nfor (j in 1:Nstudies){",

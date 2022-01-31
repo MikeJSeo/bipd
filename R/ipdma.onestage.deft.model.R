@@ -16,8 +16,8 @@
 #' @param prec.gamma.within prior precision for the effect modifiers of within study information.
 #' @param mean.gamma.across prior mean for the effect modifiers of across study information; effect modification is assumed to have common effect.
 #' @param prec.gamma.across prior precision for the effect modifiers of across study information
-#' @param mean.delta prior mean for the average treatment effect
-#' @param prec.delta prior precision for the average treatment effect
+#' @param mean.d prior mean for the average treatment effect
+#' @param prec.d prior precision for the average treatment effect
 #' @param hy.prior prior for the heterogeneity parameter. Supports uniform, gamma, and half normal for normal and binomial response
 #' It should be a list of length 3, where first element should be the distribution (one of dunif, dgamma, dhnorm) and the next two are the parameters associated with the distribution. For example, list("dunif", 0, 5) gives uniform prior with lower bound 0 and upper bound 5 for the heterogeneity parameter.
 #' @return 
@@ -32,7 +32,7 @@
 #' response = "normal"))
 #' cat(ipd$code)
 #' \donttest{
-#' samples <- ipd.run(ipd, pars.save = c("beta", "gamma.within", "gamma.across", "delta"))
+#' samples <- ipd.run(ipd, pars.save = c("beta", "gamma.within", "gamma.across", "d"))
 #' treatment.effect(ipd, samples, newpatient= c(1,0.5), reference = c(0, 0))
 #' }
 #' @export
@@ -40,7 +40,7 @@
 ipdma.model.deft.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL, 
                                  response = "normal", type = "random",
                                  mean.alpha = 0, prec.alpha = 0.001, mean.beta = 0, prec.beta = 0.001, 
-                                 mean.gamma.within = 0, prec.gamma.within = 0.001, mean.gamma.across = 0, prec.gamma.across = 0.001, mean.delta = 0, prec.delta = 0.001,
+                                 mean.gamma.within = 0, prec.gamma.within = 0.001, mean.gamma.across = 0, prec.gamma.across = 0.001, mean.d = 0, prec.d = 0.001,
                                  hy.prior = list("dhnorm", 0, 1)
 ){
   
@@ -52,6 +52,13 @@ ipdma.model.deft.onestage <- function(y = NULL, study = NULL, treat = NULL, X = 
     stop("There are more than 2 different treatments specified; need to use ipdnma.model.onestage (under development)")
   }
   
+  calls <- names(sapply(match.call(), deparse))[-1]
+  if(any("mean.delta" %in% calls)){
+    mean.d <- mean.delta
+  }
+  if(any("prec.delta" %in% calls)){
+    prec.d <- prec.delta
+  }
   
   Xbar <- NULL
   Xbar <- matrix(NA, length(unique(study)), dim(X)[2])
@@ -77,7 +84,7 @@ ipdma.model.deft.onestage <- function(y = NULL, study = NULL, treat = NULL, X = 
   ipd <- list(y = y, study = study, treat = treat, X = X, response = response, type = type, 
               mean.alpha = mean.alpha, prec.alpha = prec.alpha, 
               mean.beta = mean.beta, prec.beta = prec.beta, mean.gamma.within = mean.gamma.within, 
-              prec.gamma.within = prec.gamma.within, mean.gamma.across = mean.gamma.across, prec.gamma.across = prec.gamma.across, mean.delta = mean.delta, prec.delta = prec.delta,
+              prec.gamma.within = prec.gamma.within, mean.gamma.across = mean.gamma.across, prec.gamma.across = prec.gamma.across, mean.d = mean.d, prec.d = prec.d,
               hy.prior = hy.prior)
   
   code <- ipdma.onestage.deft.rjags(ipd)
