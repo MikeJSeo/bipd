@@ -82,9 +82,9 @@ nma.shrinkage.prior.rjags <- function(ipd){
     if(shrinkage == "none"){
       code <- paste0(code, "\n## prior distribution for the effect modifiers under no shrinkage",
                      "\nfor(k in 1:Ncovariate){",
-                     "\n\tgamma[k,1] <- 0",
+                     "\n\tgamma[1,k] <- 0",
                      "\n\tfor(m in 2:Ntreat){",
-                     "\n\t\tgamma[k,m] ~ dnorm(", mean.gamma, ", ", prec.gamma, ") ",
+                     "\n\t\tgamma[m,k] ~ dnorm(", mean.gamma, ", ", prec.gamma, ") ",
                      "\n\t}",
                      "\n}")
       
@@ -99,9 +99,9 @@ nma.shrinkage.prior.rjags <- function(ipd){
         }  
         code <- paste0(code, "\nlambda ~ dgamma(", lambda.prior[[2]], ", ", lambda.prior[[3]], ")",
                        "\nfor(k in 1:Ncovariate){",
-                       "\n\tgamma[k,1] <- 0",
+                       "\n\tgamma[1,k] <- 0",
                        "\n\tfor(m in 2:Ntreat){",
-                       "\n\t\tgamma[k,m] ~ ddexp(0, tt)",
+                       "\n\t\tgamma[m,k] ~ ddexp(0, tt)",
                        "\n\t}",
                        "\n}")
       } else if (lambda.prior[[1]] == "dunif"){
@@ -113,20 +113,20 @@ nma.shrinkage.prior.rjags <- function(ipd){
         code <- paste0(code, "\nlambda <- pow(lambda.inv, -1)",
                        "\nlambda.inv ~ dunif(", lambda.prior[[2]], ", ", lambda.prior[[3]], ")",
                        "\nfor(k in 1:Ncovariate){",
-                       "\n\tgamma[k,1] <- 0",
+                       "\n\tgamma[1,k] <- 0",
                        "\n\tfor(m in 2:Ntreat){",
-                       "\n\t\tgamma[k,m] ~ ddexp(0, tt)",
+                       "\n\t\tgamma[m,k] ~ ddexp(0, tt)",
                        "\n\t}",
                        "\n}")
       }
     } else if (shrinkage == "SSVS"){
       code <- paste0(code, "\n## prior distribution for the effect modifiers under SSVS",
                      "\nfor(k in 1:Ncovariate){",
-                     "\n\tgamma[k,1] <- 0",
+                     "\n\tgamma[1,k] <- 0",
                      "\n\tfor(m in 2:Ntreat){",
-                     "\n\t\tIndA[k,m] ~ dcat(Pind[,k])",
-                     "\n\t\tInd[k,m] <- IndA[k,m] - 1",
-                     "\n\t\tgamma[k,m] ~ dnorm(0, tauCov[IndA[k,m]])",
+                     "\n\t\tIndA[m,k] ~ dcat(Pind[,k])",
+                     "\n\t\tInd[m,k] <- IndA[m,k] - 1",
+                     "\n\t\tgamma[m,k] ~ dnorm(0, tauCov[IndA[m,k]])",
                      "\n\t}",
                      "\n}",
                      "\n",
