@@ -93,11 +93,23 @@ nma.shrinkage.prior.rjags <- function(ipd){
       code <- paste0(code, "\n## prior distribution for the effect modifiers under laplacian shrinkage")
       if(lambda.prior[[1]] == "dgamma"){
         if(response == "normal"){
-          code <- paste0(code, "\ntt <- lambda * sigma")
+          code <- paste0(code, 
+                         "\nlambda[1] <- 0",
+                         "\nfor(m in 2:Ntreat){",
+                         "\n\ttt <- lambda[m] * sigma",
+                         "\n\tlambda[m] ~ dgamma(", lambda.prior[[2]], ", ", lambda.prior[[3]], ")",
+                         "\n}"
+                         )
         } else if(response == "binomial"){
-          code <- paste0(code, "\ntt <- lambda")
-        }  
-        code <- paste0(code, "\nlambda ~ dgamma(", lambda.prior[[2]], ", ", lambda.prior[[3]], ")",
+          code <- paste0(code,
+                         "\nlambda[1] <- 0",
+                         "\nfor(m in 2:Ntreat){",
+                         "\n\ttt <- lambda[m]",
+                         "\n\tlambda[m] ~ dgamma(", lambda.prior[[2]], ", ", lambda.prior[[3]], ")",
+                         "\n}"
+                         )
+        } 
+        code <- paste0(code, 
                        "\nfor(k in 1:Ncovariate){",
                        "\n\tgamma[1,k] <- 0",
                        "\n\tfor(m in 2:Ntreat){",
@@ -106,12 +118,25 @@ nma.shrinkage.prior.rjags <- function(ipd){
                        "\n}")
       } else if (lambda.prior[[1]] == "dunif"){
         if(response == "normal"){
-          code <- paste0(code, "\ntt <- lambda * sigma")
+          code <- paste0(code, 
+                         "\nlambda[1] <- 0",
+                         "\nlambda.inv[1] <- 0",
+                         "\nfor(m in 2:Ntreat){",
+                         "\n\ttt <- lambda[m] * sigma",
+                         "\n\tlambda[m] <- pow(lambda.inv[m], -1)",
+                         "\n\tlambda.inv[m] ~ dunif(", lambda.prior[[2]], ", ", lambda.prior[[3]], ")",
+                         "\n}")
         } else if(response == "binomial"){
-          code <- paste0(code, "\ntt <- lambda")
+          code <- paste0(code, 
+                         "\nlambda[1] <- 0",
+                         "\nlambda.inv[1] <- 0",
+                         "\nfor(m in 2:Ntreat){",
+                         "\n\ttt <- lambda[m]",
+                         "\n\tlambda[m] <- pow(lambda.inv[m], -1)",
+                         "\n\tlambda.inv[m] ~ dunif(", lambda.prior[[2]], ", ", lambda.prior[[3]], ")",
+                         "\n}")
         }
-        code <- paste0(code, "\nlambda <- pow(lambda.inv, -1)",
-                       "\nlambda.inv ~ dunif(", lambda.prior[[2]], ", ", lambda.prior[[3]], ")",
+        code <- paste0(code, 
                        "\nfor(k in 1:Ncovariate){",
                        "\n\tgamma[1,k] <- 0",
                        "\n\tfor(m in 2:Ntreat){",
