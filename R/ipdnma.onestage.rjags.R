@@ -96,7 +96,7 @@ nma.shrinkage.prior.rjags <- function(ipd){
           code <- paste0(code, 
                          "\nlambda[1] <- 0",
                          "\nfor(m in 2:Ntreat){",
-                         "\n\ttt <- lambda[m] * sigma",
+                         "\n\ttt[m] <- lambda[m] * sigma",
                          "\n\tlambda[m] ~ dgamma(", lambda.prior[[2]], ", ", lambda.prior[[3]], ")",
                          "\n}"
                          )
@@ -104,7 +104,7 @@ nma.shrinkage.prior.rjags <- function(ipd){
           code <- paste0(code,
                          "\nlambda[1] <- 0",
                          "\nfor(m in 2:Ntreat){",
-                         "\n\ttt <- lambda[m]",
+                         "\n\ttt[m] <- lambda[m]",
                          "\n\tlambda[m] ~ dgamma(", lambda.prior[[2]], ", ", lambda.prior[[3]], ")",
                          "\n}"
                          )
@@ -113,7 +113,7 @@ nma.shrinkage.prior.rjags <- function(ipd){
                        "\nfor(k in 1:Ncovariate){",
                        "\n\tgamma[1,k] <- 0",
                        "\n\tfor(m in 2:Ntreat){",
-                       "\n\t\tgamma[m,k] ~ ddexp(0, tt)",
+                       "\n\t\tgamma[m,k] ~ ddexp(0, tt[m])",
                        "\n\t}",
                        "\n}")
       } else if (lambda.prior[[1]] == "dunif"){
@@ -122,7 +122,7 @@ nma.shrinkage.prior.rjags <- function(ipd){
                          "\nlambda[1] <- 0",
                          "\nlambda.inv[1] <- 0",
                          "\nfor(m in 2:Ntreat){",
-                         "\n\ttt <- lambda[m] * sigma",
+                         "\n\ttt[m] <- lambda[m] * sigma",
                          "\n\tlambda[m] <- pow(lambda.inv[m], -1)",
                          "\n\tlambda.inv[m] ~ dunif(", lambda.prior[[2]], ", ", lambda.prior[[3]], ")",
                          "\n}")
@@ -131,7 +131,7 @@ nma.shrinkage.prior.rjags <- function(ipd){
                          "\nlambda[1] <- 0",
                          "\nlambda.inv[1] <- 0",
                          "\nfor(m in 2:Ntreat){",
-                         "\n\ttt <- lambda[m]",
+                         "\n\ttt[m] <- lambda[m]",
                          "\n\tlambda[m] <- pow(lambda.inv[m], -1)",
                          "\n\tlambda.inv[m] ~ dunif(", lambda.prior[[2]], ", ", lambda.prior[[3]], ")",
                          "\n}")
@@ -140,7 +140,7 @@ nma.shrinkage.prior.rjags <- function(ipd){
                        "\nfor(k in 1:Ncovariate){",
                        "\n\tgamma[1,k] <- 0",
                        "\n\tfor(m in 2:Ntreat){",
-                       "\n\t\tgamma[m,k] ~ ddexp(0, tt)",
+                       "\n\t\tgamma[m,k] ~ ddexp(0, tt[m])",
                        "\n\t}",
                        "\n}")
       }
