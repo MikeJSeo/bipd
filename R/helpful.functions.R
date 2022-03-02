@@ -30,7 +30,7 @@ treatment.effect <- function(ipd = NULL, samples = NULL, newpatient = NULL,
                              reference = NULL, quantiles = c(0.025, 0.5, 0.975)){
 
   
-  if(class(ipd) == "ipdma.onestage"){
+  if(is(ipd, "ipdma.onestage")){
     
     newpatient <- (newpatient - ipd$scale_mean)/ipd$scale_sd
       
@@ -52,7 +52,7 @@ treatment.effect <- function(ipd = NULL, samples = NULL, newpatient = NULL,
       CI <- exp(quantile(pred, probs = quantiles))
     }
     names(CI) <- quantiles
-  } else if (class(ipd) == "ipdma.onestage.deft"){
+  } else if(is(ipd, "ipdma.onestage.deft")){
     
     if(is.null(reference)){
       stop("Need to specify reference group for deft approach")
@@ -78,7 +78,8 @@ treatment.effect <- function(ipd = NULL, samples = NULL, newpatient = NULL,
     }
     names(CI) <- quantiles
     
-  } else if(class(ipd) == "ipdnma.onestage"){
+  } else if(is(ipd, "ipdnma.onestage")){
+
     newpatient <- (newpatient - ipd$scale_mean)/ipd$scale_sd
     
     store_result <- list()
