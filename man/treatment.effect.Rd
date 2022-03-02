@@ -8,6 +8,8 @@ treatment.effect(
   ipd = NULL,
   samples = NULL,
   newpatient = NULL,
+  scale_mean = NULL,
+  scale_sd = NULL,
   reference = NULL,
   quantiles = c(0.025, 0.5, 0.975)
 )
@@ -18,6 +20,10 @@ treatment.effect(
 \item{samples}{MCMC samples found from running ipd.run function}
 
 \item{newpatient}{covariate values of patients that you want to predict treatment effect on. Must have length equal to total number of covariates.}
+
+\item{scale_mean}{option to specify different overall mean compared to what was calculated in IPD object. can be useful when using multiple imputation.}
+
+\item{scale_sd}{option to specify different overall standard deviation compared to what was calculated in IPD object.}
 
 \item{reference}{reference group used for finding patient-specific treatment effect. This is only used for deft approach}
 
