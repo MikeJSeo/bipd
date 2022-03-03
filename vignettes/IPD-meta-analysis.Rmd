@@ -108,8 +108,8 @@ ipd <- with(ds, ipdnma.model.onestage(y = y, study = studyid, treat = treat, X =
 samples <- ipd.run(ipd,  pars.save = c("beta", "gamma", "delta", "Ind", "eta"), n.chains = 3, n.burnin = 500, n.iter = 5000)
 summary(samples)
 treatment.effect(ipd, samples, newpatient = c(1,0.5))
-# Bayesian LASSO
-#ipd <- with(ds, ipdnma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "laplace", lambda.prior = list("dgamma",2,0.1)))
+# Bayesian LASSO  
+# ipd <- with(ds, ipdnma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "laplace", lambda.prior = list("dgamma",2,0.1)))
 #samples <- ipd.run(ipd, pars.save = c("beta", "gamma", "delta", "lambda", "tt"), n.chains = 3, n.burnin = 500, n.iter = 5000)
 ```
 
