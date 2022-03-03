@@ -60,6 +60,9 @@ for(ii in 1:length(multiple.imputations)){
     final.result <- add.mcmc(final.result, samples)
   }
 }
+setwd("C:/Users/mike/Desktop")
+#save(final.result, file = "final.result.RData")
+load("final.result.RData")
 ```
 
 We have written a convenient function 'mcmc.add' which combines mcmc.list. Having run the code above, we have mcmc.list containing all the results from each multiply imputed datasets. Now we can use this to summarize the findings.
