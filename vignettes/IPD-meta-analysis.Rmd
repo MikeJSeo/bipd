@@ -33,7 +33,7 @@ Another important parameter is the "shrinkage" parameter. To specify IPD meta-an
 
 ```{r}
 # continuous outcome
-ipd <- with(ds, ipdma.model.onestage(y = y, study = studyid, treat = treat, X = ds[,c("z1", "z2")], response = "normal", shrinkage = "none"))
+ipd <- with(ds, ipdma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "none"))
 ```
 
 To view the JAGS code that was used to run the model, we can run the following command. Note that "alpha" is the study intercept, "beta" is the coefficient for main effects of the covariates, "gamma" is the coefficient for effect modifier, and "delta" is the average treatment effect. 
