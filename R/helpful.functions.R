@@ -157,3 +157,69 @@ add.mcmc <- function(x,y){
   mcmc.list(newobjects)
 }
 
+
+
+# revert first stage standardized coefficients to unstandardized coefficients
+
+unstandardize_coefficients <- function(first_stage_result, study_data = NULL, X_mean = NULL, X_sd = NULL){
+  
+  if(!is.null(study_data)){
+    X <- as.matrix(study_data[,c(-1,-2,-3)])
+    X_mean <- apply(X, 2, mean, na.rm = TRUE)
+    X_sd <- apply(X, 2, sd, na.rm = TRUE)  
+  }
+  
+  vec_length <- length(first_stage_result$y)
+  N_star <- matrix(0, nrow = vec_length, ncol = vec_length)
+  
+  if(length(unique(study_data$treat)) == 3){
+    N_star[1,] <- c(1, -X_mean/X_sd, rep(0, vec_length - 1 - length(X_mean)))
+    for(k in 1:length(X_mean)){
+      N_star[k+1,] <- c(rep(0,k), 1/X_sd[k], rep(0, length(X_mean) -  k), rep(0, vec_length - 1 - length(X_mean)))
+    }  
+    for(k in 1:length(X_mean)){
+      N_star[1+length(X_mean)+k,] <- c(rep(0, length(X_mean)+k), 1/X_sd[k], rep(0, length(X_mean) - k), rep(0, vec_length - 1 - 2*length(X_mean)))
+    }
+    for(k in 1:length(X_mean)){
+      N_star[1+2*length(X_mean)+k,] <- c(rep(0, 2* length(X_mean)+k), 1/X_sd[k], rep(0, length(X_mean) - k), rep(0, vec_length - 1 - 3*length(X_mean)))
+    }
+    N_star[1+3*length(X_mean)+1,] <- c(rep(0, length(X_mean)+1), -X_mean/X_sd, rep(0, vec_length - 1 - 2*length(X_mean)-2), 1, 0)
+    N_star[1+3*length(X_mean)+2,] <- c(rep(0, 2*length(X_mean)+1), -X_mean/X_sd, rep(0, vec_length - 1 - 3*length(X_mean)-2), 0, 1)
+  } else if(length(unique(study_data$treat)) == 2){
+    
+    N_star[1,] <- c(1, -X_mean/X_sd, rep(0, vec_length - 1 - length(X_mean)))
+    for(k in 1:length(X_mean)){
+      N_star[k+1,] <- c(rep(0,k), 1/X_sd[k], rep(0, length(X_mean) -  k), rep(0, vec_length - 1 - length(X_mean)))
+    }  
+    for(k in 1:length(X_mean)){
+      N_star[1+length(X_mean)+k,] <- c(rep(0, length(X_mean)+k), 1/X_sd[k], rep(0, length(X_mean) - k), 0)
+    } 
+    N_star[1+2*length(X_mean)+1,] <- c(rep(0, length(X_mean)+1), -X_mean/X_sd, 1)
+  } 
+  
+  y <- N_star %*% first_stage_result$y
+  Sigma <- N_star %*% solve(first_stage_result$Omega) %*% t(N_star)
+  
+  list(y = y, Sigma = Sigma)
+}
+
+
+# summarize each first stage analysis
+
+summarize_each_study <- function(samples){
+  
+  samples_result <- as.matrix(samples)
+  samples_result <- samples_result[, colSums(samples_result != 0) > 0] #delete 0 value variables
+  
+  Vars <- grep("^a", colnames(samples_result))
+  Vars <- c(Vars, grep("^b", colnames(samples_result)))
+  Vars <- c(Vars, grep("^c", colnames(samples_result)))
+  Vars <- c(Vars, grep("^d", colnames(samples_result)))
+  
+  samples_result <- samples_result[,Vars]
+  y <- apply(samples_result, 2, mean)
+  Sigma <- cov(samples_result)
+  Omega <- solve(Sigma)
+  
+  return(list(y = y, Omega = Omega))
+}
