@@ -13,9 +13,9 @@ vignette: >
 knitr::opts_chunk$set(comment = "#>", message=FALSE, tidy.opts=list(width.cutoff=60), tidy=TRUE, collapse = TRUE, warning = FALSE) 
 ```
 
-## Fitting IPD meta-analysis model
+## Fitting one-stage IPD meta-analysis model
 
-We demonstrate how to run IPD meta-analysis using this package. First, let's generate sample IPD for illustration.
+We demonstrate how to run one-stage IPD meta-analysis using this package. First, let's generate sample IPD for illustration.
 
 ```{r}
 #devtools::install_github("MikeJSeo/bipd")
@@ -78,7 +78,7 @@ summary(samples)
 treatment.effect(ipd, samples, newpatient = c(1,0.5)) # binary outcome reports odds ratio
 ```
 
-## Fitting IPD network meta-analysis
+## Fitting one-stage IPD network meta-analysis
 
 We now demonstrate how to run IPD network meta-analysis using this package.
 
@@ -114,3 +114,12 @@ treatment.effect(ipd, samples, newpatient = c(1,0.5))
 ```
 
 p.s. Note that in the network meta-analysis literature, "d" usually refers to average treatment effect and "delta" refers to study-specific treatment effect. In this R package, we have flipped around the two notations.
+
+## Fitting two-stage IPD network meta-analysis
+
+```{r}
+## again use the same NMA dataset
+ds <- generate_ipdnma_example(type = "continuous")
+ds2 <- generate_ipdnma_example(type = "binary")
+```
+

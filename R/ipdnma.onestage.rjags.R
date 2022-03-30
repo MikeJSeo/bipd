@@ -72,8 +72,6 @@ ipdnma.onestage.rjags <- function(ipd){
 }
 
 
-
-
 nma.shrinkage.prior.rjags <- function(ipd){
   
   code <- ""
