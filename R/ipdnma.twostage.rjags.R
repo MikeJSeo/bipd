@@ -10,13 +10,15 @@ ipdnma.twostage.first.rjags <- function(ipd){
       
       code <- paste0(code, "\n\ty[i] ~ dbern(p[i])",
                      "\n\tlogit(p[i]) <- a + inprod(b[], X[i,]) +",
-                     "\n\t\tinprod(c[treat[i],], X[i,]) + d[treat[i]]") 
-      
+                     "\n\t\tinprod(c[treat[i],], X[i,]) + d[treat[i]]",
+                     "\n}")
+
     } else if(response == "normal"){
       
       code <- paste0(code, "\n\ty[i] ~ dnorm(mu[i], sigma)",
                      "\n\tmu[i] <- a + inprod(b[], X[i,]) +",
-                     "\n\t\tinprod(c[treat[i],], X[i,]) + d[treat[i]]")  
+                     "\n\t\tinprod(c[treat[i],], X[i,]) + d[treat[i]]",
+                     "\n}")
     }
     
     if(response == "normal"){
@@ -30,8 +32,7 @@ ipdnma.twostage.first.rjags <- function(ipd){
                    "\n}")
     
     code <- paste0(code, "\n\n## prior distribution for the study intercept",
-                   "\na ~ dnrom(", mean.a, ", ", prec.a, ")",
-                   "\n}")
+                   "\na ~ dnorm(", mean.a, ", ", prec.a, ")")
                    
     code <- paste0(code, "\n\n## prior distribution for the main effect of the covariates",
                    "\nfor(k in 1:Ncovariate){",
