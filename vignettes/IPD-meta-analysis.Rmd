@@ -123,3 +123,7 @@ ds <- generate_ipdnma_example(type = "continuous")
 ds2 <- generate_ipdnma_example(type = "binary")
 ```
 
+```{r}
+ds <- generate_ipdnma_example(type = "continuous")
+ipd <- with(ds, ipdnma.model.twostage.first(y = y, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "none"))
+```

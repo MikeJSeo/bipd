@@ -1,5 +1,5 @@
 
-ipdma.twostage.first.rjags <- function(ipd){
+ipdnma.twostage.first.rjags <- function(ipd){
   
   with(ipd, {
     
