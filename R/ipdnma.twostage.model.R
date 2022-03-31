@@ -53,10 +53,6 @@ ipdnma.model.twostage.first <- function(y = NULL, treat = NULL, X = NULL,
                                   mean.c = 0, prec.c = 0.001, mean.d = 0, prec.d = 0.001,
                                   lambda.prior = NULL, p.ind = NULL, g = NULL, hy.prior.eta = NULL){
   
-  if(!all(grepl("^-?[0-9.]+$", study))){
-    stop("Please change the study names into numbers (i.e. 1,2,3,etc)")
-  }
-  
   if(shrinkage== "none" & (!is.null(lambda.prior) || !is.null(p.ind) || !is.null(g) || !is.null(hy.prior.eta))){
     stop("Shrinkage is set to none but have specified prior for shrinkage parameters")
   }

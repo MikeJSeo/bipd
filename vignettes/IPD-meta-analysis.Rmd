@@ -119,5 +119,12 @@ p.s. Note that in the network meta-analysis literature, "d" usually refers to av
 
 ```{r}
 ds <- generate_ipdnma_example(type = "continuous")
-ipd <- with(ds, ipdnma.model.twostage.first(y = y, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "none"))
+
+for(i in 1:length(ds$studyid)){
+  ds_each <- ds[ds$studyid == i,] 
+  ipd <- with(ds_each, ipdnma.model.twostage.first(y = y, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "none"))
+}
+
+
+samples <- 
 ```
