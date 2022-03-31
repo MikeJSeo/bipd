@@ -32,6 +32,8 @@
 #' \item{model.JAGS}{JAGS code in a function. This is used when running model in parallel}
 #' \item{scale.mean}{mean used in scaling covariates}
 #' \item{scale.sd}{standard deviation used in scaling covariates}
+#' \item{treat.original}{original treatment names from user}
+#' \item{treat.relabeled}{treatment relabeled for the purpose of modelling}
 #' @references Dias S, Sutton AJ, Ades AE, et al. A Generalized Linear Modeling Framework for Pairwise and Network Meta-analysis of Randomized Controlled Trials. \emph{Medical Decision Making}. 2013;33(5):607-617. \doi{10.1177/0272989X12458724}
 #' @references O'Hara RB, Sillanpaa MJ. A review of Bayesian variable selection methods: what, how and which. \emph{Bayesian Anal}. 2009;4(1):85-117. \doi{10.1214/09-BA403}
 #' @references Seo M, White IR, Furukawa TA, et al. Comparing methods for estimating patient-specific treatment effects in individual patient data meta-analysis. \emph{Stat Med}. 2021;40(6):1553-1573. \doi{10.1002/sim.8859}
@@ -39,6 +41,9 @@
 #' ds <- generate_ipdnma_example(type = "continuous")
 #' ipd <- with(ds, ipdnma.model.twostage.first(y = y, treat = treat, X = cbind(z1, z2), 
 #' response = "normal", shrinkage = "none"))
+#' \donttest{
+#' samples <- ipd.run(ipd)
+#' }
 #' @export
 
 
@@ -64,7 +69,8 @@ ipdnma.model.twostage.first <- function(y = NULL, treat = NULL, X = NULL,
     X <- apply(X, 2, scale) 
   }
   
-  #relabel treat for fitting model purposes; however original treatment names are stored 
+  #relabel treat for fitting model purposes
+  #however original treatment names are returned 
   treat.relabeled <- as.numeric(as.factor(treat))
   
   #JAGS data input
@@ -86,7 +92,7 @@ ipdnma.model.twostage.first <- function(y = NULL, treat = NULL, X = NULL,
     data.JAGS$p.ind <- p.ind
   }
   
-  ipd <- list(y = y, treat = treat, X = X, response = response, 
+  ipd <- list(y = y, treat = treat.relabeled, X = X, response = response, 
               shrinkage = shrinkage, mean.a = mean.a, prec.a = prec.a, 
               mean.b = mean.b, prec.b = prec.b, mean.c = mean.c, 
               prec.c = prec.c, mean.d = mean.d, prec.d = prec.d,
@@ -99,10 +105,9 @@ ipdnma.model.twostage.first <- function(y = NULL, treat = NULL, X = NULL,
   model.JAGS <- NULL
   eval(parse(text = paste('model.JAGS <- function() {', code2, sep='')))
   
-  ipd <- list(data.JAGS = data.JAGS, code = code, model.JAGS = model.JAGS, response = response, scale_mean = scale_mean, scale_sd = scale_sd)
+  ipd <- list(data.JAGS = data.JAGS, code = code, model.JAGS = model.JAGS, response = response, scale_mean = scale_mean, scale_sd = scale_sd, treat.original = treat, treat.relabeled = treat.relabeled)
   class(ipd) <- "ipdnma.twostage.first"
   return(ipd)
-  
 }
 
 

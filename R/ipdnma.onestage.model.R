@@ -41,9 +41,11 @@
 #' ds <- generate_ipdnma_example(type = "continuous")
 #' ipd <- with(ds, ipdnma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), 
 #' response = "normal", shrinkage = "none"))
+#' \donttest{
+#' samples <- ipd.run(ipd)
+#' treatment.effect(ipd, samples, newpatient= c(1,0.5))
+#' }
 #' @export
-
-
 
 ipdnma.model.onestage <- function(y = NULL, study = NULL, treat = NULL, X = NULL, 
                                   response = "normal", type = "random", shrinkage = "none", scale = TRUE,
