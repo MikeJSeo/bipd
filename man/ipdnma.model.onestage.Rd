@@ -90,6 +90,10 @@ This function sets up data and JAGS code that is needed to run one-stage IPD-NMA
 ds <- generate_ipdnma_example(type = "continuous")
 ipd <- with(ds, ipdnma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), 
 response = "normal", shrinkage = "none"))
+\donttest{
+samples <- ipd.run(ipd)
+treatment.effect(ipd, samples, newpatient= c(1,0.5))
+}
 }
 \references{
 Dias S, Sutton AJ, Ades AE, et al. A Generalized Linear Modeling Framework for Pairwise and Network Meta-analysis of Randomized Controlled Trials. \emph{Medical Decision Making}. 2013;33(5):607-617. \doi{10.1177/0272989X12458724}

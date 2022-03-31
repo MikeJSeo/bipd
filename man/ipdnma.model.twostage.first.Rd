@@ -73,6 +73,8 @@ See O'hara et al (2009) for more details.}
 \item{model.JAGS}{JAGS code in a function. This is used when running model in parallel}
 \item{scale.mean}{mean used in scaling covariates}
 \item{scale.sd}{standard deviation used in scaling covariates}
+\item{treat.original}{original treatment names from user}
+\item{treat.relabeled}{treatment relabeled for the purpose of modelling}
 }
 \description{
 This is the first part of the two-stage IPD-NMA model that sets up data and JAGS code needed. 
@@ -82,6 +84,9 @@ Each study is fitted using this function.
 ds <- generate_ipdnma_example(type = "continuous")
 ipd <- with(ds, ipdnma.model.twostage.first(y = y, treat = treat, X = cbind(z1, z2), 
 response = "normal", shrinkage = "none"))
+\donttest{
+samples <- ipd.run(ipd)
+}
 }
 \references{
 Dias S, Sutton AJ, Ades AE, et al. A Generalized Linear Modeling Framework for Pairwise and Network Meta-analysis of Randomized Controlled Trials. \emph{Medical Decision Making}. 2013;33(5):607-617. \doi{10.1177/0272989X12458724}

@@ -89,6 +89,10 @@ This function sets up data and JAGS code that is needed to run one-stage IPD-MA 
 ds <- generate_ipdma_example(type = "continuous")
 ipd <- with(ds, ipdma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), 
 response = "normal", shrinkage = "none"))
+\donttest{
+samples <- ipd.run(ipd)
+treatment.effect(ipd, samples, newpatient= c(1,0.5))
+} 
 }
 \references{
 O'Hara RB, Sillanpaa MJ. A review of Bayesian variable selection methods: what, how and which. \emph{Bayesian Anal}. 2009;4(1):85-117. \doi{10.1214/09-BA403}
