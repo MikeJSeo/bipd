@@ -32,7 +32,7 @@
 #' response = "normal"))
 #' cat(ipd$code)
 #' \donttest{
-#' samples <- ipd.run(ipd, pars.save = c("beta", "gamma.within", "gamma.across", "delta"))
+#' samples <- ipd.run(ipd)
 #' treatment.effect(ipd, samples, newpatient= c(1,0.5), reference = c(0, 0))
 #' }
 #' @export

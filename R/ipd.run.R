@@ -15,13 +15,23 @@
 #' ipd <- with(ds, ipdma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), 
 #' response = "normal", shrinkage = "none"))
 #' \donttest{
-#' samples <- ipd.run(ipd, pars.save = c("beta", "gamma", "delta"), n.chains = 3, n.burnin = 500, 
-#' n.iter = 5000)
+#' samples <- ipd.run(ipd, n.chains = 3, n.burnin = 500, n.iter = 5000)
 #' }
 #' @export
 
-ipd.run <- function(ipd, pars.save = c("beta", "gamma", "delta"), inits = NULL, n.chains = 3, n.adapt = 1000, n.burnin = 1000, n.iter = 10000){
+ipd.run <- function(ipd, pars.save = NULL, inits = NULL, n.chains = 3, n.adapt = 1000, n.burnin = 1000, n.iter = 10000){
   
+  if(is.null(pars.save)){
+    # default save parameters
+    if(class(ipd) %in% c("ipdma.onestage", "ipdnma.onestage", "ipdnma.twostage.second")){
+      pars.save <- c("alpha", "beta", "gamma", "delta")
+    } else if(class(ipd) %in% c("ipdma.onestage.deft")){
+      pars.save <- c("alpha", "beta", "gamma.within", "gamma.across", "delta")
+    } else if(class(ipd) %in% c("ipdnma.twostage.first")){
+      pars.save <- c("a", "b", "c", "d")
+    }
+  }
+ 
   mod <- rjags::jags.model(textConnection(ipd$code), data = ipd$data.JAGS, inits = inits, n.chains = n.chains, n.adapt = n.adapt)
   stats::update(mod, n.burnin)
   samples <- rjags::coda.samples(model = mod, variable.names = pars.save, n.iter = n.iter)   
@@ -46,14 +56,24 @@ ipd.run <- function(ipd, pars.save = c("beta", "gamma", "delta"), inits = NULL, 
 #' ipd <- with(ds, ipdma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), 
 #' response = "normal", shrinkage = "none"))
 #' \donttest{
-#' samples <- ipd.run.parallel(ipd, pars.save = c("beta", "gamma", "delta"), n.chains = 3, 
-#' n.burnin = 500, n.iter = 5000)
+#' samples <- ipd.run.parallel(ipd, n.chains = 3, n.burnin = 500, n.iter = 5000)
 #' }
 #' @export
 
 
-ipd.run.parallel <- function(ipd, pars.save = c("beta", "gamma", "delta"), inits = NULL, n.chains = 3, n.adapt = 1000, n.burnin = 1000, n.iter = 10000){
+ipd.run.parallel <- function(ipd, pars.save = NULL, inits = NULL, n.chains = 3, n.adapt = 1000, n.burnin = 1000, n.iter = 10000){
 
+  if(is.null(pars.save)){
+    # default save parameters
+    if(class(ipd) %in% c("ipdma.onestage", "ipdnma.onestage", "ipdnma.twostage.second")){
+      pars.save <- c("alpha", "beta", "gamma", "delta")
+    } else if(class(ipd) %in% c("ipdma.onestage.deft")){
+      pars.save <- c("alpha", "beta", "gamma.within", "gamma.across", "delta")
+    } else if(class(ipd) %in% c("ipdnma.twostage.first")){
+      pars.save <- c("a", "b", "c", "d")
+    }
+  }
+  
   chk <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
   
   if (nzchar(chk) && chk == "TRUE") {
