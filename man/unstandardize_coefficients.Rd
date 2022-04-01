@@ -4,16 +4,32 @@
 \alias{unstandardize_coefficients}
 \title{Revert standardized coefficients to unstandardized coefficients}
 \usage{
-unstandardize_coefficients(ipd, samples)
+unstandardize_coefficients(
+  ipd,
+  samples,
+  X_mean = NULL,
+  X_sd = NULL,
+  y = NULL,
+  Sigma = NULL
+)
 }
 \arguments{
-\item{ipd}{first-stage model object of the two-stage model (i.e. ipdnma.twostage.model)}
+\item{ipd}{ipdma.model or ipdnma.model object created}
 
 \item{samples}{samples from first-stage model of the two-stage model}
+
+\item{X_mean}{user can specify the mean for each covariates}
+
+\item{X_sd}{user can specify the standard deviation for each covariates}
+
+\item{y}{vector of coefficient estimates for the model in the following order:
+study intercept, main effects, effect modifiers, and average treatment effect}
+
+\item{Sigma}{variance-covariance matrix for the vector of coefficients "y" defined above}
 }
 \description{
 This is a convenient function to revert standardized coefficients to unstandardized coefficients. 
-This is primarily for in two-stage models.
+This is primarily used when aggregating model estimates in the two-stage models.
 }
 \examples{
 #TODO
