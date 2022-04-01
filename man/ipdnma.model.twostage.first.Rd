@@ -2,7 +2,7 @@
 % Please edit documentation in R/ipdnma.twostage.model.R
 \name{ipdnma.model.twostage.first}
 \alias{ipdnma.model.twostage.first}
-\title{Make a two-stage individual patient data network meta-analysis object containing data, priors, and a JAGS model code}
+\title{Make a first part of the two-stage individual patient data network meta-analysis object containing data, priors, and a JAGS model code}
 \usage{
 ipdnma.model.twostage.first(
   y = NULL,
