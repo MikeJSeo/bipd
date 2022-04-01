@@ -192,43 +192,34 @@ summarize_each_study <- function(samples){
 #' This is primarily used when aggregating model estimates in the two-stage models.
 #' 
 #' @param ipd ipdma.model or ipdnma.model object created
-#' @param samples samples from first-stage model of the two-stage model
-#' @param X_mean user can specify the mean for each covariates
-#' @param X_sd user can specify the standard deviation for each covariates
-#' @param y vector of coefficient estimates for the model in the following order:
-#' study intercept, main effects, effect modifiers, and average treatment effect
-#' @param Sigma variance-covariance matrix for the vector of coefficients "y" defined above
+#' @param samples samples from running ipd.run function
+#' @return 
+#' \item{y}{unstandardized y}
+#' \item{Sigma}{unstandardized Sigma}
 #' @examples
 #' #TODO
 #' 
 #' @export
 
-unstandardize_coefficients <- function(ipd, samples, X_mean = NULL, X_sd = NULL,
-                                       y = NULL, Sigma = NULL
-                                       ){
+unstandardize_coefficients <- function(ipd, samples){
   
   if(class(ipd) %in% c("ipdma.onestage.deft", "ipdnma.twostage.second")){
-    stop("Not a suitable function for the model")
-  }
-  
+    stop("Not a suitable function for the specified model")
+  }    
+
   if(is.null(ipd$data.JAGS$Nstudies)){
     Nstudies <- 1
   } else{
     Nstudies <- ipd$data.JAGS$Nstudies
   }
   
-  if(is.null(X_mean)){
-    X_mean <- ipd$scale_mean  
-  }
-  
-  if(is.null(X_sd)){
-    X_sd <- ipd$scale_sd
-  }
+  X_mean <- ipd$scale_mean  
+  X_sd <- ipd$scale_sd
 
   samples_summarized <- summarize_each_study(samples)
   y <- samples_summarized$y
-  Sigma <- samples_summarized$Sigma
-  
+  Sigma <- samples_summarized$Sigma    
+
   vec_length <- length(y)
   N_star <- matrix(0, nrow = vec_length, ncol = vec_length)
   
