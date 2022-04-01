@@ -236,7 +236,7 @@ unstandardize_coefficients <- function(ipd, samples){
   }  
   
   # Effect modifiers
-  if(is.null(ipd$data.JAGS$NTreat)){
+  if(is.null(ipd$data.JAGS$Ntreat)){
     ntreat <- 2
   } else{
     ntreat <- ipd$data.JAGS$Ntreat
