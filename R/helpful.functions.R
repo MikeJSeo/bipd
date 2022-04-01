@@ -160,7 +160,7 @@ add.mcmc <- function(x,y){
 
 
 
-selectvar_each_study <- function(samples){
+summarize_each_study <- function(samples){
   
   samples_result <- as.matrix(samples)
   samples_result <- samples_result[, colSums(samples_result != 0) > 0] #delete 0 value variables
@@ -178,8 +178,10 @@ selectvar_each_study <- function(samples){
   }
 
   samples_result <- samples_result[,Vars]
+  y <- apply(samples_result, 2, mean)
+  Sigma <- cov(samples_result)
   
-  return(samples_result)
+  return(list(y = y, Sigma = Sigma))
 }
 
 
@@ -187,16 +189,27 @@ selectvar_each_study <- function(samples){
 #' Revert standardized coefficients to unstandardized coefficients
 #'
 #' This is a convenient function to revert standardized coefficients to unstandardized coefficients. 
-#' This is primarily for in two-stage models.
+#' This is primarily used when aggregating model estimates in the two-stage models.
 #' 
-#' @param ipd first-stage model object of the two-stage model (i.e. ipdnma.twostage.model)
+#' @param ipd ipdma.model or ipdnma.model object created
 #' @param samples samples from first-stage model of the two-stage model
+#' @param X_mean user can specify the mean for each covariates
+#' @param X_sd user can specify the standard deviation for each covariates
+#' @param y vector of coefficient estimates for the model in the following order:
+#' study intercept, main effects, effect modifiers, and average treatment effect
+#' @param Sigma variance-covariance matrix for the vector of coefficients "y" defined above
 #' @examples
 #' #TODO
 #' 
 #' @export
 
-unstandardize_coefficients <- function(ipd, samples){
+unstandardize_coefficients <- function(ipd, samples, X_mean = NULL, X_sd = NULL,
+                                       y = NULL, Sigma = NULL
+                                       ){
+  
+  if(class(ipd) %in% c("ipdma.onestage.deft", "ipdnma.twostage.second")){
+    stop("Not a suitable function for the model")
+  }
   
   if(is.null(ipd$data.JAGS$Nstudies)){
     Nstudies <- 1
@@ -204,12 +217,19 @@ unstandardize_coefficients <- function(ipd, samples){
     Nstudies <- ipd$data.JAGS$Nstudies
   }
   
-  X_mean <- ipd$scale_mean
-  X_sd <- ipd$scale_sd
+  if(is.null(X_mean)){
+    X_mean <- ipd$scale_mean  
+  }
   
-  samples_selected <- selectvar_each_study(samples)
+  if(is.null(X_sd)){
+    X_sd <- ipd$scale_sd
+  }
+
+  samples_summarized <- summarize_each_study(samples)
+  y <- samples_summarized$y
+  Sigma <- samples_summarized$Sigma
   
-  vec_length <- dim(samples_selected)[2]
+  vec_length <- length(y)
   N_star <- matrix(0, nrow = vec_length, ncol = vec_length)
   
   # Intercept
@@ -242,14 +262,11 @@ unstandardize_coefficients <- function(ipd, samples){
     dummyvec[treatindex] <- 1
     N_star[Nstudies+ntreat*length(X_mean)+treatindex,] <- c(rep(0, Nstudies), rep(0, treatindex*length(X_mean)), -X_mean/X_sd, rep(0, vec_length - Nstudies - (treatindex+1)*length(X_mean)- (ntreat-1)), dummyvec)
   }
-  
-  N_star_transposed <- t(N_star)
-  
-  samples_unstandardized <- samples_selected %*% N_star_transposed
-  
-  y <- apply(samples_unstandardized, 2, mean)
-  Sigma <- cov(samples_unstandardized)
-  return(list(y = y, Sigma = Sigma))
+
+  y_unstand <- N_star %*% y
+  Sigma_unstand <- N_star %*% Sigma %*% t(N_star)
+
+  return(list(y = y_unstand, Sigma = Sigma_unstand))
   
 }
 
