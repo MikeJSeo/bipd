@@ -1,4 +1,4 @@
-#' Make a two-stage individual patient data network meta-analysis object containing data, priors, and a JAGS model code
+#' Make a first part of the two-stage individual patient data network meta-analysis object containing data, priors, and a JAGS model code
 #'
 #' This is the first part of the two-stage IPD-NMA model that sets up data and JAGS code needed. 
 #' Each study is fitted using this function.
@@ -105,5 +105,41 @@ ipdnma.model.twostage.first <- function(y = NULL, treat = NULL, X = NULL,
   class(ipd) <- "ipdnma.twostage.first"
   return(ipd)
 }
+
+#' Make the second part of the two-stage individual patient data network meta-analysis object containing data, priors, and a JAGS model code
+#'
+#' This is the second part of the two-stage IPD-NMA model that sets up data and JAGS code needed. 
+#' This model aggregates results from first stage model.
+#' 
+#' @param ipd_all list of first part of the two-stage IPD-NMA model object
+#' @param samples_all list of samples from running first part of the two-stage IPD-NMA model
+#' @param mean.a prior mean for the study intercept
+#' @param prec.a prior precision for the study intercept
+#' @param mean.b prior mean for the regression coefficients of the main effects of the covariates; main effects are assumed to have common effect.
+#' @param prec.b prior precision for the regression coefficients of the main effects of the covariates
+#' @param mean.c prior mean for the effect modifiers. This parameter is not used if penalization is placed on effect modifiers.
+#' @param prec.c prior precision for the effect modifiers. This parameter is not used if penalization is placed on effect modifiers.
+#' @param mean.d prior mean for the average treatment effect
+#' @param prec.d prior precision for the average treatment effect
+#' @return 
+#' \item{data.JAGS}{data organized in a list so that it can be used when running code in JAGS}
+#' \item{code}{JAGS code that is used to run the model. Use cat(code) to see the code in a readable format}
+#' \item{model.JAGS}{JAGS code in a function. This is used when running model in parallel}
+#' @references Dias S, Sutton AJ, Ades AE, et al. A Generalized Linear Modeling Framework for Pairwise and Network Meta-analysis of Randomized Controlled Trials. \emph{Medical Decision Making}. 2013;33(5):607-617. \doi{10.1177/0272989X12458724}
+#' @references Seo M, White IR, Furukawa TA, et al. Comparing methods for estimating patient-specific treatment effects in individual patient data meta-analysis. \emph{Stat Med}. 2021;40(6):1553-1573. \doi{10.1002/sim.8859}
+#' @examples
+#' ds <- generate_ipdnma_example(type = "continuous")
+#' #TODO
+#' @export
+
+ipdnma.model.twostage.second <- function(ipd_all = NULL, samples_all = NULL,
+                                        mean.a = 0, prec.a = 0.001, mean.b = 0, prec.b = 0.001, 
+                                        mean.c = 0, prec.c = 0.001, mean.d = 0, prec.d = 0.001,
+                                        lambda.prior = NULL, p.ind = NULL, g = NULL, hy.prior.eta = NULL){
+  
+  
+  
+}
+
 
 

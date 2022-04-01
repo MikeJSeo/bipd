@@ -45,7 +45,7 @@ cat(ipd$code)
 Once the model is set up using ipdma.model.onestage function, we use ipd.run function to run the model. help(ipd.run) describes possible parameters to specify.
 
 ```{r}
-samples <- ipd.run(ipd, pars.save = c("beta", "gamma", "delta"), n.chains = 3, n.burnin = 500, n.iter = 5000)
+samples <- ipd.run(ipd, n.chains = 3, n.burnin = 500, n.iter = 5000)
 
 samples <- samples[,-3] #remove delta[1] which is 0
 summary(samples)
@@ -121,12 +121,19 @@ p.s. Note that in the network meta-analysis literature, "d" usually refers to av
 ds <- generate_ipdnma_example(type = "continuous")
 
 samples_all <- list()
+ipd_all <- list()
 for(i in 1:length(ds$studyid)){
   ds_each <- ds[ds$studyid == i,] 
-  ipd <- with(ds_each, ipdnma.model.twostage.first(y = y, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "none"))
-  samples_all[[i]] <- ipd.run(ipd)
+  ipd_all[[i]] <- with(ds_each, ipdnma.model.twostage.first(y = y, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "laplace"))
+  samples_all[[i]] <- ipd.run(ipd_all[[i]])
 }
+ipd2 <- ipdnma.model.twostage.second(ipd_all, samples_all)
+samples2 <- ipd.run(ipd2)
 
 
-samples <- 
+bb <- unstandardize_coefficients(ipd_all[[1]], samples_all[[1]])
+
+ds_each <- ds[ds$studyid == i,] 
+ipd_all[[i]] <- with(ds_each, ipdnma.model.twostage.first(y = y, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "laplace", scale = FALSE))
+samples_all[[i]] <- ipd.run(ipd_all[[i]])
 ```

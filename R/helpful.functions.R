@@ -159,67 +159,97 @@ add.mcmc <- function(x,y){
 
 
 
-# revert first stage standardized coefficients to unstandardized coefficients
 
-unstandardize_coefficients <- function(first_stage_result, study_data = NULL, X_mean = NULL, X_sd = NULL){
-  
-  if(!is.null(study_data)){
-    X <- as.matrix(study_data[,c(-1,-2,-3)])
-    X_mean <- apply(X, 2, mean, na.rm = TRUE)
-    X_sd <- apply(X, 2, sd, na.rm = TRUE)  
-  }
-  
-  vec_length <- length(first_stage_result$y)
-  N_star <- matrix(0, nrow = vec_length, ncol = vec_length)
-  
-  if(length(unique(study_data$treat)) == 3){
-    N_star[1,] <- c(1, -X_mean/X_sd, rep(0, vec_length - 1 - length(X_mean)))
-    for(k in 1:length(X_mean)){
-      N_star[k+1,] <- c(rep(0,k), 1/X_sd[k], rep(0, length(X_mean) -  k), rep(0, vec_length - 1 - length(X_mean)))
-    }  
-    for(k in 1:length(X_mean)){
-      N_star[1+length(X_mean)+k,] <- c(rep(0, length(X_mean)+k), 1/X_sd[k], rep(0, length(X_mean) - k), rep(0, vec_length - 1 - 2*length(X_mean)))
-    }
-    for(k in 1:length(X_mean)){
-      N_star[1+2*length(X_mean)+k,] <- c(rep(0, 2* length(X_mean)+k), 1/X_sd[k], rep(0, length(X_mean) - k), rep(0, vec_length - 1 - 3*length(X_mean)))
-    }
-    N_star[1+3*length(X_mean)+1,] <- c(rep(0, length(X_mean)+1), -X_mean/X_sd, rep(0, vec_length - 1 - 2*length(X_mean)-2), 1, 0)
-    N_star[1+3*length(X_mean)+2,] <- c(rep(0, 2*length(X_mean)+1), -X_mean/X_sd, rep(0, vec_length - 1 - 3*length(X_mean)-2), 0, 1)
-  } else if(length(unique(study_data$treat)) == 2){
-    
-    N_star[1,] <- c(1, -X_mean/X_sd, rep(0, vec_length - 1 - length(X_mean)))
-    for(k in 1:length(X_mean)){
-      N_star[k+1,] <- c(rep(0,k), 1/X_sd[k], rep(0, length(X_mean) -  k), rep(0, vec_length - 1 - length(X_mean)))
-    }  
-    for(k in 1:length(X_mean)){
-      N_star[1+length(X_mean)+k,] <- c(rep(0, length(X_mean)+k), 1/X_sd[k], rep(0, length(X_mean) - k), 0)
-    } 
-    N_star[1+2*length(X_mean)+1,] <- c(rep(0, length(X_mean)+1), -X_mean/X_sd, 1)
-  } 
-  
-  y <- N_star %*% first_stage_result$y
-  Sigma <- N_star %*% solve(first_stage_result$Omega) %*% t(N_star)
-  
-  list(y = y, Sigma = Sigma)
-}
-
-
-# summarize each first stage analysis
-
-summarize_each_study <- function(samples){
+selectvar_each_study <- function(samples){
   
   samples_result <- as.matrix(samples)
   samples_result <- samples_result[, colSums(samples_result != 0) > 0] #delete 0 value variables
   
-  Vars <- grep("^a", colnames(samples_result))
-  Vars <- c(Vars, grep("^b", colnames(samples_result)))
-  Vars <- c(Vars, grep("^c", colnames(samples_result)))
-  Vars <- c(Vars, grep("^d", colnames(samples_result)))
-  
+  if(length(grep("^alpha", colnames(samples_result))) == 0){
+    Vars <- grep("^a", colnames(samples_result))
+    Vars <- c(Vars, grep("^b", colnames(samples_result)))
+    Vars <- c(Vars, grep("^c", colnames(samples_result)))
+    Vars <- c(Vars, grep("^d", colnames(samples_result)))    
+  } else{
+    Vars <- grep("^alpha", colnames(samples_result))
+    Vars <- c(Vars, grep("^beta", colnames(samples_result)))
+    Vars <- c(Vars, grep("^gamma", colnames(samples_result)))
+    Vars <- c(Vars, grep("^delta", colnames(samples_result))) 
+  }
+
   samples_result <- samples_result[,Vars]
-  y <- apply(samples_result, 2, mean)
-  Sigma <- cov(samples_result)
-  Omega <- solve(Sigma)
   
-  return(list(y = y, Omega = Omega))
+  return(samples_result)
 }
+
+
+
+#' Revert standardized coefficients to unstandardized coefficients
+#'
+#' This is a convenient function to revert standardized coefficients to unstandardized coefficients. 
+#' This is primarily for in two-stage models.
+#' 
+#' @param ipd first-stage model object of the two-stage model (i.e. ipdnma.twostage.model)
+#' @param samples samples from first-stage model of the two-stage model
+#' @examples
+#' #TODO
+#' 
+#' @export
+
+unstandardize_coefficients <- function(ipd, samples){
+  
+  if(is.null(ipd$data.JAGS$Nstudies)){
+    Nstudies <- 1
+  } else{
+    Nstudies <- ipd$data.JAGS$Nstudies
+  }
+  
+  X_mean <- ipd$scale_mean
+  X_sd <- ipd$scale_sd
+  
+  samples_selected <- selectvar_each_study(samples)
+  
+  vec_length <- dim(samples_selected)[2]
+  N_star <- matrix(0, nrow = vec_length, ncol = vec_length)
+  
+  # Intercept
+  for(k in 1:Nstudies){
+    dummyvec0 <- rep(0, Nstudies)
+    dummyvec0[k] <- 1
+    N_star[k,] <- c(dummyvec0, -X_mean/X_sd, rep(0, vec_length - Nstudies - length(X_mean)))
+  }
+
+  # Main effects
+  for(k in 1:length(X_mean)){
+    N_star[k+Nstudies,] <- c(rep(0, Nstudies),rep(0,k-1), 1/X_sd[k], rep(0, length(X_mean) -  k), rep(0, vec_length - Nstudies - length(X_mean)))
+  }  
+  
+  # Effect modifiers
+  if(is.null(ipd$data.JAGS$NTreat)){
+    ntreat <- 2
+  } else{
+    ntreat <- ipd$data.JAGS$Ntreat
+  }
+  for(treatindex in 1:(ntreat-1)){
+    for(k in 1:length(X_mean)){
+      N_star[Nstudies+treatindex*length(X_mean)+k,] <- c(rep(0, Nstudies),rep(0, treatindex*length(X_mean)+k-1), 1/X_sd[k], rep(0, length(X_mean) - k), rep(0, vec_length - Nstudies - (treatindex+1)*length(X_mean)))
+    }    
+  }
+  
+  # Treatment effect
+  for(treatindex in 1:(ntreat-1)){
+    dummyvec <- rep(0, ntreat-1)
+    dummyvec[treatindex] <- 1
+    N_star[Nstudies+ntreat*length(X_mean)+treatindex,] <- c(rep(0, Nstudies), rep(0, treatindex*length(X_mean)), -X_mean/X_sd, rep(0, vec_length - Nstudies - (treatindex+1)*length(X_mean)- (ntreat-1)), dummyvec)
+  }
+  
+  N_star_transposed <- t(N_star)
+  
+  samples_unstandardized <- samples_selected %*% N_star_transposed
+  
+  y <- apply(samples_unstandardized, 2, mean)
+  Sigma <- cov(samples_unstandardized)
+  return(list(y = y, Sigma = Sigma))
+  
+}
+
