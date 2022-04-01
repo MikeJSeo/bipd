@@ -168,12 +168,14 @@ summarize_each_study <- function(samples){
   if(length(grep("^alpha", colnames(samples_result))) == 0){
     Vars <- grep("^a", colnames(samples_result))
     Vars <- c(Vars, grep("^b", colnames(samples_result)))
-    Vars <- c(Vars, grep("^c", colnames(samples_result)))
+    eff_name <- grep("^c", colnames(samples_result), value = TRUE)
+    Vars <- c(Vars, grep("^c", colnames(samples_result))[order(eff_name)])
     Vars <- c(Vars, grep("^d", colnames(samples_result)))    
   } else{
     Vars <- grep("^alpha", colnames(samples_result))
     Vars <- c(Vars, grep("^beta", colnames(samples_result)))
-    Vars <- c(Vars, grep("^gamma", colnames(samples_result)))
+    eff_name <- grep("^gamma", colnames(samples_result), value = TRUE)
+    Vars <- c(Vars, grep("^gamma", colnames(samples_result))[order(eff_name)])
     Vars <- c(Vars, grep("^delta", colnames(samples_result))) 
   }
 
