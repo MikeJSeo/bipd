@@ -157,9 +157,6 @@ add.mcmc <- function(x,y){
   mcmc.list(newobjects)
 }
 
-
-
-
 selectvar_each_study <- function(samples){
   
   samples_result <- as.matrix(samples)
