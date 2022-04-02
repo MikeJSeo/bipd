@@ -82,10 +82,10 @@ Each study is fitted using this function.
 }
 \examples{
 ds <- generate_ipdnma_example(type = "continuous")
-ipd <- with(ds, ipdnma.model.twostage.first(y = y, treat = treat, X = cbind(z1, z2), 
-response = "normal", shrinkage = "none"))
+ds1 <- ds[ds$studyid == 1,]
+ipd1 <- with(ds1, ipdnma.model.twostage.first(y = y, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "none"))
 \donttest{
-samples <- ipd.run(ipd)
+samples1 <- ipd.run(ipd1)
 }
 }
 \references{

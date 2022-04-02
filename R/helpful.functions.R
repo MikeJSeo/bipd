@@ -160,7 +160,7 @@ add.mcmc <- function(x,y){
 
 
 
-summarize_each_study <- function(samples){
+selectvar_each_study <- function(samples){
   
   samples_result <- as.matrix(samples)
   samples_result <- samples_result[, colSums(samples_result != 0) > 0] #delete 0 value variables
@@ -180,10 +180,10 @@ summarize_each_study <- function(samples){
   }
 
   samples_result <- samples_result[,Vars]
-  y <- apply(samples_result, 2, mean)
-  Sigma <- cov(samples_result)
-  
-  return(list(y = y, Sigma = Sigma))
+  return(samples_result)
+#  y <- apply(samples_result, 2, mean)
+#  Sigma <- cov(samples_result)
+#  return(list(y = y, Sigma = Sigma))
 }
 
 
@@ -218,11 +218,11 @@ unstandardize_coefficients <- function(ipd, samples){
   X_mean <- ipd$scale_mean  
   X_sd <- ipd$scale_sd
 
-  samples_summarized <- summarize_each_study(samples)
-  y <- samples_summarized$y
-  Sigma <- samples_summarized$Sigma    
+  samples_selected <- selectvar_each_study(samples)
+#  y <- samples_summarized$y
+#  Sigma <- samples_summarized$Sigma    
 
-  vec_length <- length(y)
+  vec_length <- dim(samples_selected)[2]
   N_star <- matrix(0, nrow = vec_length, ncol = vec_length)
   
   # Intercept
@@ -256,10 +256,15 @@ unstandardize_coefficients <- function(ipd, samples){
     N_star[Nstudies+ntreat*length(X_mean)+treatindex,] <- c(rep(0, Nstudies), rep(0, treatindex*length(X_mean)), -X_mean/X_sd, rep(0, vec_length - Nstudies - (treatindex+1)*length(X_mean)- (ntreat-1)), dummyvec)
   }
 
-  y_unstand <- N_star %*% y
-  Sigma_unstand <- N_star %*% Sigma %*% t(N_star)
-
-  return(list(y = y_unstand, Sigma = Sigma_unstand))
+  samples_unstandardized <- samples_selected %*% t(N_star)
+  y <- apply(samples_unstandardized, 2, mean)
+  Sigma <- cov(samples_unstandardized)
+  
+  return(list(y = y, Sigma = Sigma))
+    
+#  y_unstand <- N_star %*% y
+#  Sigma_unstand <- N_star %*% Sigma %*% t(N_star)
+#  return(list(y = y_unstand, Sigma = Sigma_unstand))
   
 }
 

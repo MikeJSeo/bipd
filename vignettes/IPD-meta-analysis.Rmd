@@ -130,7 +130,7 @@ for(i in 1:length(unique(ds$studyid))){
 ipd2 <- ipdnma.model.twostage.second(ipd_all, samples_all)
 samples2 <- ipd.run(ipd2)
 
-unstandardized <- unstandardize_coefficients(ipd_all[[10]], samples_all[[10]])
+unstandardized <- unstandardize_coefficients(ipd_all[[i]], samples_all[[i]])
 unstandardized$y
 sqrt(diag(unstandardized$Sigma))
 

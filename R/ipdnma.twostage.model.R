@@ -39,10 +39,10 @@
 #' @references Seo M, White IR, Furukawa TA, et al. Comparing methods for estimating patient-specific treatment effects in individual patient data meta-analysis. \emph{Stat Med}. 2021;40(6):1553-1573. \doi{10.1002/sim.8859}
 #' @examples
 #' ds <- generate_ipdnma_example(type = "continuous")
-#' ipd <- with(ds, ipdnma.model.twostage.first(y = y, treat = treat, X = cbind(z1, z2), 
-#' response = "normal", shrinkage = "none"))
+#' ds1 <- ds[ds$studyid == 1,]
+#' ipd1 <- with(ds1, ipdnma.model.twostage.first(y = y, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "none"))
 #' \donttest{
-#' samples <- ipd.run(ipd)
+#' samples1 <- ipd.run(ipd1)
 #' }
 #' @export
 
@@ -113,14 +113,14 @@ ipdnma.model.twostage.first <- function(y = NULL, treat = NULL, X = NULL,
 #' 
 #' @param ipd_all list of first part of the two-stage IPD-NMA model object
 #' @param samples_all list of samples from running first part of the two-stage IPD-NMA model
-#' @param mean.a prior mean for the study intercept
-#' @param prec.a prior precision for the study intercept
-#' @param mean.b prior mean for the regression coefficients of the main effects of the covariates; main effects are assumed to have common effect.
-#' @param prec.b prior precision for the regression coefficients of the main effects of the covariates
-#' @param mean.c prior mean for the effect modifiers. This parameter is not used if penalization is placed on effect modifiers.
-#' @param prec.c prior precision for the effect modifiers. This parameter is not used if penalization is placed on effect modifiers.
-#' @param mean.d prior mean for the average treatment effect
-#' @param prec.d prior precision for the average treatment effect
+#' @param mean.alpha prior mean for the study intercept
+#' @param prec.alpha prior precision for the study intercept
+#' @param mean.beta prior mean for the regression coefficients of the main effects of the covariates; main effects are assumed to have common effect.
+#' @param prec.beta prior precision for the regression coefficients of the main effects of the covariates
+#' @param mean.gamma prior mean for the effect modifiers. This parameter is not used if penalization is placed on effect modifiers.
+#' @param prec.gamma prior precision for the effect modifiers. This parameter is not used if penalization is placed on effect modifiers.
+#' @param mean.delta prior mean for the average treatment effect
+#' @param prec.delta prior precision for the average treatment effect
 #' @return 
 #' \item{data.JAGS}{data organized in a list so that it can be used when running code in JAGS}
 #' \item{code}{JAGS code that is used to run the model. Use cat(code) to see the code in a readable format}
@@ -133,8 +133,8 @@ ipdnma.model.twostage.first <- function(y = NULL, treat = NULL, X = NULL,
 #' @export
 
 ipdnma.model.twostage.second <- function(ipd_all = NULL, samples_all = NULL,
-                                        mean.a = 0, prec.a = 0.001, mean.b = 0, prec.b = 0.001, 
-                                        mean.c = 0, prec.c = 0.001, mean.d = 0, prec.d = 0.001,
+                                        mean.alpha = 0, prec.alpha = 0.001, mean.beta = 0, prec.beta = 0.001, 
+                                        mean.gamma = 0, prec.gamma = 0.001, mean.delta = 0, prec.delta = 0.001,
                                         lambda.prior = NULL, p.ind = NULL, g = NULL, hy.prior.eta = NULL){
   
   
