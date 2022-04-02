@@ -181,9 +181,6 @@ selectvar_each_study <- function(samples){
 
   samples_result <- samples_result[,Vars]
   return(samples_result)
-#  y <- apply(samples_result, 2, mean)
-#  Sigma <- cov(samples_result)
-#  return(list(y = y, Sigma = Sigma))
 }
 
 
@@ -209,6 +206,10 @@ unstandardize_coefficients <- function(ipd, samples){
     stop("Not a suitable function for the specified model")
   }    
 
+  if(is.null(ipd$scale_mean)){
+    stop("The model hasn't been scaled prior to fitting the model")
+  }
+  
   if(is.null(ipd$data.JAGS$Nstudies)){
     Nstudies <- 1
   } else{
@@ -219,9 +220,6 @@ unstandardize_coefficients <- function(ipd, samples){
   X_sd <- ipd$scale_sd
 
   samples_selected <- selectvar_each_study(samples)
-#  y <- samples_summarized$y
-#  Sigma <- samples_summarized$Sigma    
-
   vec_length <- dim(samples_selected)[2]
   N_star <- matrix(0, nrow = vec_length, ncol = vec_length)
   
@@ -257,14 +255,13 @@ unstandardize_coefficients <- function(ipd, samples){
   }
 
   samples_unstandardized <- samples_selected %*% t(N_star)
-  y <- apply(samples_unstandardized, 2, mean)
-  Sigma <- cov(samples_unstandardized)
+  y <- as.matrix(apply(samples_unstandardized, 2, mean), ncol = 1)
+  colnames(y) <- "Estimate"
+  rownames(y) <- colnames(samples_selected)
   
+  Sigma <- as.matrix(cov(samples_unstandardized))
+  rownames(Sigma) <- colnames(Sigma) <- colnames(samples_selected)
+
   return(list(y = y, Sigma = Sigma))
-    
-#  y_unstand <- N_star %*% y
-#  Sigma_unstand <- N_star %*% Sigma %*% t(N_star)
-#  return(list(y = y_unstand, Sigma = Sigma_unstand))
-  
 }
 
