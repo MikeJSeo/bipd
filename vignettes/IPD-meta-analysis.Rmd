@@ -124,17 +124,17 @@ samples_all <- list()
 ipd_all <- list()
 for(i in 1:length(unique(ds$studyid))){
   ds_each <- ds[ds$studyid == i,] 
-  ipd_all[[i]] <- with(ds_each, ipdnma.model.twostage.first(y = y, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "none"))
+  ipd_all[[i]] <- with(ds_each, ipdnma.model.twostage.first(y = y, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "SSVS"))
   samples_all[[i]] <- ipd.run(ipd_all[[i]], n.iter = 500000)
 }
-ipd2 <- ipdnma.model.twostage.second(ipd_all, samples_all)
-samples2 <- ipd.run(ipd2)
+#ipd2 <- ipdnma.model.twostage.second(ipd_all, samples_all)
+#samples2 <- ipd.run(ipd2)
 
 unstandardized <- unstandardize_coefficients(ipd_all[[i]], samples_all[[i]])
 unstandardized$y
 sqrt(diag(unstandardized$Sigma))
 
 ds_each <- ds[ds$studyid == i,] 
-ipd_all[[i]] <- with(ds_each, ipdnma.model.twostage.first(y = y, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "none", scale = FALSE))
+ipd_all[[i]] <- with(ds_each, ipdnma.model.twostage.first(y = y, treat = treat, X = cbind(z1, z2), response = "normal", shrinkage = "SSVS", scale = FALSE))
 samples_all[[i]] <- ipd.run(ipd_all[[i]], n.iter = 500000)
 ```

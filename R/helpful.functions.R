@@ -193,8 +193,14 @@ selectvar_each_study <- function(samples){
 #' \item{y}{unstandardized y}
 #' \item{Sigma}{unstandardized Sigma}
 #' @examples
-#' #TODO
-#' 
+#' ds <- generate_ipdnma_example()
+#' ds1 <- ds[ds$studyid == 1,] 
+#' ipd1 <- with(ds1, ipdnma.model.twostage.first(y = y, treat = treat, 
+#' X = cbind(z1, z2), response = "normal", shrinkage = "SSVS"))
+#' \donttest{
+#' samples1 <- ipd.run(ipd1)
+#' }
+#' unstandardize_coefficients(ipd1, samples1)
 #' @export
 
 unstandardize_coefficients <- function(ipd, samples){
