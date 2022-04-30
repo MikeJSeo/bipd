@@ -143,6 +143,7 @@ generate_ipdma_example <- function(type = "continuous"){
   if(type == "continuous"){
     
     alpha <- rep(c(11, 8, 10.5, 9.6, 12.9, 15.8), each = N) #study effects
+#    delta <- rep(c(-2.95, -2.97, -2.89, -2.91, -2.93, -2.90), each = N) #treatment effects
     delta <- rep(rnorm(6, -2.5, 2), each = N) #treatment effects
     beta1 <- rep(c(0.24, 0.21, 0.20, 0.18, 0.25, 0.22), each = N) #prognostic effects of z1
     gamma1 <- rep(c(-0.9, -0.5, -0.6, -0.7, -0.1, -0.3), each = N) #interaction effects of z1
@@ -159,6 +160,7 @@ generate_ipdma_example <- function(type = "continuous"){
   } else if (type == "binary"){
     
     alpha <- rep(c(0.11, 0.8, 1.05, 0.96, 0.129, 0.158), each = N) #study effects
+#    delta <- rep(c(-0.95, -0.97, -0.89, -0.91, -0.93, -0.90), each = N) #treatment effects
     delta <- rep(rnorm(6, -1.0, 2.0), each = N) #treatment effects
     beta1 <- rep(c(0.24, 0.21, 0.20, 0.18, 0.25, 0.22), each = N) #prognostic effects of w1
     gamma1 <- rep(c(-0.9, -0.5, -0.6, -0.7, -0.1, -0.3), each = N) #interaction effects of w1
