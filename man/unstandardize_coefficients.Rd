@@ -20,6 +20,12 @@ This is a convenient function to revert standardized coefficients to unstandardi
 This is primarily used when aggregating model estimates in the two-stage models.
 }
 \examples{
-#TODO
-
+ds <- generate_ipdnma_example()
+ds1 <- ds[ds$studyid == 1,] 
+ipd1 <- with(ds1, ipdnma.model.twostage.first(y = y, treat = treat, 
+X = cbind(z1, z2), response = "normal", shrinkage = "SSVS"))
+\donttest{
+samples1 <- ipd.run(ipd1)
+}
+unstandardize_coefficients(ipd1, samples1)
 }
