@@ -51,8 +51,8 @@ for(ii in 1:length(multiple.imputations)){
   
   ipd <- with(current.data, ipdma.model.onestage(y = y, study = study, treat = treat, X = X, response = "normal", shrinkage = "none"))
   
-  #Run only 500 iterations for demonstration
-  samples <- ipd.run(ipd, pars.save = c("beta", "gamma", "delta"), n.chains = 3, n.burnin = 500, n.iter = 5000) 
+  #Run only 100 iterations for demonstration
+  samples <- ipd.run(ipd, pars.save = c("beta", "gamma", "delta"), n.chains = 3, n.burnin = 100, n.iter = 100) 
 
   if(ii == 1){
     final.result <- samples
