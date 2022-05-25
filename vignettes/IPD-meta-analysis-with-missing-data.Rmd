@@ -1,5 +1,5 @@
 ---
-title: "IPD meta-analysis"
+title: "IPD meta-analysis-with-missing-data"
 author: "Michael Seo"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
