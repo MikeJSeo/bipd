@@ -2,7 +2,7 @@ Package: bipd
 Type: Package
 Title: Bayesian Individual Patient Data Meta-Analysis using 'JAGS'
 Version: 0.3
-Date: 2022-05-24
+Date: 2022-05-30
 Depends: R (>= 2.10)
 Imports: rjags (>= 4-6), coda (>= 0.13), mvtnorm, dplyr
 Suggests: 
