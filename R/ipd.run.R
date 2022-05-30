@@ -15,7 +15,7 @@
 #' ipd <- with(ds, ipdma.model.onestage(y = y, study = studyid, treat = treat, X = cbind(z1, z2), 
 #' response = "normal", shrinkage = "none"))
 #' \donttest{
-#' samples <- ipd.run(ipd, n.chains = 3, n.burnin = 500, n.iter = 5000)
+#' samples <- ipd.run(ipd, n.chains = 2, n.burnin = 500, n.iter = 5000)
 #' }
 #' @export
 
