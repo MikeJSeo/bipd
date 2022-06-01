@@ -8,7 +8,7 @@ ipd.run(
   ipd,
   pars.save = NULL,
   inits = NULL,
-  n.chains = 3,
+  n.chains = 2,
   n.adapt = 1000,
   n.burnin = 1000,
   n.iter = 10000
