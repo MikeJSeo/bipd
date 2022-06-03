@@ -59,13 +59,13 @@ which generalizes predictive mean matching using linear mixed model.
 If there is only one study available, the function defaults to use pmm in mice package.
 }
 \examples{
-# load in mice packages
-# library(mice) #for datasets with only one study level
-# library(miceadds) #for multilevel datasets without systematically missing predictors
-# library(micemd) #for multilevel datasets with systematically missing predictors.
 simulated_dataset <- generate_sysmiss_ipdma_example(Nstudies = 10, Ncov = 5, sys_missing_prob = 0.3, 
 magnitude = 0.2, heterogeneity = 0.1)
 \donttest{
+# load in mice packages
+library(mice) #for datasets with only one study level
+library(miceadds) #for multilevel datasets without systematically missing predictors
+library(micemd) #for multilevel datasets with systematically missing predictors.
 imputation <- ipdma.impute(simulated_dataset, covariates = c("x1", "x2", "x3", "x4", "x5"), 
 typeofvar = c("continuous", "binary", "binary", "continuous", "continuous"), interaction = TRUE, 
 studyname = "study", treatmentname = "treat", outcomename = "y", m = 5)
